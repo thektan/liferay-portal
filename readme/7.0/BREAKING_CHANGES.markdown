@@ -3417,13 +3417,13 @@ allow for much flexibility.
 
 ---------------------------------------
 
-### Removed the liferay-ui:asset-links Tag and Replaced with liferay-asset:asset-links Tag
+### Deprecated the liferay-ui:asset-links Tag and Replaced with liferay-asset:asset-links Tag
 - **Date:** 2015-Dec-23
 - **JIRA Ticket:** LPS-61569
 
 #### What changed?
 
-The `liferay-ui:asset-links` tag has been removed and replaced with the
+The `liferay-ui:asset-links` tag has been deprecated and replaced with the
 `liferay-asset:asset-links` tag.
 
 #### Who is affected?
