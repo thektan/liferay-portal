@@ -20,7 +20,6 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.taglib.aui.ColumnTag;
 import com.liferay.taglib.aui.LayoutTag;
 import com.liferay.taglib.ui.AssetCategoriesSummaryTag;
-import com.liferay.taglib.ui.AssetLinksTag;
 import com.liferay.taglib.ui.AssetTagsSummaryTag;
 import com.liferay.taglib.ui.BreadcrumbTag;
 import com.liferay.taglib.ui.DiscussionTag;
@@ -85,14 +84,6 @@ public interface VelocityTaglib {
 			PortletURL portletURL)
 		throws Exception;
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link
-	 *             com.liferay.asset.taglib.servlet.taglib.AssetLinksTag}
-	 */
-	@Deprecated
-	public void assetLinks(long assetEntryId, String className, long classPK)
-		throws Exception;
-
 	public void assetTagsSummary(
 			String className, long classPK, String message,
 			String assetTagNames, PortletURL portletURL)
@@ -132,13 +123,6 @@ public interface VelocityTaglib {
 
 	public AssetCategoriesSummaryTag<?> getAssetCategoriesSummaryTag()
 		throws Exception;
-
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link
-	 *             com.liferay.asset.taglib.servlet.taglib.AssetLinksTag}
-	 */
-	@Deprecated
-	public AssetLinksTag getAssetLinksTag() throws Exception;
 
 	public AssetTagsSummaryTag<?> getAssetTagsSummaryTag() throws Exception;
 
