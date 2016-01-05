@@ -98,7 +98,7 @@ public class AssetCategoriesSummaryTag<R> extends IncludeTag {
 	}
 
 	private static final String _PAGE =
-		"/html/taglib/ui/asset_categories_summary/page.jsp";
+		"/asset_categories_summary/page.jsp";
 
 	private String _className;
 	private long _classPK;
