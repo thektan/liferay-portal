@@ -13,5 +13,3 @@
  * details.
  */
 --%>
-
-<%@ include file="/html/taglib/init.jsp" %>
