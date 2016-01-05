@@ -16,6 +16,7 @@ package com.liferay.asset.taglib.servlet.taglib;
 
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.taglib.util.IncludeTag;
+import com.liferay.taglib.ui.AssetCategoriesAvailableTag;
 
 import java.util.ArrayList;
 import java.util.List;
