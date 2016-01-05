@@ -102,6 +102,11 @@ public class DummyVelocityTaglib implements VelocityTaglib {
 		String className, long classPK, String message, PortletURL portletURL) {
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             com.liferay.asset.taglib.servlet.taglib.AssetLinksTag}
+	 */
+	@Deprecated
 	@Override
 	public void assetLinks(long assetEntryId, String className, long classPK) {
 	}
@@ -157,6 +162,11 @@ public class DummyVelocityTaglib implements VelocityTaglib {
 		return null;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             com.liferay.asset.taglib.servlet.taglib.AssetLinksTag}
+	 */
+	@Deprecated
 	@Override
 	public AssetLinksTag getAssetLinksTag() {
 		return null;
