@@ -165,7 +165,7 @@ if (organization != null) {
 						<aui:input name="organizationId" type="hidden" value="<%= organizationId %>" />
 
 						<span class="entry-categories">
-							<liferay-ui:asset-categories-summary
+							<liferay-asset:asset-categories-summary
 								className="<%= Organization.class.getName() %>"
 								classPK="<%= organization.getOrganizationId() %>"
 								portletURL="<%= renderResponse.createRenderURL() %>"

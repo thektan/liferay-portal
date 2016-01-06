@@ -243,7 +243,7 @@ contextObjects.put("wikiPortletInstanceOverriddenConfiguration", wikiPortletInst
 
 	<div class="page-categorization">
 		<div class="page-categories">
-			<liferay-ui:asset-categories-summary
+			<liferay-asset:asset-categories-summary
 				className="<%= WikiPage.class.getName() %>"
 				classPK="<%= wikiPage.getResourcePrimKey() %>"
 				portletURL="<%= PortletURLUtil.clone(categorizedPagesURL, renderResponse) %>"

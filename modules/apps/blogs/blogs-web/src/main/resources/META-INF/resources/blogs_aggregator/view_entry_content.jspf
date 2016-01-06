@@ -47,7 +47,7 @@
 				<span class="entry-date icon-calendar"><liferay-ui:message key="on-date" /> <%= dateFormatDateTime.format(entry.getDisplayDate()) %></span>
 
 				<span class="entry-categories">
-					<liferay-ui:asset-categories-summary
+					<liferay-asset:asset-categories-summary
 						className="<%= BlogsEntry.class.getName() %>"
 						classPK="<%= entry.getEntryId() %>"
 					/>

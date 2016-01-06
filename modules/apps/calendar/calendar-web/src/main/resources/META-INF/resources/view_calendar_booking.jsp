@@ -115,7 +115,7 @@ AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(CalendarBookin
 	</p>
 
 	<div class="entry-categories">
-		<liferay-ui:asset-categories-summary
+		<liferay-asset:asset-categories-summary
 			className="<%= CalendarBooking.class.getName() %>"
 			classPK="<%= calendarBooking.getCalendarBookingId() %>"
 		/>
