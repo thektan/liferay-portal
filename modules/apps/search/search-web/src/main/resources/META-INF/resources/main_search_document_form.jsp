@@ -77,7 +77,7 @@ if (assetRendererFactory != null) {
 				portletURL="<%= PortletURLUtil.clone(portletURL, renderResponse) %>"
 			/>
 
-			<liferay-ui:asset-categories-summary
+			<liferay-asset:asset-categories-summary
 				className="<%= entryClassName %>"
 				classPK="<%= entryClassPK %>"
 				paramName="<%= Field.ASSET_CATEGORY_IDS %>"

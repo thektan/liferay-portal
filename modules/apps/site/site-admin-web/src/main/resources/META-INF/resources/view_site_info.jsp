@@ -150,7 +150,7 @@ request.setAttribute("view_entries.jspf-site", group);
 		</p>
 	</c:if>
 
-	<liferay-ui:asset-categories-summary
+	<liferay-asset:asset-categories-summary
 		className="<%= Group.class.getName() %>"
 		classPK="<%= groupId %>"
 	/>

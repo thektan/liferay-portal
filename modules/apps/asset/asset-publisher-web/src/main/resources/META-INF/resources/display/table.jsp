@@ -131,7 +131,7 @@ request.setAttribute("view.jsp-showIconLabel", false);
 		%>
 
 			<td class="table-cell">
-				<liferay-ui:asset-categories-summary
+				<liferay-asset:asset-categories-summary
 					className="<%= assetEntry.getClassName() %>"
 					classPK="<%= assetEntry.getClassPK() %>"
 					portletURL="<%= renderResponse.createRenderURL() %>"
