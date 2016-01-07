@@ -76,7 +76,7 @@ if (portletTitleBasedNavigation) {
 	<aui:row>
 		<aui:col cssClass="lfr-asset-column lfr-asset-column-details" width="<%= 75 %>">
 			<div class="lfr-asset-categories">
-				<liferay-ui:asset-categories-summary
+				<liferay-asset:asset-categories-summary
 					className="<%= BookmarksEntry.class.getName() %>"
 					classPK="<%= entryId %>"
 				/>
