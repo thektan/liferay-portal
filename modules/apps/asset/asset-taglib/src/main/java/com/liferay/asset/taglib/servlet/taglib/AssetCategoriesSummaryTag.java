@@ -14,9 +14,10 @@
 
 package com.liferay.asset.taglib.servlet.taglib;
 
+import com.liferay.asset.taglib.servlet.ServletContextUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
-import com.liferay.taglib.util.IncludeTag;
 import com.liferay.taglib.ui.AssetCategoriesAvailableTag;
+import com.liferay.taglib.util.IncludeTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
@@ -45,6 +47,13 @@ public class AssetCategoriesSummaryTag<R> extends IncludeTag {
 
 	public void setMessage(String message) {
 		_message = message;
+	}
+
+	@Override
+	public void setPageContext(PageContext pageContext) {
+		super.setPageContext(pageContext);
+
+		servletContext = ServletContextUtil.getServletContext();
 	}
 
 	public void setParamName(String paramName) {
