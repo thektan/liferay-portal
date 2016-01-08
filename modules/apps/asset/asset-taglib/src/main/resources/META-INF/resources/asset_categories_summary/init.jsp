@@ -13,3 +13,24 @@
  * details.
  */
 --%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ page import="com.liferay.portlet.asset.model.AssetCategory" %><%@
+page import="com.liferay.portlet.asset.model.AssetVocabulary" %><%@
+page import="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil" %><%@
+page import="com.liferay.portlet.asset.service.AssetCategoryServiceUtil" %><%@
+page import="com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil" %><%@
+page import="com.liferay.portal.kernel.exception.PortalException" %><%@
+page import="com.liferay.portal.kernel.exception.SystemException" %><%@
+page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
+page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
+page import="com.liferay.portal.kernel.util.ListUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringBundler" %><%@
+page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
+page import="com.liferay.portal.theme.ThemeDisplay" %>
+
+<%@ page import="java.util.Collections" %><%@
+page import="javax.portlet.PortletURL" %>
+
+<liferay-theme:defineObjects />
