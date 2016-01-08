@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,15 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/html/taglib/ui/asset_display/init.jsp" %>
+package com.liferay.staging.processes.web.constants;
 
-<%
-AssetRenderer<?> assetRenderer = (AssetRenderer<?>)request.getAttribute(WebKeys.ASSET_RENDERER);
-int abstractLength = GetterUtil.getInteger(request.getAttribute("liferay-ui:asset-display:abstractLength"));
+/**
+ * @author Levente Hudák
+ */
+public class StagingProcessesWebKeys {
 
-String summary = StringUtil.shorten(assetRenderer.getSummary(renderRequest, renderResponse), abstractLength);
-%>
+	public static final String BRANCHING_ENABLED = "BRANCHING_ENABLED";
 
-<%= HtmlUtil.escape(summary) %>
+}

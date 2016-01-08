@@ -14,22 +14,13 @@
  */
 --%>
 
-<%@ include file="/html/taglib/ui/asset_display/init.jsp" %>
+<%@ include file="/asset_display/init.jsp" %>
 
 <%
 AssetRenderer<?> assetRenderer = (AssetRenderer<?>)request.getAttribute(WebKeys.ASSET_RENDERER);
+int abstractLength = GetterUtil.getInteger(request.getAttribute("liferay-asset:asset-display:abstractLength"));
 
-boolean showHeader = ParamUtil.getBoolean(request, "showHeader");
-%>
-
-<c:if test="<%= showHeader %>">
-	<liferay-ui:header
-		title="<%= assetRenderer.getTitle(locale) %>"
-	/>
-</c:if>
-
-<%
-String summary = StringUtil.shorten(assetRenderer.getSummary(renderRequest, renderResponse), Integer.MAX_VALUE);
+String summary = StringUtil.shorten(assetRenderer.getSummary(renderRequest, renderResponse), abstractLength);
 %>
 
 <%= HtmlUtil.escape(summary) %>

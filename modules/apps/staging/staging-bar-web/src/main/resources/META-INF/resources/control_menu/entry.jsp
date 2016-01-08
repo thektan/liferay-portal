@@ -14,6 +14,8 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
-<portlet:defineObjects />
+<li class="staging-links">
+	<liferay-portlet:runtime portletName="<%= PortletKeys.STAGING_BAR %>" />
+</li>
