@@ -16,11 +16,14 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+
 <%@ page import="com.liferay.portlet.asset.model.AssetCategory" %><%@
+page import="com.liferay.portlet.asset.model.AssetEntry" %><%@
 page import="com.liferay.portlet.asset.model.AssetVocabulary" %><%@
 page import="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil" %><%@
 page import="com.liferay.portlet.asset.service.AssetCategoryServiceUtil" %><%@
-page import="com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil" %><%@
+page import="com.liferay.portlet.asset.service.AssetVocabularyServiceUtil" %><%@
 page import="com.liferay.portal.kernel.exception.PortalException" %><%@
 page import="com.liferay.portal.kernel.exception.SystemException" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
@@ -28,9 +31,13 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ListUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringBundler" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
-page import="com.liferay.portal.theme.ThemeDisplay" %>
+page import="com.liferay.portal.theme.ThemeDisplay" %><%@
+page import="com.liferay.portal.util.PortalUtil" %>
 
 <%@ page import="java.util.Collections" %><%@
 page import="javax.portlet.PortletURL" %>
+
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 
 <liferay-theme:defineObjects />
