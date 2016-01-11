@@ -8,7 +8,7 @@
 					base: PATH_ASSET_TAGLIB + '/',
 					modules: {
 						'liferay-asset-addon-entry-selector': {
-							path: 'liferay-asset-addon-entry-selector/js/asset_addon_entry_selector.js',
+							path: 'asset_addon_entry_selector/js/asset_addon_entry_selector.js',
 							requires: [
 								'aui-component',
 								'liferay-portlet-base',
