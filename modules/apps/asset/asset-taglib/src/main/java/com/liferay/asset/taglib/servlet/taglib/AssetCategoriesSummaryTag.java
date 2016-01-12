@@ -12,9 +12,11 @@
  * details.
  */
 
-package com.liferay.taglib.ui;
+package com.liferay.asset.taglib.servlet.taglib;
 
+import com.liferay.asset.taglib.servlet.ServletContextUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.taglib.ui.AssetCategoriesAvailableTag;
 import com.liferay.taglib.util.IncludeTag;
 
 import java.util.ArrayList;
@@ -23,14 +25,12 @@ import java.util.List;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Jorge Ferrer
- * @deprecated As of 7.0.0, replaced by {@link
- *             com.liferay.asset.taglib.servlet.taglib.AssetCategoriesSummaryTag}
  */
-@Deprecated
 public class AssetCategoriesSummaryTag<R> extends IncludeTag {
 
 	public PortletURL getPortletURL() {
@@ -47,6 +47,13 @@ public class AssetCategoriesSummaryTag<R> extends IncludeTag {
 
 	public void setMessage(String message) {
 		_message = message;
+	}
+
+	@Override
+	public void setPageContext(PageContext pageContext) {
+		super.setPageContext(pageContext);
+
+		servletContext = ServletContextUtil.getServletContext();
 	}
 
 	public void setParamName(String paramName) {
@@ -84,24 +91,23 @@ public class AssetCategoriesSummaryTag<R> extends IncludeTag {
 		}
 
 		request.setAttribute(
-			"liferay-ui:asset-categories-summary:assetCategories",
+			"liferay-asset:asset-categories-summary:assetCategories",
 			assetCategories);
 
 		request.setAttribute(
-			"liferay-ui:asset-categories-summary:className", _className);
+			"liferay-asset:asset-categories-summary:className", _className);
 		request.setAttribute(
-			"liferay-ui:asset-categories-summary:classPK",
+			"liferay-asset:asset-categories-summary:classPK",
 			String.valueOf(_classPK));
 		request.setAttribute(
-			"liferay-ui:asset-categories-summary:message", _message);
+			"liferay-asset:asset-categories-summary:message", _message);
 		request.setAttribute(
-			"liferay-ui:asset-categories-summary:paramName", _paramName);
+			"liferay-asset:asset-categories-summary:paramName", _paramName);
 		request.setAttribute(
-			"liferay-ui:asset-categories-summary:portletURL", _portletURL);
+			"liferay-asset:asset-categories-summary:portletURL", _portletURL);
 	}
 
-	private static final String _PAGE =
-		"/html/taglib/ui/asset_categories_summary/page.jsp";
+	private static final String _PAGE = "/asset_categories_summary/page.jsp";
 
 	private String _className;
 	private long _classPK;

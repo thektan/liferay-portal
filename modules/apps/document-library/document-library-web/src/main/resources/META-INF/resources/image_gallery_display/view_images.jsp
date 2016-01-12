@@ -156,7 +156,7 @@ DLPortletInstanceSettingsHelper dlPortletInstanceSettingsHelper = new DLPortletI
 
 					<div id="<portlet:namespace />categorizationContainer_<%= fileEntry.getFileEntryId() %>" style="display: none;">
 						<span <%= !assetTags.isEmpty() ? "class=\"has-tags\"" : "" %>>
-							<liferay-ui:asset-categories-summary
+							<liferay-asset:asset-categories-summary
 								className="<%= DLFileEntryConstants.getClassName() %>"
 								classPK="<%= fileEntry.getFileEntryId() %>"
 							/>

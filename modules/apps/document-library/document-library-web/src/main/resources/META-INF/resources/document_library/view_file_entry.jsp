@@ -227,7 +227,7 @@ if (portletTitleBasedNavigation) {
 
 						<c:if test="<%= fileEntry.isSupportsSocial() %>">
 							<div class="lfr-asset-categories">
-								<liferay-ui:asset-categories-summary
+								<liferay-asset:asset-categories-summary
 									className="<%= DLFileEntryConstants.getClassName() %>"
 									classPK="<%= assetClassPK %>"
 								/>

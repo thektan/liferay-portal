@@ -3369,3 +3369,30 @@ To keep the previous behaviour in freemarker you can just add this:
 #### Why was this change made?
 
 The API was forcing to have a dependency on a taglib and didn't give enough flexibility to developers.
+
+---------------------------------------
+
+### Deprecated the liferay-ui:asset-categories-summary Tag and Replaced with liferay-asset:asset-categories-summary Tag
+- **Date:** 2016-Jan-08
+- **JIRA Ticket:** LPS-61706
+
+#### What changed?
+
+The `liferay-ui:asset-categories-summary` tag has been deprecated and replaced with the
+`liferay-asset:asset-categories-summary` tag.
+
+#### Who is affected?
+
+Plugins or templates that are using the `liferay-ui:asset-categories-summary` tag need to
+update their usage of the tag.
+
+#### How should I update my code?
+
+You should import the `liferay-asset` tag library (if necessary) and
+update the tag namespace from `liferay-ui:asset-categories-summary` to
+`liferay-asset:asset-categories-summary`.
+
+#### Why was this change made?
+
+This change was made as a part of the ongoing strategy to modularize Liferay
+Portal by means of an OSGi container.
