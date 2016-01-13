@@ -3444,19 +3444,18 @@ Portal by means of an OSGi container.
 
 ---------------------------------------
 
-### Deprecated the liferay-ui:input-asset-links Tag and Replaced with liferay-asset:asset-links-selector Tag
+### Removed the liferay-ui:input-asset-links Tag and Replaced with liferay-asset:asset-links-selector Tag
 - **Date:** 2015-Dec-23
 - **JIRA Ticket:** LPS-61594
 
 #### What changed?
 
-The `liferay-ui:input-asset-links` tag has been deprecated and replaced with the
+The `liferay-ui:input-asset-links` tag has been removed and replaced with the
 `liferay-asset:asset-links-selector` tag.
 
 #### Who is affected?
 
-Plugins or templates that are using the `liferay-ui:input-asset-links` tag need to
-update their usage of the tag.
+Plugins or templates that are using the `liferay-ui:input-asset-links` tag need to update their usage of the tag.
 
 #### How should I update my code?
 
