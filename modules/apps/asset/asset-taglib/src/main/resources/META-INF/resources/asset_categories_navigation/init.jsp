@@ -17,6 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%@ page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
+page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.theme.ThemeDisplay" %><%@
 page import="com.liferay.portlet.asset.NoSuchVocabularyException" %><%@
 page import="com.liferay.portlet.asset.model.AssetCategory" %><%@
