@@ -14,7 +14,17 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
-<%@ page import="com.liferay.portlet.asset.model.AssetLink" %><%@
-page import="com.liferay.portlet.asset.service.AssetLinkLocalServiceUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
+page import="com.liferay.portal.kernel.util.UnicodeFormatter" %>
+
+<%@ page import="com.liferay.portlet.asset.model.AssetEntry" %>
+
+<%@ page import="java.util.Map" %>
+
+<%@ page import="com.liferay.asset.taglib.servlet.taglib.display.context.AssetLinksSelectorDisplayContext" %>
+
+<%
+AssetLinksSelectorDisplayContext assetLinksSelectorDisplayContext = new AssetLinksSelectorDisplayContext(pageContext);
+%>

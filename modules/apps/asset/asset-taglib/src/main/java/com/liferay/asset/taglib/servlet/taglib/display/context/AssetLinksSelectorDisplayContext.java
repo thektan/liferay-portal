@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.taglib.ui.display.context;
+package com.liferay.asset.taglib.servlet.taglib.display.context;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -44,12 +44,14 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
 import com.liferay.portlet.asset.service.AssetLinkLocalServiceUtil;
 import com.liferay.portlet.asset.util.comparator.AssetRendererFactoryTypeNameComparator;
+import com.liferay.taglib.util.TagResourceBundleUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
@@ -60,20 +62,17 @@ import javax.servlet.jsp.PageContext;
 
 /**
  * @author José Manuel Navarro
- * @deprecated As of 7.0.0, replaced by {@link
- *             com.liferay.asset.taglib.servlet.taglib.display.context.AssetLinksSelectorDisplayContext}
  */
-@Deprecated
-public class InputAssetLinksDisplayContext {
+public class AssetLinksSelectorDisplayContext {
 
-	public InputAssetLinksDisplayContext(PageContext pageContext) {
+	public AssetLinksSelectorDisplayContext(PageContext pageContext) {
 		_pageContext = pageContext;
 
 		_request = (HttpServletRequest)pageContext.getRequest();
 
 		_assetEntryId = GetterUtil.getLong(
 			(String)_request.getAttribute(
-				"liferay-ui:input-asset-links:assetEntryId"));
+				"liferay-asset:asset-links-selector:assetEntryId"));
 		_portletRequest = (PortletRequest)_request.getAttribute(
 			JavaConstants.JAVAX_PORTLET_REQUEST);
 		_themeDisplay = (ThemeDisplay)_request.getAttribute(
@@ -166,7 +165,7 @@ public class InputAssetLinksDisplayContext {
 
 		_randomNamespace = PortalUtil.generateRandomKey(
 			_request, "taglib_ui_input_asset_links_page") +
-			StringPool.UNDERLINE;
+				StringPool.UNDERLINE;
 
 		return _randomNamespace;
 	}
@@ -270,14 +269,15 @@ public class InputAssetLinksDisplayContext {
 			"href",
 			_getAssetBrowserPortletURL(assetRendererFactory).toString());
 
+		ResourceBundle resourceBundle = TagResourceBundleUtil.getResourceBundle(
+			_pageContext);
+
 		String typeName = assetRendererFactory.getTypeName(
 			_themeDisplay.getLocale());
 
-		HttpServletRequest request =
-			(HttpServletRequest)_pageContext.getRequest();
-
 		selectorEntryData.put(
-			"title", LanguageUtil.format(request, "select-x", typeName, false));
+			"title",
+			LanguageUtil.format(resourceBundle, "select-x", typeName, false));
 
 		selectorEntryData.put("type", assetRendererFactory.getClassName());
 
@@ -390,12 +390,14 @@ public class InputAssetLinksDisplayContext {
 
 		selectorEntryData.put("href", portletURL.toString());
 
-		HttpServletRequest request =
-			(HttpServletRequest)_pageContext.getRequest();
+		ResourceBundle resourceBundle = TagResourceBundleUtil.getResourceBundle(
+			_pageContext);
 
 		selectorEntryData.put(
-			"title", LanguageUtil.format(
-				request, "select-x", classType.getName(), false));
+			"title",
+			LanguageUtil.format(
+				resourceBundle, "select-x", classType.getName(), false));
+
 		selectorEntryData.put("type", classType.getName());
 
 		return selectorEntryData;
@@ -467,7 +469,7 @@ public class InputAssetLinksDisplayContext {
 
 		if (_isStagedLocally()) {
 			String className = (String)_request.getAttribute(
-				"liferay-ui:input-asset-links:className");
+				"liferay-asset:asset-links-selector:className");
 
 			AssetRendererFactory<?> assetRendererFactory =
 				AssetRendererFactoryRegistryUtil.

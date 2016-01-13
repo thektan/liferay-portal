@@ -14,10 +14,10 @@
  */
 --%>
 
-<%@ include file="/html/taglib/ui/asset_links/init.jsp" %>
+<%@ include file="/asset_links/init.jsp" %>
 
 <%
-long assetEntryId = GetterUtil.getLong((String)request.getAttribute("liferay-ui:asset-links:assetEntryId"));
+long assetEntryId = GetterUtil.getLong((String)request.getAttribute("liferay-asset:asset-links:assetEntryId"));
 
 List<AssetLink> assetLinks = null;
 

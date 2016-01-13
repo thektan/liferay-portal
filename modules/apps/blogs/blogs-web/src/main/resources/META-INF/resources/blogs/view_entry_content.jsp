@@ -234,7 +234,7 @@ AssetEntry assetEntry = (AssetEntry)request.getAttribute("view_entry_content.jsp
 					<aui:col width="<%= 40 %>">
 						<c:if test="<%= blogsPortletInstanceConfiguration.enableRelatedAssets() %>">
 							<div class="entry-links">
-								<liferay-ui:asset-links
+								<liferay-asset:asset-links
 									assetEntryId="<%= (assetEntry != null) ? assetEntry.getEntryId() : 0 %>"
 									className="<%= BlogsEntry.class.getName() %>"
 									classPK="<%= entry.getEntryId() %>"
@@ -288,7 +288,7 @@ AssetEntry assetEntry = (AssetEntry)request.getAttribute("view_entry_content.jsp
 							<%= dateFormatDateTime.format(entry.getDisplayDate()) %>
 
 							<c:if test="<%= blogsPortletInstanceConfiguration.enableViewCount() %>">
-								, <liferay-ui:message key='<%= assetEntry.getViewCount() == 1 ? "x-view" : "x-views" %>' arguments="<%= assetEntry.getViewCount() %>" />
+								, <liferay-ui:message arguments="<%= assetEntry.getViewCount() %>" key='<%= assetEntry.getViewCount() == 1 ? "x-view" : "x-views" %>' />
 							</c:if>
 						</liferay-ui:user-display>
 					</div>
