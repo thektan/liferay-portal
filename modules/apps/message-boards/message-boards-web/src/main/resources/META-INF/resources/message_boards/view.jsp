@@ -68,7 +68,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 
 <c:choose>
 	<c:when test="<%= useAssetEntryQuery %>">
-		<liferay-ui:categorization-filter
+		<liferay-asset:categorization-filter
 			assetType="threads"
 			portletURL="<%= portletURL %>"
 		/>

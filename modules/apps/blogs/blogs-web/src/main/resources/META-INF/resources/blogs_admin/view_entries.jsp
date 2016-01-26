@@ -115,7 +115,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 		<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
 		<aui:input name="deleteEntryIds" type="hidden" />
 
-		<liferay-ui:categorization-filter
+		<liferay-asset:categorization-filter
 			assetType="entries"
 			portletURL="<%= portletURL %>"
 		/>
