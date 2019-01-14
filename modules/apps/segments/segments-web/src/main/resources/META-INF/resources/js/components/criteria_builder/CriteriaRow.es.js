@@ -139,7 +139,7 @@ class CriteriaRow extends Component {
 				<b key="property">
 					{propertyLabel}
 				</b>,
-				<span key="operator">
+				<span className="operator" key="operator">
 					{operatorLabel}
 				</span>,
 				<b key="value">
