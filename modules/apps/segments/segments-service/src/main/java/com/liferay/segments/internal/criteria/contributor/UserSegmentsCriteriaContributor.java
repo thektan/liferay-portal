@@ -15,6 +15,13 @@
 package com.liferay.segments.internal.criteria.contributor;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.Team;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.segments.criteria.Criteria;
@@ -23,9 +30,13 @@ import com.liferay.segments.criteria.contributor.SegmentsCriteriaContributor;
 import com.liferay.segments.internal.odata.entity.EntityModelFieldMapper;
 import com.liferay.segments.internal.odata.entity.UserEntityModel;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import javax.portlet.PortletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -51,8 +62,9 @@ public class UserSegmentsCriteriaContributor
 	public static final String KEY = "user";
 
 	@Override
-	public List<Field> getFields(Locale locale) {
-		return _entityModelFieldMapper.getFields(_entityModel, locale);
+	public List<Field> getFields(PortletRequest portletRequest) {
+		return _entityModelFieldMapper.getFields(
+			_entityModel, _idEntityFieldTypes, portletRequest);
 	}
 
 	@Override
@@ -72,6 +84,21 @@ public class UserSegmentsCriteriaContributor
 	public Criteria.Type getType() {
 		return Criteria.Type.MODEL;
 	}
+
+	private static final Map<String, String> _idEntityFieldTypes =
+		new HashMap<String, String>() {
+			{
+				put("ancestorOrganizationIds", Organization.class.getName());
+				put("companyId", Company.class.getName());
+				put("groupId", Group.class.getName());
+				put("groupIds", Group.class.getName());
+				put("organizationIds", Organization.class.getName());
+				put("roleIds", Role.class.getName());
+				put("teamId", Team.class.getName());
+				put("userGroupIds", UserGroup.class.getName());
+				put("userId", User.class.getName());
+			}
+		};
 
 	@Reference(
 		cardinality = ReferenceCardinality.MANDATORY,
