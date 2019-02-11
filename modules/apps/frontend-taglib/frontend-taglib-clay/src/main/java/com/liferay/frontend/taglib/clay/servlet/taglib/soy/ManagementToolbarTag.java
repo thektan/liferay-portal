@@ -76,7 +76,7 @@ public class ManagementToolbarTag extends BaseClayTag {
 
 		String searchAriaLabel = (String)context.get("searchAriaLabel");
 
-		setSearchLabel(searchAriaLabel);
+		setSearchAriaLabel(searchAriaLabel);
 
 		String searchFormMethod = GetterUtil.getString(
 			context.get("searchFormMethod"),
