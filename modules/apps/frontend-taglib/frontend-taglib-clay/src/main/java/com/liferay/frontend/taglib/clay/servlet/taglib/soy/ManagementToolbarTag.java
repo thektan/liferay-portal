@@ -74,6 +74,10 @@ public class ManagementToolbarTag extends BaseClayTag {
 			setSearchInputName(searchInputName);
 		}
 
+		String searchAriaLabel = (String)context.get("searchAriaLabel");
+
+		setSearchLabel(searchAriaLabel);
+
 		String searchFormMethod = GetterUtil.getString(
 			context.get("searchFormMethod"),
 			ManagementToolbarDefaults.getSearchFormMethod());
@@ -201,6 +205,10 @@ public class ManagementToolbarTag extends BaseClayTag {
 
 	public void setSearchActionURL(String searchActionURL) {
 		putValue("searchActionURL", searchActionURL);
+	}
+
+	public void setSearchAriaLabel(String searchAriaLabel) {
+		putValue("searchAriaLabel", searchAriaLabel);
 	}
 
 	public void setSearchContainerId(String searchContainerId) {
@@ -333,6 +341,11 @@ public class ManagementToolbarTag extends BaseClayTag {
 		if (context.get("searchActionURL") == null) {
 			setSearchActionURL(
 				managementToolbarDisplayContext.getSearchActionURL());
+		}
+
+		if (context.get("searchAriaLabel") == null) {
+			setSearchAriaLabel(
+				managementToolbarDisplayContext.getSearchAriaLabel());
 		}
 
 		if (context.get("searchContainerId") == null) {

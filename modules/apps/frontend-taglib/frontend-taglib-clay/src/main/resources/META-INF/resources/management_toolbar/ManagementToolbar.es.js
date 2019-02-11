@@ -341,6 +341,16 @@ ManagementToolbar.STATE = {
 	searchActionURL: Config.string(),
 
 	/**
+	 * Aria label of the search input.
+	 * @default undefined
+	 * @instance
+	 * @memberof ManagementToolbar
+	 * @type {?(string|undefined)}
+	 */
+
+	searchAriaLabel: Config.string(),
+
+	/**
 	 * Map of properties that will be rendered as hidden inputs in the search
 	 * form.
 	 * @default undefined

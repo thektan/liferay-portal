@@ -1386,6 +1386,12 @@
 		</attribute>
 		<attribute>
 			<description></description>
+			<name>searchAriaLabel</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
 			<name>searchContainerId</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

@@ -83,6 +83,7 @@
 	{@param? searchFormMethod: string}
 	{@param? searchFormName: string}
 	{@param? searchInputName: string}
+	{@param? searchAriaLabel: string}
 	{@param? searchValue: string}
 	{@param? selectable: bool}
 	{@param? selectedItems: number}
@@ -128,6 +129,7 @@
 		{param searchFormMethod: $searchFormMethod /}
 		{param searchFormName: $searchFormName /}
 		{param searchInputName: $searchInputName /}
+		{param searchAriaLabel: $searchAriaLabel /}
 		{param searchValue: $searchValue /}
 		{param selectable: $selectable /}
 		{param selectedItems: $selectedItems /}
@@ -159,12 +161,17 @@
 	{@param? searchFormName: string}
 	{@param? searchInput: html}
 	{@param? searchInputName: string}
+	{@param? searchAriaLabel: string}
 	{@param? searchValue: string}
 
 	{let $searchFormContent kind="html"}
 		{let $searchFormAttributes kind="attributes"}
 			{if $searchActionURL}
 				action="{$searchActionURL}"
+			{/if}
+
+			{if $searchAriaLabel}
+				aria-label="{$searchAriaLabel}"
 			{/if}
 
 			method="{$searchFormMethod ?: 'GET'}"

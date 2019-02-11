@@ -90,6 +90,10 @@ public interface ManagementToolbarDisplayContext {
 		return null;
 	}
 
+	public default String getSearchAriaLabel() {
+		return null;
+	}
+
 	public default String getSearchContainerId() {
 		return null;
 	}
