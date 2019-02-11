@@ -59,6 +59,7 @@ String displayStyle = blogEntriesManagementToolbarDisplayContext.getDisplayStyle
 	filterLabelItems="<%= blogEntriesManagementToolbarDisplayContext.getFilterLabelItems() %>"
 	itemsTotal="<%= entriesSearchContainer.getTotal() %>"
 	searchActionURL="<%= blogEntriesManagementToolbarDisplayContext.getSearchActionURL() %>"
+	searchAriaLabel='<%= LanguageUtil.format(request, "search-x", "blogs") %>'
 	searchContainerId="blogEntries"
 	searchFormName="searchFm"
 	showInfoButton="<%= false %>"
