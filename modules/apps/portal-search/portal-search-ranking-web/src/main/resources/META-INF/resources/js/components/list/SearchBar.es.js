@@ -3,8 +3,8 @@ import ClayButton from 'components/shared/ClayButton.es';
 import Dropdown from './Dropdown.es';
 import getCN from 'classnames';
 import React, {Component} from 'react';
-import {sub} from 'utils/language.es';
 import {PropTypes} from 'prop-types';
+import {sub} from 'utils/language.es';
 
 class SearchBar extends Component {
 	static propTypes = {

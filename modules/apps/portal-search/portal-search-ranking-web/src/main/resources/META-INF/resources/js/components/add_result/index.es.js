@@ -4,10 +4,10 @@ import Item from 'components/list/Item.es';
 import PaginationBar from './PaginationBar.es';
 import React, {Component} from 'react';
 import ReactModal from 'react-modal';
-import {sub} from 'utils/language.es';
 import {getMockResultsData} from 'test/mock-data.js';
 import {PropTypes} from 'prop-types';
 import {resultsDataToMap} from 'utils/util.es';
+import {sub} from 'utils/language.es';
 import {toggleListItem} from '../../utils/util.es';
 
 const DELTAS = [5, 10, 20, 40, 50];
@@ -343,7 +343,7 @@ class AddResult extends Component {
 																	]
 																) :
 																sub(
-																	Liferay.Language.get('x-to-x-of-x-results'),
+																	Liferay.Language.get('x-x-of-x-results'),
 																	[
 																		start - selectedDelta + 1,
 																		Math.min(start, results.items),

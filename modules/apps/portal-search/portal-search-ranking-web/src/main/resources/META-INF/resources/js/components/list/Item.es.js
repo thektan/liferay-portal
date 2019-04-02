@@ -7,8 +7,8 @@ import React, {Component} from 'react';
 import {DragSource as dragSource, DropTarget as dropTarget} from 'react-dnd';
 import {findDOMNode} from 'react-dom';
 import {getEmptyImage} from 'react-dnd-html5-backend';
-import {sub} from 'utils/language.es';
 import {PropTypes} from 'prop-types';
+import {sub} from 'utils/language.es';
 
 /**
  * Passes the required values to the drop target and drag preview.
