@@ -46,8 +46,8 @@ String indexName = "results-ranking";
 		'<%= resultsRankingsRootElementId %>',
 		{
 			cancelUrl: '<%= HtmlUtil.escape(redirect) %>',
-			fetchDocumentsUrl: '',
 			fetchDocumentsHiddenUrl: '',
+			fetchDocumentsUrl: '',
 			searchTerm: '<%= HtmlUtil.escape(keywords) %>'
 		},
 		{
