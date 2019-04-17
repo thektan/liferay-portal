@@ -5,6 +5,9 @@ import 'jest-dom/extend-expect';
 
 const DELTAS = [5, 10, 20, 40, 50];
 
+const PAGINATION_DELTA_ID = 'pagination-delta';
+const PAGINATION_ID = 'pagination';
+
 describe(
 	'PaginationBar',
 	() => {
@@ -14,7 +17,7 @@ describe(
 			'should have a dropdown for updating delta',
 			() => {
 
-				const {container} = render(
+				const {getByTestId} = render(
 					<PaginationBar
 						deltas={DELTAS}
 						page={1}
@@ -25,7 +28,9 @@ describe(
 					/>
 				);
 
-				const dropdownItems = container.querySelectorAll('.pagination-items-per-page .dropdown-item');
+				const deltaDropdown = getByTestId(PAGINATION_DELTA_ID);
+
+				const dropdownItems = deltaDropdown.querySelectorAll('.dropdown-item');
 
 				expect(dropdownItems.length).toEqual(5);
 
@@ -41,7 +46,7 @@ describe(
 			'should have correct pagination with 100 items and delta 50',
 			() => {
 
-				const {queryByText} = render(
+				const {getByTestId, queryByText} = render(
 					<PaginationBar
 						deltas={DELTAS}
 						page={1}
@@ -54,8 +59,8 @@ describe(
 
 				expect(queryByText('Showing 1 to 50 of 100 entries')).toBeDefined();
 
-				expect(queryByText('2')).not.toBeNull();
-				expect(queryByText('3')).toBeNull();
+				expect(getByTestId(PAGINATION_ID)).toHaveTextContent('2');
+				expect(getByTestId(PAGINATION_ID)).not.toHaveTextContent('3');
 			}
 		);
 
@@ -63,7 +68,7 @@ describe(
 			'should have correct pagination with 105 items and delta 5',
 			() => {
 
-				const {queryByText} = render(
+				const {getByTestId, queryByText} = render(
 					<PaginationBar
 						deltas={DELTAS}
 						page={1}
@@ -76,8 +81,8 @@ describe(
 
 				expect(queryByText('Showing 1 to 50 of 100 entries')).toBeDefined();
 
-				expect(queryByText('21')).not.toBeNull();
-				expect(queryByText('22')).toBeNull();
+				expect(getByTestId(PAGINATION_ID)).toHaveTextContent('21');
+				expect(getByTestId(PAGINATION_ID)).not.toHaveTextContent('22');
 			}
 		);
 
@@ -101,11 +106,32 @@ describe(
 		);
 
 		it(
+			'should show the pagination dropdown menu when clicked on dropdown delta',
+			() => {
+
+				const {getByTestId, getByText} = render(
+					<PaginationBar
+						deltas={DELTAS}
+						page={7}
+						selectedDelta={DELTAS[0]}
+						onDeltaChange={jest.fn()}
+						onPageChange={jest.fn()}
+						totalItems={100}
+					/>
+				);
+
+				fireEvent.click(getByText('5 Items'));
+
+				expect(getByTestId(PAGINATION_DELTA_ID).querySelector('.dropdown-menu')).toHaveClass('show');
+			}
+		);
+
+		it(
 			'should call the onDeltaChange function when selecting delta',
 			() => {
 				const onDeltaChange = jest.fn();
 
-				const {container} = render(
+				const {getByTestId} = render(
 					<PaginationBar
 						deltas={DELTAS}
 						page={7}
@@ -116,9 +142,9 @@ describe(
 					/>
 				);
 
-				const dropdownItem = container.querySelector('.pagination-items-per-page .dropdown-item');
+				const deltaDropdown = getByTestId(PAGINATION_DELTA_ID);
 
-				fireEvent.click(dropdownItem);
+				fireEvent.click(deltaDropdown.querySelector('.dropdown-item'));
 
 				expect(onDeltaChange.mock.calls.length).toBe(1);
 			}

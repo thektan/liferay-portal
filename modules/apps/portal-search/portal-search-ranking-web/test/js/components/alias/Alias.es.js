@@ -82,7 +82,7 @@ describe(
 
 				fireEvent.click(getByText('Add an Alias'));
 
-				fireEvent.click(getByText('Cancel', {exact: false}));
+				fireEvent.click(getByText('Cancel'));
 
 				expect(queryByTestId(MODAL_ID)).toBeNull();
 			}

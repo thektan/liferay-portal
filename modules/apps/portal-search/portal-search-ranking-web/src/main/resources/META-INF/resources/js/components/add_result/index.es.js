@@ -445,7 +445,7 @@ class AddResult extends Component {
 											</div>
 										</div>
 
-										<ul className="list-group" data-testid="add-result-items" >
+										<ul className="list-group" data-testid="add-result-items">
 											{results.items.map(
 												result => (
 													<Item

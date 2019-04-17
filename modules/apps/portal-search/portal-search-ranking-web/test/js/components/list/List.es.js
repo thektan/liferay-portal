@@ -2,43 +2,17 @@ import React from 'react';
 import List from 'components/list/index.es';
 import {cleanup, fireEvent, render} from 'react-testing-library';
 import 'jest-dom/extend-expect';
+import {getMockResultsData} from 'test/mock-data.js';
+import {resultsDataToMap} from 'utils/util.es';
 
-const DATA_MAP = {
-	102: {
-		author: 'Juan Hidalgo',
-		clicks: 289,
-		date: 'Apr 18 2018, 11:04 AM',
-		description:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
-		hidden: false,
-		id: 102,
-		pinned: false,
-		title: 'This is a Web Content Example with Long Title',
-		type: 'Web Content'
-	},
-	103: {
-		author: 'Juan Hidalgo',
-		clicks: 8,
-		date: 'Apr 18 2018, 11:04 AM',
-		hidden: false,
-		extension: 'png',
-		id: 103,
-		pinned: false,
-		title: 'This is an Image Example',
-		type: 'Document'
-	},
-	104: {
-		author: 'Juan Hidalgo',
-		clicks: 89,
-		date: 'Apr 18 2018, 11:04 AM',
-		extension: 'png',
-		hidden: false,
-		id: 104,
-		pinned: false,
-		title: 'This is a Document Example',
-		type: 'Document'
-	}
-};
+const DATA_MAP = resultsDataToMap(
+	getMockResultsData(
+		10,
+		0,
+		'',
+		false
+	).documents
+);
 
 describe(
 	'List',
@@ -66,9 +40,9 @@ describe(
 
 				const listItems = container.querySelectorAll('.text-truncate-inline');
 
-				expect(listItems[0]).toHaveTextContent('This is a Web Content Example with Long Title');
-				expect(listItems[1]).toHaveTextContent('This is a Document Example');
-				expect(listItems[2]).toHaveTextContent('This is an Image Example');
+				expect(listItems[0]).toHaveTextContent('102 This is a Document Example');
+				expect(listItems[1]).toHaveTextContent('104 This is a Document Example');
+				expect(listItems[2]).toHaveTextContent('103 This is a Web Content Example');
 			}
 		);
 
@@ -144,6 +118,60 @@ describe(
 				fireEvent.click(loadButton);
 
 				expect(mockLoad).toHaveBeenCalledTimes(1);
+			}
+		);
+
+		it(
+			'should update the selected ids',
+			() => {
+				const mockLoad = jest.fn();
+
+				const {getByTestId, queryByText} = render(
+					<List
+						dataLoading={false}
+						dataMap={DATA_MAP}
+						onClickHide={jest.fn()}
+						onLoadResults={mockLoad}
+						onSearchBarEnter={jest.fn()}
+						onUpdateSearchBarTerm={jest.fn()}
+						resultIds={[102, 104, 103]}
+						searchBarTerm={''}
+						selected={[104]}
+						totalResultsCount={300}
+					/>
+				);
+
+				fireEvent.click(getByTestId('102').querySelector('.custom-control-input'));
+				fireEvent.click(getByTestId('104').querySelector('.custom-control-input'));
+
+				expect(queryByText('2 of 3 Items Selected')).toBeInTheDocument();
+			}
+		);
+
+		it(
+			'should update the selected ids back',
+			() => {
+				const mockLoad = jest.fn();
+
+				const {getByTestId, queryByText} = render(
+					<List
+						dataLoading={false}
+						dataMap={DATA_MAP}
+						onClickHide={jest.fn()}
+						onLoadResults={mockLoad}
+						onSearchBarEnter={jest.fn()}
+						onUpdateSearchBarTerm={jest.fn()}
+						resultIds={[102, 104, 103]}
+						searchBarTerm={''}
+						selected={[104]}
+						totalResultsCount={300}
+					/>
+				);
+
+				fireEvent.click(getByTestId('102').querySelector('.custom-control-input'));
+				fireEvent.click(getByTestId('102').querySelector('.custom-control-input'));
+
+				expect(queryByText('Items Selected')).not.toBeInTheDocument();
 			}
 		);
 	}

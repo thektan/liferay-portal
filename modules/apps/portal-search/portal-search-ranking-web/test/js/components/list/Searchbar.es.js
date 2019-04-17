@@ -2,42 +2,17 @@ import React from 'react';
 import SearchBar from 'components/list/SearchBar.es';
 import {cleanup, fireEvent, render} from 'react-testing-library';
 import 'jest-dom/extend-expect';
+import {getMockResultsData} from 'test/mock-data.js';
+import {resultsDataToMap} from 'utils/util.es';
 
-const DATA_MAP = {
-	102: {
-		author: 'Juan Hidalgo',
-		clicks: 289,
-		date: 'Apr 18 2018, 11:04 AM',
-		description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
-		hidden: false,
-		id: 102,
-		pinned: false,
-		title: 'This is a Web Content Example with Long Title',
-		type: 'Web Content'
-	},
-	103: {
-		author: 'Juan Hidalgo',
-		clicks: 8,
-		date: 'Apr 18 2018, 11:04 AM',
-		hidden: false,
-		extension: 'png',
-		id: 103,
-		pinned: false,
-		title: 'This is an Image Example',
-		type: 'Document'
-	},
-	104: {
-		author: 'Juan Hidalgo',
-		clicks: 89,
-		date: 'Apr 18 2018, 11:04 AM',
-		extension: 'png',
-		hidden: false,
-		id: 104,
-		pinned: false,
-		title: 'This is an Document Example',
-		type: 'Document'
-	}
-};
+const DATA_MAP = resultsDataToMap(
+	getMockResultsData(
+		10,
+		0,
+		'',
+		false
+	).documents
+);
 
 describe(
 	'SearchBar',
@@ -47,7 +22,6 @@ describe(
 		it(
 			'should have the searchbar term in the input',
 			() => {
-
 				const {getByPlaceholderText} = render(
 					<SearchBar
 						dataMap={DATA_MAP}
@@ -71,7 +45,56 @@ describe(
 		);
 
 		it(
-			'should show what is selected',
+			'should have an add result button when onAddResultSubmit is defined',
+			() => {
+				const onUpdateSearchBarTerm = jest.fn();
+
+				const {queryByText} = render(
+					<SearchBar
+						dataMap={DATA_MAP}
+						onAddResultSubmit={jest.fn()}
+						onClickHide={jest.fn()}
+						onClickPin={jest.fn()}
+						onSearchBarEnter={jest.fn()}
+						onSelectAll={jest.fn()}
+						onSelectClear={jest.fn()}
+						onUpdateSearchBarTerm={onUpdateSearchBarTerm}
+						resultIds={[102, 104, 103]}
+						searchBarTerm={'test'}
+						selectedIds={[]}
+					/>
+				);
+
+				expect(queryByText('Add a Result')).not.toBeNull();
+			}
+		);
+
+		it(
+			'should not have an add result button when onAddResultSubmit is not defined',
+			() => {
+				const onUpdateSearchBarTerm = jest.fn();
+
+				const {queryByText} = render(
+					<SearchBar
+						dataMap={DATA_MAP}
+						onClickHide={jest.fn()}
+						onClickPin={jest.fn()}
+						onSearchBarEnter={jest.fn()}
+						onSelectAll={jest.fn()}
+						onSelectClear={jest.fn()}
+						onUpdateSearchBarTerm={onUpdateSearchBarTerm}
+						resultIds={[102, 104, 103]}
+						searchBarTerm={'test'}
+						selectedIds={[]}
+					/>
+				);
+
+				expect(queryByText('Add a Result')).toBeNull();
+			}
+		);
+
+		it(
+			'should show what is selected using selectedIds',
 			() => {
 
 				const {queryByText, queryByPlaceholderText} = render(
@@ -123,7 +146,7 @@ describe(
 		);
 
 		it(
-			'should show no items selected',
+			'should show no items selected with empty selectedIds',
 			() => {
 				const {queryByPlaceholderText, queryByText} = render(
 					<SearchBar

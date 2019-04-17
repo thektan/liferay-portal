@@ -1,7 +1,6 @@
 export function getMockResultsData(
 	size = 10,
 	startId = 0,
-	level = 100,
 	searchBarTerm = '',
 	hidden = false,
 	properties = {}
@@ -10,24 +9,33 @@ export function getMockResultsData(
 
 	const PINNED_AMOUNT = 5;
 
+	let LEVEL;
+
+	if (searchBarTerm === '') {
+		LEVEL = hidden ? 200 : 100;
+	}
+	else {
+		LEVEL = 300;
+	}
+
 	for (let i = 0; i < size; i++) {
 		const typeOfItem = i % 2 === 0 ? 'Document' : 'Web Content';
 
-		const k = searchBarTerm === '' ? i + startId : (i + startId) * 2;
+		const k = i + startId;
 
 		mockData.push(
 			{
 				author: 'Test Test',
-				clicks: k + level,
+				clicks: k + LEVEL,
 				date: 'Apr 18 2018, 11:04 AM',
 				description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
 				extension:
 					typeOfItem === 'Document' ? 'pdf' : null,
 				hidden: hidden,
-				id: k + level,
+				id: k + LEVEL,
 				pinned: hidden ? false : k < PINNED_AMOUNT,
-				title: `${k + level} This is a ${typeOfItem} Example`,
+				title: `${k + LEVEL} This is a ${typeOfItem} Example`,
 				type: typeOfItem,
 				...properties
 			}

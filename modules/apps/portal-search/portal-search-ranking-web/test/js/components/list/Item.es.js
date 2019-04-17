@@ -3,6 +3,11 @@ import Item from 'components/list/Item.es';
 import {cleanup, fireEvent, render} from 'react-testing-library';
 import 'jest-dom/extend-expect';
 
+jest.mock('react-dnd', () => ({
+	DragSource: el => el => el,
+	DropTarget: el => el => el
+}));
+
 describe(
 	'Item',
 	() => {
@@ -13,9 +18,9 @@ describe(
 			() => {
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}
@@ -50,9 +55,9 @@ describe(
 			() => {
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}
@@ -78,7 +83,7 @@ describe(
 
 				const subtitles = container.querySelectorAll('.list-group-subtext');
 
-				expect(subtitles[0]).toHaveTextContent('Juan Hidalgo - Apr 18 2018, 11:04 AM');
+				expect(subtitles[0]).toHaveTextContent('Test Test - Apr 18 2018, 11:04 AM');
 				expect(subtitles[1]).toHaveTextContent('[Web Content]');
 			}
 		);
@@ -88,9 +93,9 @@ describe(
 			() => {
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}
@@ -123,9 +128,9 @@ describe(
 			() => {
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}
@@ -158,9 +163,9 @@ describe(
 			() => {
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}
@@ -195,9 +200,9 @@ describe(
 				const onClickHide = jest.fn();
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}
@@ -234,9 +239,9 @@ describe(
 				const onClickPin = jest.fn();
 
 				const {container} = render(
-					<Item.DecoratedComponent
+					<Item
 						addedResult={false}
-						author={'Juan Hidalgo'}
+						author={'Test Test'}
 						clicks={289}
 						date={'Apr 18 2018, 11:04 AM'}
 						description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'}

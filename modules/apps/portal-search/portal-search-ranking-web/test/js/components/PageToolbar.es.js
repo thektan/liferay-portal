@@ -19,7 +19,7 @@ describe(
 					/>
 				);
 
-				expect(getByText('publish', {exact: false})).toHaveAttribute('disabled');
+				expect(getByText('Publish')).toHaveAttribute('disabled');
 			}
 		);
 
@@ -34,7 +34,7 @@ describe(
 					/>
 				);
 
-				expect(getByText('publish', {exact: false})).not.toHaveAttribute('disabled');
+				expect(getByText('Publish')).not.toHaveAttribute('disabled');
 			}
 		);
 	}

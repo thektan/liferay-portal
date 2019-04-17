@@ -10,11 +10,11 @@ describe(
 		it(
 			'should render',
 			() => {
-				const {asFragment} = render(
+				const {container} = render(
 					<ClayMultiselect />
 				);
 
-				expect(asFragment()).toMatchSnapshot();
+				expect(container.firstChild).not.toBeNull();
 			}
 		);
 	}

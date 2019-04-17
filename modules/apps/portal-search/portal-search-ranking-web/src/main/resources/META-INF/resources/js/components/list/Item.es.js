@@ -261,6 +261,7 @@ class Item extends Component {
 			extension,
 			hidden,
 			hoverIndex,
+			id,
 			index,
 			lastIndex,
 			onClickHide,
@@ -310,6 +311,7 @@ class Item extends Component {
 		return connectDropTarget(
 			<li
 				className={listClasses}
+				data-testid={id}
 				onMouseEnter={this._handleMouseEnter}
 				onMouseLeave={this._handleMouseLeave}
 				style={style}

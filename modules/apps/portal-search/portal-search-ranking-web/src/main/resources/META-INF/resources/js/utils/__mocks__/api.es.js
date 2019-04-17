@@ -12,13 +12,10 @@ export const fetchDocuments = jest.fn(
 	) => {
 		const {from, hidden, keywords, size} = config;
 
-		const level = hidden ? 200 : 100;
-
 		const p = Promise.resolve(
 			getMockResultsData(
 				size,
 				from,
-				level,
 				keywords,
 				hidden
 			)

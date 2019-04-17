@@ -272,7 +272,7 @@ class Pagination extends Component {
 		);
 
 		return (
-			<ul className="pagination">
+			<ul className="pagination" data-testid="pagination">
 				<li className={classPrevious}>
 					<a
 						className="page-link"
