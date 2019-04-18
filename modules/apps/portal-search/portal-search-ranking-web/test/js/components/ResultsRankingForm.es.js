@@ -21,6 +21,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={'example'}
 					/>
 				);
@@ -38,6 +39,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -57,6 +59,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -70,6 +73,52 @@ describe(
 		);
 
 		it(
+			'should include the initial aliases',
+			async() => {
+
+				const {container} = render(
+					<ResultsRankingForm
+						cancelUrl={'cancel'}
+						fetchDocumentsHiddenUrl=""
+						fetchDocumentsUrl=""
+						initialAliases={['one', 'two', 'three']}
+						searchTerm={''}
+					/>
+				);
+
+				const tagsElement = container.querySelectorAll('.label-item-expand');
+
+				expect(tagsElement[0]).toHaveTextContent('one');
+				expect(tagsElement[1]).toHaveTextContent('two');
+				expect(tagsElement[2]).toHaveTextContent('three');
+			}
+		);
+
+		it(
+			'should remove an initial alias after clicking delete',
+			async() => {
+
+				const {container} = render(
+					<ResultsRankingForm
+						cancelUrl={'cancel'}
+						fetchDocumentsHiddenUrl=""
+						fetchDocumentsUrl=""
+						initialAliases={['one', 'two', 'three']}
+						searchTerm={''}
+					/>
+				);
+
+				const tagsElementClose = container.querySelectorAll('.label-item-after button');
+
+				fireEvent.click(tagsElementClose[0]);
+
+				const tagsElement = container.querySelectorAll('.label-item-expand');
+
+				expect(tagsElement[0]).not.toHaveTextContent('one');
+			}
+		);
+
+		it(
 			'should update the pinnedAdded',
 			async() => {
 
@@ -78,6 +127,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -101,6 +151,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -126,6 +177,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -149,6 +201,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -174,6 +227,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -197,6 +251,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -224,6 +279,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -249,6 +305,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -278,6 +335,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);
@@ -311,6 +369,7 @@ describe(
 						cancelUrl={'cancel'}
 						fetchDocumentsHiddenUrl=""
 						fetchDocumentsUrl=""
+						initialAliases={[]}
 						searchTerm={''}
 					/>
 				);

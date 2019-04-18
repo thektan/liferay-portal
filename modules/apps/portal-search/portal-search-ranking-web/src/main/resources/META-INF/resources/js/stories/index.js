@@ -47,6 +47,7 @@ storiesOf('Main|ResultsRankingForm', module)
 				cancelUrl=""
 				fetchDocumentsHiddenUrl=""
 				fetchDocumentsUrl=""
+				initialAliases={[]}
 				searchTerm={text('Search Term', 'example')}
 			/>
 		)
@@ -58,6 +59,7 @@ storiesOf('Main|ResultsRankingForm', module)
 				cancelUrl=""
 				fetchDocumentsHiddenUrl="http://www.mocky.io/v2/5cabd9ab3000002900103266"
 				fetchDocumentsUrl="http://www.mocky.io/v2/5cabd1073000002900103260"
+				initialAliases={['one', 'two', 'three']}
 				searchTerm={text('Search Term', 'example')}
 			/>
 		)

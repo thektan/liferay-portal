@@ -28,6 +28,7 @@ class ResultsRankingForm extends Component {
 		cancelUrl: PropTypes.string.isRequired,
 		fetchDocumentsHiddenUrl: PropTypes.string.isRequired,
 		fetchDocumentsUrl: PropTypes.string.isRequired,
+		initialAliases: PropTypes.arrayOf(String).isRequired,
 		searchTerm: PropTypes.string.isRequired
 	};
 
@@ -37,7 +38,7 @@ class ResultsRankingForm extends Component {
 		 * A list of strings of aliases.
 		 * @type {Array}
 		 */
-		aliases: [],
+		aliases: this.props.initialAliases,
 
 		/**
 		 * Display a loading spinner while data is fetching.
@@ -104,7 +105,6 @@ class ResultsRankingForm extends Component {
 	constructor(props) {
 		super(props);
 
-		this._initialAliases = this.state.aliases;
 		this._initialResultIds = [];
 		this._initialResultIdsHidden = [];
 		this._initialResultIdsPinned = [];
@@ -141,8 +141,8 @@ class ResultsRankingForm extends Component {
 	 * Returns a boolean of whether the alias list has changed.
 	 */
 	_getAliasUnchanged = () =>
-		this._initialAliases.length === this.state.aliases.length &&
-			this._initialAliases.every(item => this.state.aliases.includes(item));
+		this.props.initialAliases.length === this.state.aliases.length &&
+			this.props.initialAliases.every(item => this.state.aliases.includes(item));
 
 	/**
 	 * Checks whether changes have been made for submission. Checks the lengths of
