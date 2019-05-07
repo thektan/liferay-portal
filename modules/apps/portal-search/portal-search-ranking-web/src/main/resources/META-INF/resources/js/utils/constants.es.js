@@ -1,7 +1,7 @@
 export const KEY_CODES = {
 	ARROW_DOWN: 'ArrowDown',
 	ARROW_UP: 'ArrowUp',
-	H: 'H',
+	H: 'h',
 	P: 'p',
 	S: 's',
 	SPACE: ' ',

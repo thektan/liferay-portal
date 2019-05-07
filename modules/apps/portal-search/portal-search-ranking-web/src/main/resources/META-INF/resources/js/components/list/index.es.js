@@ -90,15 +90,14 @@ class List extends Component {
 			event.preventDefault();
 
 			if (focusIndex + 1 < resultIds.length) {
+				if (!(reorder && focusIndex + 1 === pinLength)) {
 
-				if (reorder && focusIndex + 1 < pinLength) {
-					onMove(focusIndex, focusIndex + 2);
-				}
-				else if (focusIndex + 1 === pinLength) {
-					this._handleReorder(false);
-				}
+					if (reorder && focusIndex + 1 < pinLength) {
+						onMove(focusIndex, focusIndex + 2);
+					}
 
-				this._handleFocus(focusIndex + 1);
+					this._handleFocus(focusIndex + 1);
+				}
 			}
 		}
 		else if (event.key === KEY_CODES.ARROW_UP) {
@@ -197,7 +196,7 @@ class List extends Component {
 	 * @param {Array} arr The full list of items.
 	 */
 	_renderItem = (id, index, arr) => {
-		const {dataMap, onClickHide, onClickPin, onMove} = this.props;
+		const {dataMap, onClickHide, onMove} = this.props;
 
 		const {focusIndex, reorder, selectedIds} = this.state;
 

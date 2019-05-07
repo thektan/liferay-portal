@@ -342,14 +342,18 @@ class ResultsRankingForm extends Component {
 			}
 		).then(
 			({items, total}) => {
-				const mappedData = items ? resultsDataToMap(items) : {};
-
-				const pinnedIds = items ?
-					items.filter(({pinned}) => pinned)
-						.map(({id}) => id) :
+				const newItems = items ?
+					items.filter(({id}) => ![...this._initialResultIdsPinned, ...this._initialResultIds].includes(id)) :
 					[];
 
-				const ids = items ? items.map(({id}) => id) : [];
+				const mappedData = items ? resultsDataToMap(newItems) : {};
+
+				const pinnedIds = newItems
+					.filter(({pinned}) => pinned)
+					.map(({id}) => id);
+
+				const ids = newItems
+					.map(({id}) => id);
 
 				this._initialResultIdsPinned = [
 					...this._initialResultIdsPinned,
@@ -427,9 +431,15 @@ class ResultsRankingForm extends Component {
 			}
 		).then(
 			({items, total}) => {
-				const mappedData = items ? resultsDataToMap(items) : {};
+				const newItems = items ?
+					items.filter(({id}) => !this._initialResultIdsHidden.includes(id)) :
+					[];
 
-				const ids = items ? items.map(({id}) => id) : [];
+				const mappedData = items ? resultsDataToMap(newItems) : {};
+
+				const ids = newItems
+					.filter(({id}) => !this._initialResultIdsHidden.includes(id))
+					.map(({id}) => id);
 
 				this._initialResultIdsHidden = [
 					...this._initialResultIdsHidden,
