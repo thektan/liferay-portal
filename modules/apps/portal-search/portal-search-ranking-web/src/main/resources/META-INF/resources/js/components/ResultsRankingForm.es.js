@@ -1,4 +1,5 @@
 import Alias from 'components/alias/index.es';
+import ClayEmptyState, {DISPLAY_STATES} from 'components/shared/ClayEmptyState.es';
 import FormValueDebugger from 'utils/FormValueDebugger.es';
 import List from 'components/list/index.es';
 import PageToolbar from './PageToolbar.es';
@@ -21,6 +22,34 @@ import {
 import {PropTypes} from 'prop-types';
 
 const DELTA = 10;
+
+class ErrorBoundary extends Component {
+	state = {
+		hasError: false
+	}
+
+	static getDerivedStateFromError(error) {
+		return {hasError: true};
+	}
+
+	componentDidCatch(error, info) {
+		console.log('error', error, info);
+	}
+
+	render() {
+		if (this.state.hasError) {
+			return (
+				<ClayEmptyState
+					description={Liferay.Language.get('an-error-has-occurred-and-we-were-unable-to-load-the-results')}
+					displayState={DISPLAY_STATES.EMPTY}
+					title={Liferay.Language.get('unable-to-load-content')}
+				/>
+			);
+		}
+
+		return this.props.children;
+	}
+}
 
 const HiddenInput = ({name, value}) => (
 	<input id={name} name={name} type="hidden" value={value} />
@@ -707,73 +736,75 @@ class ResultsRankingForm extends Component {
 							<strong>{Liferay.Language.get('results')}</strong>
 						</div>
 
-						<div className="form-section-results-list">
-							<ClayTabs onSelect={this._handleTabSelect}>
-								<ClayTabList className="results-ranking-tabs">
-									<ClayTab>{Liferay.Language.get('visible')}</ClayTab>
+						<ErrorBoundary>
+							<div className="form-section-results-list">
+								<ClayTabs onSelect={this._handleTabSelect}>
+									<ClayTabList className="results-ranking-tabs">
+										<ClayTab>{Liferay.Language.get('visible')}</ClayTab>
 
-									<ClayTab>{Liferay.Language.get('hidden')}</ClayTab>
-								</ClayTabList>
+										<ClayTab>{Liferay.Language.get('hidden')}</ClayTab>
+									</ClayTabList>
 
-								<ClayTabPanel>
-									<List
-										dataLoading={dataLoading}
-										dataMap={dataMap}
-										displayError={displayError}
-										fetchDocumentsUrl={fetchDocumentsUrl}
-										onAddResultSubmit={
-											this._handleUpdateAddResultIds
-										}
-										onClickHide={this._handleClickHide}
-										onClickPin={this._handleClickPin}
-										onLoadResults={this._handleFetchResultsData}
-										onMove={this._handleMove}
-										onSearchBarEnter={
-											this._handleSearchBarEnter
-										}
-										onUpdateSearchBarTerm={
-											this._handleUpdateSearchBarTerm
-										}
-										resultIds={this._getResultIdsVisible()}
-										resultIdsPinned={this.state.resultIdsPinned}
-										searchBarTerm={searchBarTerm}
-										selected={selected}
-										totalResultsCount={
-											totalResultsVisibleCount -
+									<ClayTabPanel>
+										<List
+											dataLoading={dataLoading}
+											dataMap={dataMap}
+											displayError={displayError}
+											fetchDocumentsUrl={fetchDocumentsUrl}
+											onAddResultSubmit={
+												this._handleUpdateAddResultIds
+											}
+											onClickHide={this._handleClickHide}
+											onClickPin={this._handleClickPin}
+											onLoadResults={this._handleFetchResultsData}
+											onMove={this._handleMove}
+											onSearchBarEnter={
+												this._handleSearchBarEnter
+											}
+											onUpdateSearchBarTerm={
+												this._handleUpdateSearchBarTerm
+											}
+											resultIds={this._getResultIdsVisible()}
+											resultIdsPinned={this.state.resultIdsPinned}
+											searchBarTerm={searchBarTerm}
+											selected={selected}
+											totalResultsCount={
+												totalResultsVisibleCount -
 											this._getHiddenAdded().length +
 											this._getHiddenRemoved().length
-										}
-									/>
-								</ClayTabPanel>
+											}
+										/>
+									</ClayTabPanel>
 
-								<ClayTabPanel>
-									<List
-										dataLoading={dataLoading}
-										dataMap={dataMap}
-										displayError={displayErrorHidden}
-										onClickHide={this._handleClickHide}
-										onClickPin={this._handleClickPin}
-										onLoadResults={
-											this._handleFetchResultsDataHidden
-										}
-										onSearchBarEnter={
-											this._handleSearchBarEnter
-										}
-										onUpdateSearchBarTerm={
-											this._handleUpdateSearchBarTerm
-										}
-										resultIds={resultIdsHidden}
-										searchBarTerm={searchBarTerm}
-										selected={selected}
-										totalResultsCount={
-											totalResultsHiddenCount -
+									<ClayTabPanel>
+										<List
+											dataLoading={dataLoading}
+											dataMap={dataMap}
+											displayError={displayErrorHidden}
+											onClickHide={this._handleClickHide}
+											onClickPin={this._handleClickPin}
+											onLoadResults={
+												this._handleFetchResultsDataHidden
+											}
+											onSearchBarEnter={
+												this._handleSearchBarEnter
+											}
+											onUpdateSearchBarTerm={
+												this._handleUpdateSearchBarTerm
+											}
+											resultIds={resultIdsHidden}
+											searchBarTerm={searchBarTerm}
+											selected={selected}
+											totalResultsCount={
+												totalResultsHiddenCount -
 											this._getHiddenRemoved().length +
 											this._getHiddenAdded().length
-										}
-									/>
-								</ClayTabPanel>
-							</ClayTabs>
-						</div>
+											}
+										/>
+									</ClayTabPanel>
+								</ClayTabs>
+							</div>
+						</ErrorBoundary>
 					</div>
 				</div>
 
