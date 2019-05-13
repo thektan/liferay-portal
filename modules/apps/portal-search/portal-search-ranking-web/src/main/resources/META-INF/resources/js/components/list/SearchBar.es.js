@@ -1,7 +1,5 @@
 import AddResult from 'components/add_result/index.es';
 import ClayButton from 'components/shared/ClayButton.es';
-import FilterBar from './FilterBar.es';
-import FilterInput from './FilterInput.es';
 import getCN from 'classnames';
 import ItemDropdown from './ItemDropdown.es';
 import React, {Component} from 'react';
@@ -123,16 +121,10 @@ class SearchBar extends Component {
 
 	render() {
 		const {
-			currentlySearching,
-			disableSearch,
 			fetchDocumentsUrl,
 			onAddResultSubmit,
-			onSearchBarEnter,
-			onUpdateSearchBarTerm,
 			resultIds,
-			searchBarTerm,
-			selectedIds,
-			totalResultsCount
+			selectedIds
 		} = this.props;
 
 		const classManagementBar = getCN(
@@ -250,12 +242,7 @@ class SearchBar extends Component {
 
 							{!this._hasSelectedIds() &&
 							<React.Fragment>
-								<FilterInput
-									disableSearch={disableSearch}
-									onSearchBarEnter={onSearchBarEnter}
-									onUpdateSearchBarTerm={onUpdateSearchBarTerm}
-									searchBarTerm={searchBarTerm}
-								/>
+								<div className="navbar-nav navbar-nav-expand" />
 
 								{onAddResultSubmit && (
 									<ul className="navbar-nav">
@@ -270,15 +257,6 @@ class SearchBar extends Component {
 						</div>
 					</div>
 				</nav>
-
-				{currentlySearching &&
-					<FilterBar
-						onSearchBarEnter={onSearchBarEnter}
-						onUpdateSearchBarTerm={onUpdateSearchBarTerm}
-						searchBarTerm={searchBarTerm}
-						totalResultsCount={totalResultsCount}
-					/>
-				}
 			</div>
 		);
 	}

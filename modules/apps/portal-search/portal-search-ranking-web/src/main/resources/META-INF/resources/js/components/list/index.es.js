@@ -12,7 +12,6 @@ import {PropTypes} from 'prop-types';
 
 class List extends PureComponent {
 	static propTypes = {
-		currentlySearching: PropTypes.bool,
 		dataLoading: PropTypes.bool,
 		dataMap: PropTypes.object,
 		displayError: PropTypes.bool,
@@ -22,11 +21,8 @@ class List extends PureComponent {
 		onClickPin: PropTypes.func,
 		onLoadResults: PropTypes.func,
 		onMove: PropTypes.func,
-		onSearchBarEnter: PropTypes.func,
-		onUpdateSearchBarTerm: PropTypes.func,
 		resultIds: PropTypes.arrayOf(Number),
 		resultIdsPinned: PropTypes.arrayOf(Number),
-		searchBarTerm: PropTypes.string,
 		totalResultsCount: PropTypes.number
 	};
 
@@ -223,7 +219,6 @@ class List extends PureComponent {
 
 	render() {
 		const {
-			currentlySearching,
 			dataLoading,
 			dataMap,
 			displayError,
@@ -231,10 +226,7 @@ class List extends PureComponent {
 			onAddResultSubmit,
 			onClickHide,
 			onClickPin,
-			onSearchBarEnter,
-			onUpdateSearchBarTerm,
 			resultIds,
-			searchBarTerm,
 			totalResultsCount
 		} = this.props;
 
@@ -245,20 +237,15 @@ class List extends PureComponent {
 				<ItemDragLayer />
 
 				<SearchBar
-					currentlySearching={currentlySearching}
 					dataMap={dataMap}
-					disableSearch={!resultIds.length && !this._hasMoreData()}
 					fetchDocumentsUrl={fetchDocumentsUrl}
 					onAddResultSubmit={onAddResultSubmit}
 					onClickHide={onClickHide}
 					onClickPin={onClickPin}
 					onRemoveSelect={this._handleRemoveSelect}
-					onSearchBarEnter={onSearchBarEnter}
 					onSelectAll={this._handleSelectAll}
 					onSelectClear={this._handleSelectClear}
-					onUpdateSearchBarTerm={onUpdateSearchBarTerm}
 					resultIds={resultIds}
-					searchBarTerm={searchBarTerm}
 					selectedIds={selectedIds}
 					totalResultsCount={totalResultsCount}
 				/>

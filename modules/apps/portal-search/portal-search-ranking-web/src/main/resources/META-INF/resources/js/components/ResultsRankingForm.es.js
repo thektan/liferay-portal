@@ -133,18 +133,6 @@ class ResultsRankingForm extends Component {
 		resultIdsPinned: [],
 
 		/**
-		 * The current value of the search bar to filter results.
-		 * @type {string}
-		 */
-		searchBarTerm: '',
-
-		/**
-		 * The state of whether items are being currently filtered by searchbar.
-		 * @type {boolean}
-		 */
-		currentlySearching: false,
-
-		/**
 		 * Total number of hidden results returned from the fetch request.
 		 * @type {number}
 		 */
@@ -177,26 +165,6 @@ class ResultsRankingForm extends Component {
 		this._handleFetchResultsData();
 		this._handleFetchResultsDataHidden();
 	}
-
-	/**
-	 * Clears past resultIds, both pinned and hidden lists as a preface for
-	 * using the searchbar.
-	 */
-	_clearResultsData = () => {
-		this.setState(
-			{
-				resultIds: [],
-				resultIdsHidden: [],
-				resultIdsPinned: [],
-				totalResultsHiddenCount: 0,
-				totalResultsVisibleCount: 0
-			}
-		);
-
-		this._initialResultIds = [];
-		this._initialResultIdsHidden = [];
-		this._initialResultIdsPinned = [];
-	};
 
 	/**
 	 * Returns a boolean of whether the alias list has changed.
@@ -584,25 +552,6 @@ class ResultsRankingForm extends Component {
 	}
 
 	/**
-	 * Handles the search bar enter, in which results are cleared and replaced
-	 * with fetched data with the new search parameter.
-	 */
-	_handleSearchBarEnter = () => {
-		this._clearResultsData();
-
-		this._handleFetchResultsData();
-		this._handleFetchResultsDataHidden();
-
-		this.setState(
-			state => (
-				{
-					currentlySearching: state.searchBarTerm != ''
-				}
-			)
-		);
-	};
-
-	/**
 	 * Handles adding to the alias list and filters out duplicate words.
 	 * @param {array} value The value of the new aliases (array of String).
 	 */
@@ -675,15 +624,6 @@ class ResultsRankingForm extends Component {
 	};
 
 	/**
-	 * Handles updating the term in the search bar, which gets applied for
-	 * fetching data.
-	 * @param {string} searchBarTerm The new term
-	 */
-	_handleUpdateSearchBarTerm = searchBarTerm => {
-		this.setState({searchBarTerm});
-	};
-
-	/**
 	 * Checks if an item is neither pinned or hidden. Useful for displaying
 	 * the remaining results in the visible tab.
 	 * @param {number|string} id The id of the item to check.
@@ -706,14 +646,12 @@ class ResultsRankingForm extends Component {
 		const {
 			aliases,
 			changeIndex,
-			currentlySearching,
 			dataLoading,
 			dataMap,
 			displayError,
 			displayErrorHidden,
 			resultIdsHidden,
 			resultIdsPinned,
-			searchBarTerm,
 			selected,
 			totalResultsHiddenCount,
 			totalResultsVisibleCount,
@@ -765,7 +703,6 @@ class ResultsRankingForm extends Component {
 
 									<ClayTabPanel>
 										<List
-											currentlySearching={currentlySearching}
 											dataLoading={dataLoading}
 											dataMap={dataMap}
 											displayError={displayError}
@@ -777,15 +714,8 @@ class ResultsRankingForm extends Component {
 											onClickPin={this._handleClickPin}
 											onLoadResults={this._handleFetchResultsData}
 											onMove={this._handleMove}
-											onSearchBarEnter={
-												this._handleSearchBarEnter
-											}
-											onUpdateSearchBarTerm={
-												this._handleUpdateSearchBarTerm
-											}
 											resultIds={this._getResultIdsVisible()}
 											resultIdsPinned={this.state.resultIdsPinned}
-											searchBarTerm={searchBarTerm}
 											selected={selected}
 											totalResultsCount={
 												totalResultsVisibleCount -
@@ -797,7 +727,6 @@ class ResultsRankingForm extends Component {
 
 									<ClayTabPanel>
 										<List
-											currentlySearching={currentlySearching}
 											dataLoading={dataLoading}
 											dataMap={dataMap}
 											displayError={displayErrorHidden}
@@ -806,14 +735,7 @@ class ResultsRankingForm extends Component {
 											onLoadResults={
 												this._handleFetchResultsDataHidden
 											}
-											onSearchBarEnter={
-												this._handleSearchBarEnter
-											}
-											onUpdateSearchBarTerm={
-												this._handleUpdateSearchBarTerm
-											}
 											resultIds={resultIdsHidden}
-											searchBarTerm={searchBarTerm}
 											selected={selected}
 											totalResultsCount={
 												totalResultsHiddenCount -
