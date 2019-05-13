@@ -139,6 +139,12 @@ class ResultsRankingForm extends Component {
 		searchBarTerm: '',
 
 		/**
+		 * The state of whether items are being currently filtered by searchbar.
+		 * @type {boolean}
+		 */
+		currentlySearching: false,
+
+		/**
 		 * Total number of hidden results returned from the fetch request.
 		 * @type {number}
 		 */
@@ -303,7 +309,7 @@ class ResultsRankingForm extends Component {
 					),
 					resultIdsHidden: removeIdFromList(state.resultIdsHidden, ids),
 					resultIdsPinned: pin ?
-						[...state.resultIdsPinned, ...ids] :
+						[...ids, ...state.resultIdsPinned] :
 						removeIdFromList(state.resultIdsPinned, ids)
 				}
 			)
@@ -370,7 +376,7 @@ class ResultsRankingForm extends Component {
 		).then(
 			({items, total}) => {
 				const newItems = items ?
-					items.filter(({id}) => ![...this._initialResultIdsPinned, ...this._initialResultIds].includes(id)) :
+					items.filter(({id}) => !this.state.resultIds.includes(id)) :
 					[];
 
 				const mappedData = items ? resultsDataToMap(newItems) : {};
@@ -586,6 +592,14 @@ class ResultsRankingForm extends Component {
 
 		this._handleFetchResultsData();
 		this._handleFetchResultsDataHidden();
+
+		this.setState(
+			state => (
+				{
+					currentlySearching: state.searchBarTerm != ''
+				}
+			)
+		);
 	};
 
 	/**
@@ -692,6 +706,7 @@ class ResultsRankingForm extends Component {
 		const {
 			aliases,
 			changeIndex,
+			currentlySearching,
 			dataLoading,
 			dataMap,
 			displayError,
@@ -750,6 +765,7 @@ class ResultsRankingForm extends Component {
 
 									<ClayTabPanel>
 										<List
+											currentlySearching={currentlySearching}
 											dataLoading={dataLoading}
 											dataMap={dataMap}
 											displayError={displayError}
@@ -781,6 +797,7 @@ class ResultsRankingForm extends Component {
 
 									<ClayTabPanel>
 										<List
+											currentlySearching={currentlySearching}
 											dataLoading={dataLoading}
 											dataMap={dataMap}
 											displayError={displayErrorHidden}

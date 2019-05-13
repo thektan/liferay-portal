@@ -6,6 +6,8 @@ import {withA11y} from '@storybook/addon-a11y';
 
 import Alias from 'components/alias/index.es';
 import ClayEmptyState from 'components/shared/ClayEmptyState.es';
+import FilterBar from '../components/list/FilterBar.es';
+import FilterInput from 'components/list/FilterInput.es';
 import Item from 'components/list/Item.es';
 import ItemDragPreview from 'components/list/ItemDragPreview.es';
 import List from 'components/list/index.es';
@@ -206,6 +208,27 @@ storiesOf('Components|EmptyState', module)
 				displayState="empty"
 				onClickAction={action('onClickAction')}
 				title={text('Title')}
+			/>
+		)
+	);
+
+storiesOf('Components|SearchBar', module)
+	.addDecorator(withSheet)
+	.add(
+		'input',
+		() => (
+			<FilterInput
+				disableSearch={false}
+				searchBarTerm="example"
+			/>
+		)
+	)
+	.add(
+		'toolbar',
+		() => (
+			<FilterBar
+				searchBarTerm="example"
+				totalResultsCount={100}
 			/>
 		)
 	);

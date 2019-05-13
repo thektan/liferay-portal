@@ -563,13 +563,15 @@ class Item extends PureComponent {
 						)}
 					</div>
 
-					<ItemDropdown
-						addedResult={addedResult}
-						hidden={hidden}
-						onClickHide={this._handleHide}
-						onClickPin={this._handlePin}
-						pinned={pinned}
-					/>
+					{onClickPin && onClickHide &&
+						<ItemDropdown
+							addedResult={addedResult}
+							hidden={hidden}
+							onClickHide={this._handleHide}
+							onClickPin={this._handlePin}
+							pinned={pinned}
+						/>
+					}
 				</div>
 
 				{!isNil(clicks) &&

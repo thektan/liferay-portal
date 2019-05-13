@@ -1,5 +1,7 @@
 import AddResult from 'components/add_result/index.es';
 import ClayButton from 'components/shared/ClayButton.es';
+import FilterBar from './FilterBar.es';
+import FilterInput from './FilterInput.es';
 import getCN from 'classnames';
 import ItemDropdown from './ItemDropdown.es';
 import React, {Component} from 'react';
@@ -8,6 +10,7 @@ import {sub} from 'utils/language.es';
 
 class SearchBar extends Component {
 	static propTypes = {
+		currentlySearching: PropTypes.bool,
 
 		/**
 		 * The data map of id to object it represents. Search bar needs to know
@@ -27,11 +30,11 @@ class SearchBar extends Component {
 		onUpdateSearchBarTerm: PropTypes.func,
 		resultIds: PropTypes.arrayOf(String),
 		searchBarTerm: PropTypes.string,
-		selectedIds: PropTypes.arrayOf(String)
+		selectedIds: PropTypes.arrayOf(String),
+		totalResultsCount: PropTypes.number
 	};
 
 	static defaultProps = {
-		disableSearch: false,
 		resultIds: [],
 		selectedIds: []
 	};
@@ -82,22 +85,6 @@ class SearchBar extends Component {
 		}
 	};
 
-	_handleSearchChange = event => {
-		event.preventDefault();
-
-		this.props.onUpdateSearchBarTerm(event.target.value);
-	};
-
-	_handleSearchEnter = () => {
-		this.props.onSearchBarEnter();
-	};
-
-	_handleSearchKeyDown = event => {
-		if (event.key === 'Enter' && event.currentTarget.value.trim()) {
-			this._handleSearchEnter();
-		}
-	};
-
 	/**
 	 * Checks if there are any items selected.
 	 * @returns {boolean} True if there is at least 1 item selected.
@@ -136,12 +123,16 @@ class SearchBar extends Component {
 
 	render() {
 		const {
+			currentlySearching,
 			disableSearch,
 			fetchDocumentsUrl,
 			onAddResultSubmit,
+			onSearchBarEnter,
+			onUpdateSearchBarTerm,
 			resultIds,
 			searchBarTerm,
-			selectedIds
+			selectedIds,
+			totalResultsCount
 		} = this.props;
 
 		const classManagementBar = getCN(
@@ -150,35 +141,35 @@ class SearchBar extends Component {
 				'management-bar-primary' :
 				'management-bar-light',
 			'navbar',
-			'navbar-expand-md',
-			'search-bar-root'
+			'navbar-expand-md'
 		);
 
 		return (
-			<nav className={classManagementBar}>
-				<div className="container-fluid container-fluid-max-xl">
-					<div className="navbar-form navbar-form-autofit navbar-overlay">
-						<ul className="navbar-nav">
-							<li className="nav-item">
-								<div className="custom-control custom-checkbox">
-									<label>
-										<input
-											aria-label={Liferay.Language.get('select-all')}
-											checked={this._hasSelectedIds()}
-											className="custom-control-input"
-											disabled={!resultIds.length}
-											onChange={this._handleAllCheckbox}
-											ref={this.selectAllCheckbox}
-											type="checkbox"
-										/>
+			<div className="search-bar-root">
+				<nav className={classManagementBar}>
+					<div className="container-fluid container-fluid-max-xl">
+						<div className="navbar-form navbar-form-autofit navbar-overlay">
+							<ul className="navbar-nav">
+								<li className="nav-item">
+									<div className="custom-control custom-checkbox">
+										<label>
+											<input
+												aria-label={Liferay.Language.get('select-all')}
+												checked={this._hasSelectedIds()}
+												className="custom-control-input"
+												disabled={!resultIds.length}
+												onChange={this._handleAllCheckbox}
+												ref={this.selectAllCheckbox}
+												type="checkbox"
+											/>
 
-										<span className="custom-control-label" />
-									</label>
-								</div>
-							</li>
-						</ul>
+											<span className="custom-control-label" />
+										</label>
+									</div>
+								</li>
+							</ul>
 
-						{this._hasSelectedIds() &&
+							{this._hasSelectedIds() &&
 							<React.Fragment>
 								<ul className="navbar-nav navbar-nav-expand">
 									<li className="nav-item">
@@ -255,37 +246,16 @@ class SearchBar extends Component {
 									</li>
 								</ul>
 							</React.Fragment>
-						}
+							}
 
-						{!this._hasSelectedIds() &&
+							{!this._hasSelectedIds() &&
 							<React.Fragment>
-								<div className="navbar-nav navbar-nav-expand">
-									<div className="container-fluid container-fluid-max-xl">
-										<div className="input-group">
-											<div className="input-group-item">
-												<input
-													aria-label={Liferay.Language.get('search')}
-													className="form-control input-group-inset input-group-inset-after"
-													disabled={disableSearch}
-													onChange={this._handleSearchChange}
-													onKeyDown={this._handleSearchKeyDown}
-													placeholder={Liferay.Language.get('contains-text')}
-													type="text"
-													value={searchBarTerm}
-												/>
-
-												<div className="input-group-inset-item input-group-inset-item-after">
-													<ClayButton
-														displayStyle={'unstyled'}
-														iconName="search"
-														onClick={this._handleSearchEnter}
-														title={Liferay.Language.get('search-icon')}
-													/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
+								<FilterInput
+									disableSearch={disableSearch}
+									onSearchBarEnter={onSearchBarEnter}
+									onUpdateSearchBarTerm={onUpdateSearchBarTerm}
+									searchBarTerm={searchBarTerm}
+								/>
 
 								{onAddResultSubmit && (
 									<ul className="navbar-nav">
@@ -296,10 +266,20 @@ class SearchBar extends Component {
 									</ul>
 								)}
 							</React.Fragment>
-						}
+							}
+						</div>
 					</div>
-				</div>
-			</nav>
+				</nav>
+
+				{currentlySearching &&
+					<FilterBar
+						onSearchBarEnter={onSearchBarEnter}
+						onUpdateSearchBarTerm={onUpdateSearchBarTerm}
+						searchBarTerm={searchBarTerm}
+						totalResultsCount={totalResultsCount}
+					/>
+				}
+			</div>
 		);
 	}
 }

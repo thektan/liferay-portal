@@ -12,6 +12,7 @@ import {PropTypes} from 'prop-types';
 
 class List extends PureComponent {
 	static propTypes = {
+		currentlySearching: PropTypes.bool,
 		dataLoading: PropTypes.bool,
 		dataMap: PropTypes.object,
 		displayError: PropTypes.bool,
@@ -222,6 +223,7 @@ class List extends PureComponent {
 
 	render() {
 		const {
+			currentlySearching,
 			dataLoading,
 			dataMap,
 			displayError,
@@ -232,7 +234,8 @@ class List extends PureComponent {
 			onSearchBarEnter,
 			onUpdateSearchBarTerm,
 			resultIds,
-			searchBarTerm
+			searchBarTerm,
+			totalResultsCount
 		} = this.props;
 
 		const {selectedIds} = this.state;
@@ -242,6 +245,7 @@ class List extends PureComponent {
 				<ItemDragLayer />
 
 				<SearchBar
+					currentlySearching={currentlySearching}
 					dataMap={dataMap}
 					disableSearch={!resultIds.length && !this._hasMoreData()}
 					fetchDocumentsUrl={fetchDocumentsUrl}
@@ -256,6 +260,7 @@ class List extends PureComponent {
 					resultIds={resultIds}
 					searchBarTerm={searchBarTerm}
 					selectedIds={selectedIds}
+					totalResultsCount={totalResultsCount}
 				/>
 
 				{!!resultIds.length && (
