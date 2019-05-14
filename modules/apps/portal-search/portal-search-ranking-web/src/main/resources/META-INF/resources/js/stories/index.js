@@ -6,7 +6,7 @@ import {withA11y} from '@storybook/addon-a11y';
 
 import Alias from 'components/alias/index.es';
 import ClayEmptyState from 'components/shared/ClayEmptyState.es';
-import FilterBar from '../components/list/FilterBar.es';
+import FilterDisplay from '../components/list/FilterDisplay.es';
 import FilterInput from 'components/list/FilterInput.es';
 import Item from 'components/list/Item.es';
 import ItemDragPreview from 'components/list/ItemDragPreview.es';
@@ -224,9 +224,9 @@ storiesOf('Components|SearchBar', module)
 		)
 	)
 	.add(
-		'toolbar',
+		'display',
 		() => (
-			<FilterBar
+			<FilterDisplay
 				searchBarTerm="example"
 				totalResultsCount={100}
 			/>

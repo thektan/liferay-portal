@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {sub} from 'utils/language.es';
 
-class FilterBar extends Component {
+class FilterDisplay extends Component {
 	static propTypes = {
 		onSearchBarEnter: PropTypes.func,
 		onUpdateSearchBarTerm: PropTypes.func,
@@ -63,4 +63,4 @@ class FilterBar extends Component {
 	}
 }
 
-export default FilterBar;
+export default FilterDisplay;
