@@ -5,28 +5,28 @@ import {PropTypes} from 'prop-types';
 class FilterInput extends Component {
 	static propTypes = {
 		disableSearch: PropTypes.bool,
-		onSearchBarEnter: PropTypes.func,
-		onUpdateSearchBarTerm: PropTypes.func,
+		onChange: PropTypes.func,
+		onSubmit: PropTypes.func,
 		searchBarTerm: PropTypes.string
 	}
 	static defaultProps = {
 		disableSearch: false
 	};
 
-	_handleSearchChange = event => {
+	_handleChange = event => {
 		event.preventDefault();
 
-		this.props.onUpdateSearchBarTerm(event.target.value);
+		this.props.onChange(event.target.value);
 	};
 
-	_handleSearchKeyDown = event => {
+	_handleKeyDown = event => {
 		if (event.key === 'Enter' && event.currentTarget.value.trim()) {
-			this.props.onSearchBarEnter();
+			this.props.onSubmit();
 		}
 	};
 
 	render() {
-		const {disableSearch, onSearchBarEnter, searchBarTerm} = this.props;
+		const {disableSearch, onSubmit, searchBarTerm} = this.props;
 
 		return (
 			<div className="navbar-nav navbar-nav-expand">
@@ -37,8 +37,8 @@ class FilterInput extends Component {
 								aria-label={Liferay.Language.get('search')}
 								className="form-control input-group-inset input-group-inset-after"
 								disabled={disableSearch}
-								onChange={this._handleSearchChange}
-								onKeyDown={this._handleSearchKeyDown}
+								onChange={this._handleChange}
+								onKeyDown={this._handleKeyDown}
 								placeholder={Liferay.Language.get('contains-text')}
 								type="text"
 								value={searchBarTerm}
@@ -48,7 +48,7 @@ class FilterInput extends Component {
 								<ClayButton
 									displayStyle={'unstyled'}
 									iconName="search"
-									onClick={onSearchBarEnter}
+									onClick={onSubmit}
 									title={Liferay.Language.get('search-icon')}
 								/>
 							</div>

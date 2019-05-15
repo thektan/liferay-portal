@@ -23,7 +23,7 @@ class List extends PureComponent {
 		onMove: PropTypes.func,
 		resultIds: PropTypes.arrayOf(Number),
 		resultIdsPinned: PropTypes.arrayOf(Number),
-		totalResultsCount: PropTypes.number
+		showLoadMore: PropTypes.bool
 	};
 
 	static defaultProps = {
@@ -145,12 +145,6 @@ class List extends PureComponent {
 		}
 	};
 
-	_hasMoreData = () => {
-		const {resultIds, totalResultsCount} = this.props;
-
-		return resultIds.length < totalResultsCount;
-	};
-
 	/**
 	 * Handles the pin action. Updates the focus index to keep the same item
 	 * focused.
@@ -227,7 +221,7 @@ class List extends PureComponent {
 			onClickHide,
 			onClickPin,
 			resultIds,
-			totalResultsCount
+			showLoadMore
 		} = this.props;
 
 		const {selectedIds} = this.state;
@@ -247,7 +241,6 @@ class List extends PureComponent {
 					onSelectClear={this._handleSelectClear}
 					resultIds={resultIds}
 					selectedIds={selectedIds}
-					totalResultsCount={totalResultsCount}
 				/>
 
 				{!!resultIds.length && (
@@ -286,7 +279,7 @@ class List extends PureComponent {
 							/>
 						}
 
-						{this._hasMoreData() && (
+						{showLoadMore && (
 							<div className="load-more-container">
 								<ClayButton
 									className="load-more-button"

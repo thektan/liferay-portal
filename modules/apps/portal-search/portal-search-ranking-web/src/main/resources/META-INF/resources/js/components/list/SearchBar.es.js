@@ -28,8 +28,7 @@ class SearchBar extends Component {
 		onUpdateSearchBarTerm: PropTypes.func,
 		resultIds: PropTypes.arrayOf(String),
 		searchBarTerm: PropTypes.string,
-		selectedIds: PropTypes.arrayOf(String),
-		totalResultsCount: PropTypes.number
+		selectedIds: PropTypes.arrayOf(String)
 	};
 
 	static defaultProps = {
@@ -61,9 +60,11 @@ class SearchBar extends Component {
 	};
 
 	_handleClickHide = () => {
-		this.props.onRemoveSelect(this.props.selectedIds);
+		const {onClickHide, onRemoveSelect, selectedIds} = this.props;
 
-		this.props.onClickHide(this.props.selectedIds, !this._isAnyHidden());
+		onRemoveSelect(selectedIds);
+
+		onClickHide(selectedIds, !this._isAnyHidden());
 	};
 
 	_handleClickPin = () => {
@@ -88,16 +89,6 @@ class SearchBar extends Component {
 	 * @returns {boolean} True if there is at least 1 item selected.
 	 */
 	_hasSelectedIds = () => this.props.selectedIds.length > 0;
-
-	/**
-	 * Checks if any selected ids contain any added items.
-	 * @returns {boolean} True if any of the selected ids were added.
-	 */
-	_isAnyAddedResult = () => {
-		const {dataMap, selectedIds} = this.props;
-
-		return selectedIds.some(id => dataMap[id].addedResult);
-	};
 
 	/**
 	 * Checks if any selected ids contain any hidden items.
@@ -183,25 +174,23 @@ class SearchBar extends Component {
 
 								<ul className="navbar-nav">
 									<li className="nav-item">
-										{!this._isAnyAddedResult() && (
-											<div className="nav-link nav-link-monospaced">
-												<ClayButton
-													borderless
-													className="component-action"
-													iconName={
-														this._isAnyHidden() ?
-															'view' :
-															'hidden'
-													}
-													onClick={this._handleClickHide}
-													title={
-														this._isAnyUnpinned() ?
-															Liferay.Language.get('show-result') :
-															Liferay.Language.get('hide-result')
-													}
-												/>
-											</div>
-										)}
+										<div className="nav-link nav-link-monospaced">
+											<ClayButton
+												borderless
+												className="component-action"
+												iconName={
+													this._isAnyHidden() ?
+														'view' :
+														'hidden'
+												}
+												onClick={this._handleClickHide}
+												title={
+													this._isAnyHidden() ?
+														Liferay.Language.get('show-result') :
+														Liferay.Language.get('hide-result')
+												}
+											/>
+										</div>
 									</li>
 
 									<li className="nav-item">
@@ -227,7 +216,6 @@ class SearchBar extends Component {
 									<li className="nav-item">
 										<div className="nav-link nav-link-monospaced">
 											<ItemDropdown
-												addedResult={this._isAnyAddedResult()}
 												hidden={this._isAnyHidden()}
 												itemCount={selectedIds.length}
 												onClickHide={this._handleClickHide}

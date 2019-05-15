@@ -5,19 +5,13 @@ import {sub} from 'utils/language.es';
 
 class FilterDisplay extends Component {
 	static propTypes = {
-		onSearchBarEnter: PropTypes.func,
-		onUpdateSearchBarTerm: PropTypes.func,
+		onClear: PropTypes.func,
 		searchBarTerm: PropTypes.string,
 		totalResultsCount: PropTypes.number
 	}
 
-	_handleClearSearchBar = () => {
-		this.props.onUpdateSearchBarTerm('');
-		this.props.onSearchBarEnter();
-	}
-
 	render() {
-		const {searchBarTerm, totalResultsCount} = this.props;
+		const {onClear, searchBarTerm, totalResultsCount} = this.props;
 
 		return (
 			<nav className="tbar tbar-inline-xs-down subnav-tbar subnav-tbar-primary">
@@ -40,6 +34,7 @@ class FilterDisplay extends Component {
 								</span>
 							</div>
 						</li>
+
 						<li className="tbar=item">
 							<div className="tbar-section">
 								<ClayButton
@@ -48,7 +43,7 @@ class FilterDisplay extends Component {
 									label={Liferay.Language.get(
 										'clear'
 									)}
-									onClick={this._handleClearSearchBar}
+									onClick={onClear}
 									size="sm"
 									title={Liferay.Language.get(
 										'clear'

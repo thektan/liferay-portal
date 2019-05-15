@@ -142,6 +142,11 @@ describe('utils', () => {
 			expect(resultsDataToMap(newResults, originalDataMap))
 				.toEqual(originalDataMap);
 		});
+
+		it('should be an empty set if data is empty', () => {
+			expect(resultsDataToMap([]))
+				.toEqual({});
+		});
 	});
 
 	describe('toggleListItem', () => {

@@ -82,7 +82,7 @@ class ResultsRankingForm extends Component {
 		 * to update the stored pinned ids.
 		 * @type {Object}
 		 */
-		changeIndex: {
+		dataLoadIndex: {
 			pinned: {
 				end: 0,
 				start: 0
@@ -115,6 +115,12 @@ class ResultsRankingForm extends Component {
 		displayErrorHidden: false,
 
 		/**
+		 * "Pagination" for items loaded in hidden label.
+		 * @type {number}
+		 */
+		hiddenCur: 0,
+
+		/**
 		 * A full list of IDs which include hidden and pinned items.
 		 * @type {Array}
 		 */
@@ -145,6 +151,12 @@ class ResultsRankingForm extends Component {
 		totalResultsVisibleCount: 0,
 
 		/**
+		 * "Pagination" for items loaded in visible label.
+		 * @type {number}
+		 */
+		visibleCur: 0,
+
+		/**
 		 * Determines if the form submission is save as draft or publish.
 		 * @type {string}
 		 */
@@ -172,32 +184,6 @@ class ResultsRankingForm extends Component {
 	_getAliasUnchanged = () =>
 		this.props.initialAliases.length === this.state.aliases.length &&
 			this.props.initialAliases.every(item => this.state.aliases.includes(item));
-
-	/**
-	 * Increments the `end` property of the changeIndex state by the `DELTA`.
-	 * @param {number} increment The amount the new value should increase by.
-	 */
-	_updateChangeIndex = (increment = DELTA) => {
-		const property = 'pinned';
-
-		this.setState(
-			({changeIndex, resultIdsPinned}) => {
-				const maxValue = resultIdsPinned.length - 1;
-
-				const newValue = changeIndex[property].end + increment;
-
-				return ({
-					changeIndex: {
-						...changeIndex,
-						[property]: {
-							...changeIndex[property],
-							end: newValue > maxValue ? maxValue : newValue
-						}
-					}
-				});
-			}
-		);
-	};
 
 	/**
 	 * Checks whether changes have been made for submission. Checks the lengths of
@@ -277,7 +263,7 @@ class ResultsRankingForm extends Component {
 					),
 					resultIdsHidden: removeIdFromList(state.resultIdsHidden, ids),
 					resultIdsPinned: pin ?
-						[...ids, ...state.resultIdsPinned] :
+						[...state.resultIdsPinned, ...ids] :
 						removeIdFromList(state.resultIdsPinned, ids)
 				}
 			)
@@ -331,23 +317,37 @@ class ResultsRankingForm extends Component {
 
 		const {companyId, namespace} = this.context;
 
-		const visibleIdList = this._getResultIdsVisible();
-
 		return fetchDocuments(
 			this.props.fetchDocumentsUrl,
 			{
 				[`${namespace}companyId`]: companyId,
-				[`${namespace}from`]: visibleIdList.length,
+				[`${namespace}from`]: DELTA * this.state.visibleCur,
 				[`${namespace}keywords`]: this.props.searchTerm,
 				[`${namespace}size`]: DELTA
 			}
 		).then(
 			({items, total}) => {
-				const newItems = items ?
-					items.filter(({id}) => !this.state.resultIds.includes(id)) :
-					[];
 
-				const mappedData = items ? resultsDataToMap(newItems) : {};
+				const definedItems = items ? items : {};
+
+				// Record duplicate results in order to set addedResult property to
+				// false in setState.
+
+				const duplicateItems = definedItems
+					.filter(({id}) => this._initialResultIds.includes(id))
+					.map(({id}) => id);
+
+				// Remove duplicate results from the new list of results to avoid
+				// duplicate key errors.
+
+				const newItems = definedItems
+					.filter(({id}) => !this._initialResultIds.includes(id));
+
+				// Add new data to the current map of all data.
+
+				const mappedData = resultsDataToMap(newItems);
+
+				// Get the ids of all items and pinned items.
 
 				const pinnedIds = newItems
 					.filter(({pinned}) => pinned)
@@ -355,6 +355,9 @@ class ResultsRankingForm extends Component {
 
 				const ids = newItems
 					.map(({id}) => id);
+
+				// Keep history of all initial results, to get the difference
+				// for addedResults and for all added/removed hidden/pinned.
 
 				this._initialResultIdsPinned = [
 					...this._initialResultIdsPinned,
@@ -368,7 +371,17 @@ class ResultsRankingForm extends Component {
 						{
 							dataLoading: false,
 							dataMap: {
-								...state.dataMap,
+
+								// Set the addedResult to false if it shows up as one
+								// of the results that pops up in search.
+
+								...updateDataMap(
+									state.dataMap,
+									duplicateItems,
+									{
+										addedResult: false
+									}
+								),
 								...mappedData
 							},
 							resultIds: [
@@ -379,11 +392,12 @@ class ResultsRankingForm extends Component {
 								...state.resultIdsPinned,
 								...pinnedIds
 							],
-							totalResultsVisibleCount: total
+							totalResultsVisibleCount: total,
+							visibleCur: state.visibleCur + 1
 						}
 					),
 					() => {
-						this._updateChangeIndex();
+						this._updateDataLoadIndex('pinned', this._initialResultIdsPinned);
 					}
 				);
 			}
@@ -418,29 +432,46 @@ class ResultsRankingForm extends Component {
 			}
 		);
 
-		const {resultIdsHidden} = this.state;
-
 		const {companyId, namespace} = this.context;
 
 		return fetchDocuments(
 			this.props.fetchDocumentsHiddenUrl,
 			{
 				[`${namespace}companyId`]: companyId,
-				[`${namespace}from`]: resultIdsHidden.length,
+				[`${namespace}from`]: DELTA * this.state.hiddenCur,
 				[`${namespace}keywords`]: this.props.searchTerm,
 				[`${namespace}size`]: DELTA
 			}
 		).then(
 			({items, total}) => {
-				const newItems = items ?
-					items.filter(({id}) => !this._initialResultIdsHidden.includes(id)) :
-					[];
 
-				const mappedData = items ? resultsDataToMap(newItems) : {};
+				const definedItems = items ? items : {};
+
+				// Record duplicate results in order to set addedResult property to
+				// false in setState.
+
+				const duplicateItems = definedItems
+					.filter(({id}) => this._initialResultIdsHidden.includes(id))
+					.map(({id}) => id);
+
+				// Remove duplicate results from the new list of results to avoid
+				// duplicate key errors.
+
+				const newItems = definedItems
+					.filter(({id}) => !this._initialResultIdsHidden.includes(id));
+
+				// Add new data to the current map of all data
+
+				const mappedData = resultsDataToMap(newItems);
+
+				// Get the ids of all items.
 
 				const ids = newItems
 					.filter(({id}) => !this._initialResultIdsHidden.includes(id))
 					.map(({id}) => id);
+
+				// Keep history of all initial results, to get the difference
+				// for addedResults and for all added/removed hidden/pinned
 
 				this._initialResultIdsHidden = [
 					...this._initialResultIdsHidden,
@@ -451,10 +482,22 @@ class ResultsRankingForm extends Component {
 					state => (
 						{
 							dataLoading: false,
+
 							dataMap: {
-								...state.dataMap,
+
+								// Set the addedResult to false if it shows up as one
+								// of the results that pops up in search.
+
+								...updateDataMap(
+									state.dataMap,
+									duplicateItems,
+									{
+										addedResult: false
+									}
+								),
 								...mappedData
 							},
+							hiddenCur: state.hiddenCur + 1,
 							resultIdsHidden: [
 								...state.resultIdsHidden,
 								...ids
@@ -577,6 +620,9 @@ class ResultsRankingForm extends Component {
 	_handleUpdateAddResultIds = addedResultsDataList => {
 		const mappedData = resultsDataToMap(addedResultsDataList);
 
+		// Make sure that all added results that don't overlap with the original
+		// search results get marked as pinned and addedResult.
+
 		const preMappedData = updateDataMap(
 			mappedData,
 			addedResultsDataList
@@ -587,6 +633,9 @@ class ResultsRankingForm extends Component {
 				pinned: true
 			}
 		);
+
+		// Make sure that all added results that overlap with the original
+		// search results get marked with as pinned (not addedResult).
 
 		const newMappedData = updateDataMap(
 			preMappedData,
@@ -607,10 +656,19 @@ class ResultsRankingForm extends Component {
 						...state.dataMap,
 						...newMappedData
 					},
+
+					// Remove any results from hidden if they are getting pinned
+					// and considered as an addedResult.
+
 					resultIdsHidden: state.resultIdsHidden.filter(
 						id => !addedResultsIds.includes(id)
 					),
 					resultIdsPinned: [
+
+						// Place the addedResults at the top of the pinned list
+						// while removing any that are already part of the
+						// pinned list.
+
 						...addedResultsDataList
 							.filter(
 								result => !state.resultIdsPinned.includes(result.id)
@@ -624,6 +682,18 @@ class ResultsRankingForm extends Component {
 	};
 
 	/**
+	 * Checks if there are any remaining results to be loaded by comparing the
+	 * originally loaded with totalCount.
+	 * @param {number} totalCount Total number of results to potentially load.
+	 * @param {number} cur The 'page' at which loaded results are currently on.
+	 * @param {number} delta Number of results per page.
+	 */
+
+	_hasMoreData = (totalCount, cur, delta = DELTA) => {
+		return cur * delta < totalCount;
+	};
+
+	/**
 	 * Checks if an item is neither pinned or hidden. Useful for displaying
 	 * the remaining results in the visible tab.
 	 * @param {number|string} id The id of the item to check.
@@ -632,6 +702,32 @@ class ResultsRankingForm extends Component {
 		const {resultIdsHidden, resultIdsPinned} = this.state;
 
 		return !resultIdsPinned.includes(id) && !resultIdsHidden.includes(id);
+	};
+
+	/**
+	 * Increments the `end` property of the dataLoadIndex state by the `DELTA`.
+	 * @param {string} property The property to update.
+	 * @param {Array} list The list to get the max length from.
+	 * @param {number} increment The amount the new value should increase by.
+	 */
+	_updateDataLoadIndex = (property, list, increment = DELTA) => {
+		this.setState(
+			({dataLoadIndex}) => {
+				const maxValue = list.length - 1;
+
+				const newValue = dataLoadIndex[property].end + increment;
+
+				return ({
+					dataLoadIndex: {
+						...dataLoadIndex,
+						[property]: {
+							...dataLoadIndex[property],
+							end: newValue > maxValue ? maxValue : newValue
+						}
+					}
+				});
+			}
+		);
 	};
 
 	render() {
@@ -645,16 +741,17 @@ class ResultsRankingForm extends Component {
 
 		const {
 			aliases,
-			changeIndex,
+			dataLoadIndex,
 			dataLoading,
 			dataMap,
 			displayError,
 			displayErrorHidden,
+			hiddenCur,
 			resultIdsHidden,
 			resultIdsPinned,
-			selected,
 			totalResultsHiddenCount,
 			totalResultsVisibleCount,
+			visibleCur,
 			workflowAction
 		} = this.state;
 
@@ -664,8 +761,8 @@ class ResultsRankingForm extends Component {
 				<HiddenInput name={`${namespace}hiddenIdsAdded`} value={this._getHiddenAdded()} />
 				<HiddenInput name={`${namespace}hiddenIdsRemoved`} value={this._getHiddenRemoved()} />
 				<HiddenInput name={`${namespace}pinnedIds`} value={resultIdsPinned} />
-				<HiddenInput name={`${namespace}pinnedIdsEndIndex`} value={changeIndex.pinned.end} />
-				<HiddenInput name={`${namespace}pinnedIdsStartIndex`} value={changeIndex.pinned.start} />
+				<HiddenInput name={`${namespace}pinnedIdsEndIndex`} value={dataLoadIndex.pinned.end} />
+				<HiddenInput name={`${namespace}pinnedIdsStartIndex`} value={dataLoadIndex.pinned.start} />
 				<HiddenInput name={`${namespace}workflowAction`} value={workflowAction} />
 
 				<PageToolbar
@@ -716,12 +813,7 @@ class ResultsRankingForm extends Component {
 											onMove={this._handleMove}
 											resultIds={this._getResultIdsVisible()}
 											resultIdsPinned={this.state.resultIdsPinned}
-											selected={selected}
-											totalResultsCount={
-												totalResultsVisibleCount -
-											this._getHiddenAdded().length +
-											this._getHiddenRemoved().length
-											}
+											showLoadMore={this._hasMoreData(totalResultsVisibleCount, visibleCur)}
 										/>
 									</ClayTabPanel>
 
@@ -736,12 +828,7 @@ class ResultsRankingForm extends Component {
 												this._handleFetchResultsDataHidden
 											}
 											resultIds={resultIdsHidden}
-											selected={selected}
-											totalResultsCount={
-												totalResultsHiddenCount -
-											this._getHiddenRemoved().length +
-											this._getHiddenAdded().length
-											}
+											showLoadMore={this._hasMoreData(totalResultsHiddenCount, hiddenCur)}
 										/>
 									</ClayTabPanel>
 								</ClayTabs>
@@ -770,11 +857,11 @@ class ResultsRankingForm extends Component {
 						},
 						{
 							name: `${namespace}pinnedIdsEndIndex`,
-							value: changeIndex.pinned.end
+							value: dataLoadIndex.pinned.end
 						},
 						{
 							name: `${namespace}pinnedIdsStartIndex`,
-							value: changeIndex.pinned.start
+							value: dataLoadIndex.pinned.start
 						},
 						{
 							name: `${namespace}workflowAction`,
