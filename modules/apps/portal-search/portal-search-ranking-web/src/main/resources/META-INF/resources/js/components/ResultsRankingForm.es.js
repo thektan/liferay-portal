@@ -328,9 +328,9 @@ class ResultsRankingForm extends Component {
 		).then(
 			({items, total}) => {
 
-				const definedItems = items ? items : {};
+				const definedItems = items || {};
 
-				// Record duplicate results in order to set addedResult property to
+				// Get duplicate results in order to set addedResult property to
 				// false in setState.
 
 				const duplicateItems = definedItems
@@ -372,8 +372,13 @@ class ResultsRankingForm extends Component {
 							dataLoading: false,
 							dataMap: {
 
-								// Set the addedResult to false if it shows up as one
-								// of the results that pops up in search.
+								// In the case when a previously added result
+								// is actually one of the results that loads in,
+								// its 'addedResult' property must be set to
+								// false. This prevents confusion since
+								// unpinning or unhiding results added from
+								// the add results modal should remove it from
+								// results list entirely.
 
 								...updateDataMap(
 									state.dataMap,
@@ -445,9 +450,9 @@ class ResultsRankingForm extends Component {
 		).then(
 			({items, total}) => {
 
-				const definedItems = items ? items : {};
+				const definedItems = items || {};
 
-				// Record duplicate results in order to set addedResult property to
+				// Get duplicate results in order to set addedResult property to
 				// false in setState.
 
 				const duplicateItems = definedItems
@@ -485,8 +490,13 @@ class ResultsRankingForm extends Component {
 
 							dataMap: {
 
-								// Set the addedResult to false if it shows up as one
-								// of the results that pops up in search.
+								// In the case when a previously added result
+								// is actually one of the results that loads in,
+								// its 'addedResult' property must be set to
+								// false. This prevents confusion since
+								// unpinning or unhiding results added from
+								// the add results modal should remove it from
+								// results list entirely.
 
 								...updateDataMap(
 									state.dataMap,
@@ -620,7 +630,7 @@ class ResultsRankingForm extends Component {
 	_handleUpdateAddResultIds = addedResultsDataList => {
 		const mappedData = resultsDataToMap(addedResultsDataList);
 
-		// Make sure that all added results that don't overlap with the original
+		// Make sure that all added results that are not part of the original
 		// search results get marked as pinned and addedResult.
 
 		const preMappedData = updateDataMap(
@@ -634,7 +644,7 @@ class ResultsRankingForm extends Component {
 			}
 		);
 
-		// Make sure that all added results that overlap with the original
+		// Make sure that all added results that are part of the original
 		// search results get marked with as pinned (not addedResult).
 
 		const newMappedData = updateDataMap(
