@@ -35,6 +35,7 @@ public class RankingCriteriaBuilderFactoryImpl
 	public static class RankingCriteriaBuilderImpl
 		implements RankingCriteriaBuilder {
 
+		@Deprecated
 		@Override
 		public RankingCriteriaBuilder aliases(String... aliases) {
 			_rankingCriteriaImpl._aliases.clear();
@@ -50,22 +51,23 @@ public class RankingCriteriaBuilderFactoryImpl
 		}
 
 		@Override
+		public RankingCriteriaBuilder id(String id) {
+			_rankingCriteriaImpl._id = id;
+
+			return this;
+		}
+
+		@Override
 		public RankingCriteriaBuilder index(String index) {
 			_rankingCriteriaImpl._index = index;
 
 			return this;
 		}
 
+		@Deprecated
 		@Override
 		public RankingCriteriaBuilder queryString(String queryString) {
 			_rankingCriteriaImpl._queryString = queryString;
-
-			return this;
-		}
-
-		@Override
-		public RankingCriteriaBuilder uid(String uid) {
-			_rankingCriteriaImpl._uid = uid;
 
 			return this;
 		}
@@ -82,14 +84,20 @@ public class RankingCriteriaBuilderFactoryImpl
 
 		public RankingCriteriaImpl(RankingCriteriaImpl rankingCriteriaImpl) {
 			_index = rankingCriteriaImpl._index;
-			_uid = rankingCriteriaImpl._uid;
+			_id = rankingCriteriaImpl._id;
 			_queryString = rankingCriteriaImpl._queryString;
 			_aliases = new ArrayList<>(rankingCriteriaImpl._aliases);
 		}
 
+		@Deprecated
 		@Override
 		public List<String> getAliases() {
 			return Collections.unmodifiableList(_aliases);
+		}
+
+		@Override
+		public String getId() {
+			return _id;
 		}
 
 		@Override
@@ -97,20 +105,16 @@ public class RankingCriteriaBuilderFactoryImpl
 			return _index;
 		}
 
+		@Deprecated
 		@Override
 		public String getQueryString() {
 			return _queryString;
 		}
 
-		@Override
-		public String getUid() {
-			return _uid;
-		}
-
 		private List _aliases = new ArrayList<>();
+		private String _id;
 		private String _index;
 		private String _queryString;
-		private String _uid;
 
 	}
 

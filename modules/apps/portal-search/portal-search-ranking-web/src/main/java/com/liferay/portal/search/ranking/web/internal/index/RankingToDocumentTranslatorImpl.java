@@ -15,13 +15,12 @@
 package com.liferay.portal.search.ranking.web.internal.index;
 
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.search.document.Document;
 import com.liferay.portal.search.document.DocumentBuilderFactory;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
@@ -38,36 +37,22 @@ public class RankingToDocumentTranslatorImpl
 	public Document translate(Ranking ranking) {
 		return _documentBuilderFactory.builder(
 		).setStrings(
-			"aliases", ArrayUtil.toStringArray(ranking.getAliases())
-		).setStrings(
-			"hidden_documents", ArrayUtil.toStringArray(ranking.getHiddenIds())
+			SearchTuningFields.BLOCKS,
+			ArrayUtil.toStringArray(ranking.getBlockIds())
+		).setBoolean(
+			SearchTuningFields.INACTIVE, ranking.isInactive()
 		).setString(
 			"index", ranking.getIndex()
-		).setValue(
+		).setString(
+			SearchTuningFields.NAME, ranking.getName()
+		).setValues(
 			SearchTuningFields.PINS, _toMaps(ranking.getPins())
+		).setStrings(
+			SearchTuningFields.QUERY_STRINGS,
+			ArrayUtil.toStringArray(ranking.getQueryStrings())
 		).setString(
-			SearchTuningFields.QUERY_STRING, ranking.getQueryString()
-		).setString(
-			"uid", ranking.getUid()
+			"uid", ranking.getId()
 		).build();
-	}
-
-	protected String[] getAliases(Ranking ranking) {
-		List<String> aliases = ranking.getAliases();
-
-		if (ListUtil.isNotEmpty(aliases)) {
-			return ArrayUtil.toStringArray(aliases);
-		}
-
-		return null;
-	}
-
-	protected List<String> getHiddenDocuments(Ranking ranking) {
-		if (ListUtil.isNotEmpty(ranking.getHiddenIds())) {
-			return ranking.getHiddenIds();
-		}
-
-		return null;
 	}
 
 	@Reference(unbind = "-")
@@ -77,7 +62,7 @@ public class RankingToDocumentTranslatorImpl
 		_documentBuilderFactory = documentBuilderFactory;
 	}
 
-	private List<Map<String, String>> _toMaps(List<Ranking.Pin> pins) {
+	private Collection<Object> _toMaps(List<Ranking.Pin> pins) {
 		return pins.stream(
 		).map(
 			pin -> new LinkedHashMap<String, String>() {

@@ -15,17 +15,11 @@
 package com.liferay.portal.search.ranking.web.internal.display.context;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.search.document.Document;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.ranking.web.internal.index.Ranking;
 
-import java.text.DateFormat;
-
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,11 +27,9 @@ import java.util.List;
  */
 public class RankingEntryDisplayContextBuilder {
 
-	public RankingEntryDisplayContextBuilder(
-		String id, Document document, Ranking ranking) {
+	public static final String __INACTIVE__INDICATOR = "X";
 
-		_id = id;
-		_document = document;
+	public RankingEntryDisplayContextBuilder(Ranking ranking) {
 		_ranking = ranking;
 	}
 
@@ -45,13 +37,13 @@ public class RankingEntryDisplayContextBuilder {
 		RankingEntryDisplayContext rankingEntryDisplayContext =
 			new RankingEntryDisplayContext();
 
-		_setAliases(rankingEntryDisplayContext);
 		_setDisplayDate(rankingEntryDisplayContext);
 		_setHiddenResultsCount(rankingEntryDisplayContext);
 		_setIndex(rankingEntryDisplayContext);
-		_setKeywords(rankingEntryDisplayContext);
 		_setModifiedDate(rankingEntryDisplayContext);
+		_setName(rankingEntryDisplayContext);
 		_setPinnedResultsCount(rankingEntryDisplayContext);
+		_setQueryStrings(rankingEntryDisplayContext);
 		_setStatus(rankingEntryDisplayContext);
 		_setUid(rankingEntryDisplayContext);
 
@@ -62,43 +54,35 @@ public class RankingEntryDisplayContextBuilder {
 		return String.valueOf(list.size());
 	}
 
-	private Date _getDate(String name) {
-		try {
-			DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(
-				_INDEX_DATE_FORMAT_PATTERN);
+	private List<String> _getQueryStrings() {
+		List<String> queryStrings = new ArrayList<>(_ranking.getQueryStrings());
 
-			return dateFormat.parse(_document.getDate(name));
+		if (_ranking.isInactive()) {
+			queryStrings.add(__INACTIVE__INDICATOR);
 		}
-		catch (Exception e) {
-			return null;
-		}
+
+		return queryStrings;
 	}
 
-	private void _setAliases(
-		RankingEntryDisplayContext rankingEntryDisplayContext) {
-
-		List<String> aliases = _ranking.getAliases();
-
-		if (!aliases.isEmpty()) {
-			rankingEntryDisplayContext.setAliases(
-				StringUtil.merge(aliases, StringPool.COMMA_AND_SPACE));
+	private int _getStatus() {
+		if (_ranking.isInactive()) {
+			return WorkflowConstants.STATUS_INACTIVE;
 		}
-		else {
-			rankingEntryDisplayContext.setAliases(StringPool.BLANK);
-		}
+
+		return WorkflowConstants.STATUS_APPROVED;
 	}
 
 	private void _setDisplayDate(
 		RankingEntryDisplayContext rankingEntryDisplayContext) {
 
-		rankingEntryDisplayContext.setDisplayDate(_getDate(Field.DISPLAY_DATE));
+		rankingEntryDisplayContext.setDisplayDate(_ranking.getDisplayDate());
 	}
 
 	private void _setHiddenResultsCount(
 		RankingEntryDisplayContext rankingEntryDisplayContext) {
 
 		rankingEntryDisplayContext.setHiddenResultsCount(
-			getSizeString(_ranking.getHiddenIds()));
+			getSizeString(_ranking.getBlockIds()));
 	}
 
 	private void _setIndex(
@@ -107,17 +91,16 @@ public class RankingEntryDisplayContextBuilder {
 		rankingEntryDisplayContext.setIndex(_ranking.getIndex());
 	}
 
-	private void _setKeywords(
-		RankingEntryDisplayContext rankingEntryDisplayContext) {
-
-		rankingEntryDisplayContext.setKeywords(_ranking.getQueryString());
-	}
-
 	private void _setModifiedDate(
 		RankingEntryDisplayContext rankingEntryDisplayContext) {
 
-		rankingEntryDisplayContext.setModifiedDate(
-			_getDate(Field.MODIFIED_DATE));
+		rankingEntryDisplayContext.setModifiedDate(_ranking.getModifiedDate());
+	}
+
+	private void _setName(
+		RankingEntryDisplayContext rankingEntryDisplayContext) {
+
+		rankingEntryDisplayContext.setKeywords(_ranking.getName());
 	}
 
 	private void _setPinnedResultsCount(
@@ -127,24 +110,25 @@ public class RankingEntryDisplayContextBuilder {
 			getSizeString(_ranking.getPins()));
 	}
 
+	private void _setQueryStrings(
+		RankingEntryDisplayContext rankingEntryDisplayContext) {
+
+		rankingEntryDisplayContext.setAliases(
+			StringUtil.merge(_getQueryStrings(), StringPool.COMMA_AND_SPACE));
+	}
+
 	private void _setStatus(
 		RankingEntryDisplayContext rankingEntryDisplayContext) {
 
-		rankingEntryDisplayContext.setStatus(
-			String.valueOf(_ranking.getStatus()));
+		rankingEntryDisplayContext.setStatus(String.valueOf(_getStatus()));
 	}
 
 	private void _setUid(
 		RankingEntryDisplayContext rankingEntryDisplayContext) {
 
-		rankingEntryDisplayContext.setUid(_id);
+		rankingEntryDisplayContext.setUid(_ranking.getId());
 	}
 
-	private static final String _INDEX_DATE_FORMAT_PATTERN = PropsUtil.get(
-		PropsKeys.INDEX_DATE_FORMAT_PATTERN);
-
-	private final Document _document;
-	private final String _id;
 	private final Ranking _ranking;
 
 }

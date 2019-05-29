@@ -19,14 +19,15 @@ package com.liferay.portal.search.ranking.web.internal.index;
  */
 public interface RankingCriteriaBuilder {
 
+	@Deprecated
 	public RankingCriteriaBuilder aliases(String... aliases);
 
 	public RankingCriteria build();
 
+	public RankingCriteriaBuilder id(String uid);
+
 	public RankingCriteriaBuilder index(String index);
 
 	public RankingCriteriaBuilder queryString(String queryString);
-
-	public RankingCriteriaBuilder uid(String uid);
 
 }

@@ -14,36 +14,44 @@
 
 package com.liferay.portal.search.ranking.web.internal.index;
 
-import com.liferay.portal.kernel.util.ListUtil;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Bryan Engler
  */
 public class Ranking {
 
-	public static <T, V extends T> List<T> toList(List<V> list) {
-		if (list != null) {
-			return new ArrayList<>(list);
-		}
-
-		return new ArrayList<>();
+	public Ranking(Ranking ranking) {
+		_blockIds = new LinkedHashSet<>(ranking._blockIds);
+		_displayDate = ranking._displayDate;
+		_id = ranking._id;
+		_inactive = ranking._inactive;
+		_index = ranking._index;
+		_modifiedDate = ranking._modifiedDate;
+		_name = ranking._name;
+		_pinIds = new HashSet<>(ranking._pinIds);
+		_pins = new ArrayList<>(ranking._pins);
+		_queryStrings = new ArrayList<>(ranking._queryStrings);
 	}
 
-	public List<String> getAliases() {
-		return Collections.unmodifiableList(_aliases);
+	public List<String> getBlockIds() {
+		return new ArrayList<>(_blockIds);
 	}
 
+	@Deprecated
 	public Date getDisplayDate() {
 		return _displayDate;
 	}
 
-	public List<String> getHiddenIds() {
-		return Collections.unmodifiableList(_hiddenIds);
+	public String getId() {
+		return _id;
 	}
 
 	public String getIndex() {
@@ -54,56 +62,28 @@ public class Ranking {
 		return _modifiedDate;
 	}
 
+	public String getName() {
+		return _name;
+	}
+
 	public List<Pin> getPins() {
 		return Collections.unmodifiableList(_pins);
 	}
 
-	public String getQueryString() {
-		return _queryString;
+	public List<String> getQueryStrings() {
+		return Collections.unmodifiableList(_queryStrings);
 	}
 
 	public int getStatus() {
 		return _status;
 	}
 
-	public String getUid() {
-		return _uid;
+	public boolean isInactive() {
+		return _inactive;
 	}
 
-	public void setAliases(String... aliases) {
-		_aliases = ListUtil.toList(aliases);
-	}
-
-	public void setDisplayDate(Date displayDate) {
-		_displayDate = displayDate;
-	}
-
-	public void setHiddenIds(List<String> hiddenDocuments) {
-		_hiddenIds = toList(hiddenDocuments);
-	}
-
-	public void setIndex(String index) {
-		_index = index;
-	}
-
-	public void setModifiedDate(Date modifiedDate) {
-		_modifiedDate = modifiedDate;
-	}
-
-	public void setPins(List<Pin> pins) {
-		_pins = toList(pins);
-	}
-
-	public void setQueryString(String queryString) {
-		_queryString = queryString;
-	}
-
-	public void setStatus(int status) {
-		_status = status;
-	}
-
-	public void setUid(String uid) {
-		_uid = uid;
+	public boolean isPinned(String id) {
+		return _pinIds.contains(id);
 	}
 
 	public static class Pin {
@@ -126,14 +106,131 @@ public class Ranking {
 
 	}
 
-	private List<String> _aliases = new ArrayList<>();
+	public static class RankingBuilder {
+
+		public RankingBuilder() {
+			_ranking = new Ranking();
+		}
+
+		public RankingBuilder(Ranking ranking) {
+			_ranking = ranking;
+		}
+
+		public RankingBuilder blocks(List<String> hiddenIds) {
+			_ranking._blockIds = new LinkedHashSet<>(toList(hiddenIds));
+
+			return this;
+		}
+
+		public Ranking build() {
+			return new Ranking(_ranking);
+		}
+
+		public RankingBuilder id(String id) {
+			_ranking._id = id;
+
+			return this;
+		}
+
+		public RankingBuilder inactive(boolean inactive) {
+			_ranking._inactive = inactive;
+
+			return this;
+		}
+
+		public RankingBuilder index(String index) {
+			_ranking._index = index;
+
+			return this;
+		}
+
+		public RankingBuilder name(String name) {
+			_ranking._name = name;
+
+			return this;
+		}
+
+		public RankingBuilder pins(List<Pin> pins) {
+			if (pins != null) {
+				_ranking._pinIds = new LinkedHashSet<>(
+					pins.stream(
+					).map(
+						Pin::getId
+					).collect(
+						Collectors.toSet()
+					));
+
+				_ranking._pins = pins;
+			}
+			else {
+				_ranking._pinIds.clear();
+
+				_ranking._pins.clear();
+			}
+
+			return this;
+		}
+
+		public RankingBuilder queryStrings(List<String> queryStrings) {
+			_ranking._queryStrings = queryStrings;
+
+			return this;
+		}
+
+		@Deprecated
+		public RankingBuilder setDisplayDate(Date displayDate) {
+			_ranking._displayDate = displayDate;
+
+			return this;
+		}
+
+		@Deprecated
+		public RankingBuilder setModifiedDate(Date modifiedDate) {
+			_ranking._modifiedDate = modifiedDate;
+
+			return this;
+		}
+
+		@Deprecated
+		public RankingBuilder status(int status) {
+			_ranking._status = status;
+
+			return this;
+		}
+
+		protected static <T, V extends T> List<T> toList(List<V> list) {
+			if (list != null) {
+				return new ArrayList<>(list);
+			}
+
+			return new ArrayList<>();
+		}
+
+		private final Ranking _ranking;
+
+	}
+
+	private Ranking() {
+	}
+
+	private Set<String> _blockIds = new LinkedHashSet<>();
+
+	@Deprecated
 	private Date _displayDate;
-	private List<String> _hiddenIds = new ArrayList<>();
+
+	private String _id;
+	private boolean _inactive;
 	private String _index;
+
+	@Deprecated
 	private Date _modifiedDate;
+
+	private String _name;
+	private Set<String> _pinIds = new LinkedHashSet<>();
 	private List<Pin> _pins = new ArrayList<>();
-	private String _queryString;
+	private List<String> _queryStrings = new ArrayList<>();
+
+	@Deprecated
 	private int _status;
-	private String _uid;
 
 }

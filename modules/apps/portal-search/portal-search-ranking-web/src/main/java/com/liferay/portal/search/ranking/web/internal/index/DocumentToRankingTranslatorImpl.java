@@ -14,12 +14,17 @@
 
 package com.liferay.portal.search.ranking.web.internal.index;
 
-import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.document.Document;
 
+import java.text.DateFormat;
+
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,20 +40,53 @@ public class DocumentToRankingTranslatorImpl
 	implements DocumentToRankingTranslator {
 
 	@Override
-	public Ranking translate(Document document, String uid) {
-		Ranking ranking = new Ranking();
+	public Ranking translate(Document document, String id) {
+		return builder(
+		).blocks(
+			document.getStrings(SearchTuningFields.BLOCKS)
+		).setDisplayDate(
+			_getDate(document, Field.DISPLAY_DATE)
+		).id(
+			id
+		).inactive(
+			document.getBoolean(SearchTuningFields.INACTIVE)
+		).index(
+			document.getString("index")
+		).setModifiedDate(
+			_getDate(document, Field.MODIFIED_DATE)
+		).name(
+			_getName(document)
+		).pins(
+			_getPins(document)
+		).queryStrings(
+			_getQueryStrings(document)
+		).build();
+	}
 
-		ranking.setAliases(
-			ArrayUtil.toStringArray(document.getStrings("aliases")));
-		ranking.setHiddenIds(document.getStrings("hidden_documents"));
-		ranking.setIndex(document.getString("index"));
-		ranking.setPins(_getPins(document));
-		ranking.setQueryString(
-			document.getString(SearchTuningFields.QUERY_STRING));
-		ranking.setStatus(GetterUtil.getInteger(document.getInteger("status")));
-		ranking.setUid(uid);
+	protected Ranking.RankingBuilder builder() {
+		return new Ranking.RankingBuilder();
+	}
 
-		return ranking;
+	private static Date _getDate(Document document, String name) {
+		try {
+			DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(
+				_INDEX_DATE_FORMAT_PATTERN);
+
+			return dateFormat.parse(document.getDate(name));
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	private String _getName(Document document) {
+		String string = document.getString(SearchTuningFields.NAME);
+
+		if (Validator.isBlank(string)) {
+			return document.getString(SearchTuningFields.QUERY_STRING);
+		}
+
+		return string;
 	}
 
 	private List<Ranking.Pin> _getPins(Document document) {
@@ -58,8 +96,7 @@ public class DocumentToRankingTranslatorImpl
 			return Collections.emptyList();
 		}
 
-		List<Map<String, String>> maps = (List<Map<String, String>>)values.get(
-			0);
+		List<Map<String, String>> maps = (List<Map<String, String>>)values;
 
 		Stream<Map<String, String>> stream = maps.stream();
 
@@ -68,9 +105,22 @@ public class DocumentToRankingTranslatorImpl
 		return pinStream.collect(Collectors.toList());
 	}
 
+	private List<String> _getQueryStrings(Document document) {
+		List<String> strings = document.getStrings(
+			SearchTuningFields.QUERY_STRINGS);
+
+		if (ListUtil.isEmpty(strings)) {
+			return document.getStrings(SearchTuningFields.ALIASES);
+		}
+
+		return strings;
+	}
+
 	private Ranking.Pin _toPin(Map<String, String> map) {
 		return new Ranking.Pin(
 			GetterUtil.getInteger(map.get("position")), map.get("uid"));
 	}
+
+	private static final String _INDEX_DATE_FORMAT_PATTERN = "yyyyMMddHHmmss";
 
 }
