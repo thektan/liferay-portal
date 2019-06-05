@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,12 +32,11 @@ public class Ranking {
 
 	public Ranking(Ranking ranking) {
 		_aliases = new ArrayList<>(ranking._aliases);
-		_blockIds = new HashSet<>(ranking._blockIds);
+		_blockIds = new LinkedHashSet<>(ranking._blockIds);
 		_displayDate = ranking._displayDate;
 		_id = ranking._id;
 		_index = ranking._index;
 		_modifiedDate = ranking._modifiedDate;
-		_pinIds = new HashSet<>(ranking._pinIds);
 		_pins = new ArrayList<>(ranking._pins);
 		_queryString = ranking._queryString;
 		_status = ranking._status;
@@ -132,7 +131,7 @@ public class Ranking {
 		}
 
 		public RankingBuilder blocks(List<String> hiddenIds) {
-			_ranking._blockIds = new HashSet<>(toList(hiddenIds));
+			_ranking._blockIds = new LinkedHashSet<>(toList(hiddenIds));
 
 			return this;
 		}
@@ -154,13 +153,22 @@ public class Ranking {
 		}
 
 		public RankingBuilder pins(List<Pin> pins) {
-			_ranking._pins = toList(pins);
-			_ranking._pinIds = pins.stream(
-			).map(
-				Pin::getId
-			).collect(
-				Collectors.toSet()
-			);
+			if (pins != null) {
+				_ranking._pinIds = new LinkedHashSet<>(
+					pins.stream(
+					).map(
+						Pin::getId
+					).collect(
+						Collectors.toSet()
+					));
+
+				_ranking._pins = pins;
+			}
+			else {
+				_ranking._pinIds.clear();
+
+				_ranking._pins.clear();
+			}
 
 			return this;
 		}
@@ -205,12 +213,12 @@ public class Ranking {
 	}
 
 	private List<String> _aliases = new ArrayList<>();
-	private Set<String> _blockIds = new HashSet<>();
+	private Set<String> _blockIds = new LinkedHashSet<>();
 	private Date _displayDate;
 	private String _id;
 	private String _index;
 	private Date _modifiedDate;
-	private Set<String> _pinIds = new HashSet<>();
+	private Set<String> _pinIds = new LinkedHashSet<>();
 	private List<Pin> _pins = new ArrayList<>();
 	private String _queryString;
 	private int _status;

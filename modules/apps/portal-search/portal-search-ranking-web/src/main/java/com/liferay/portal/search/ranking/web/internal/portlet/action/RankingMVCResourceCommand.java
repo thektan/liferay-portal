@@ -28,6 +28,10 @@ import com.liferay.portal.search.document.Document;
 import com.liferay.portal.search.engine.adapter.SearchEngineAdapter;
 import com.liferay.portal.search.engine.adapter.document.GetDocumentRequest;
 import com.liferay.portal.search.engine.adapter.document.GetDocumentResponse;
+import com.liferay.portal.search.filter.ComplexQueryPartBuilderFactory;
+import com.liferay.portal.search.query.IdsQuery;
+import com.liferay.portal.search.query.Queries;
+import com.liferay.portal.search.query.Query;
 import com.liferay.portal.search.ranking.web.internal.constants.SearchTuningPortletKeys;
 import com.liferay.portal.search.ranking.web.internal.index.Ranking;
 import com.liferay.portal.search.ranking.web.internal.index.RankingIndexReader;
@@ -114,14 +118,31 @@ public class RankingMVCResourceCommand implements MVCResourceCommand {
 		return getDocumentResponse.getDocument();
 	}
 
+	protected Query getIdsQuery(String id) {
+		IdsQuery idsQuery = queries.ids();
+
+		idsQuery.addIds(id);
+
+		return idsQuery;
+	}
+
 	protected SearchRequestBuilder getSearchRequestBuilder(
 		ResourceRequest resourceRequest) {
 
+		String queryString = ParamUtil.getString(resourceRequest, "keywords");
+
 		return searchRequestBuilderFactory.builder(
+		).addComplexQueryPart(
+			complexQueryPartBuilderFactory.builder(
+			).query(
+				getIdsQuery(queryString)
+			).occur(
+				"should"
+			).build()
 		).from(
 			ParamUtil.getInteger(resourceRequest, "from")
 		).queryString(
-			ParamUtil.getString(resourceRequest, "keywords")
+			queryString
 		).size(
 			ParamUtil.getInteger(resourceRequest, "size", 10)
 		).withSearchContext(
@@ -175,6 +196,12 @@ public class RankingMVCResourceCommand implements MVCResourceCommand {
 			jsonArray::put
 		);
 	}
+
+	@Reference
+	protected ComplexQueryPartBuilderFactory complexQueryPartBuilderFactory;
+
+	@Reference
+	protected Queries queries;
 
 	@Reference
 	protected RankingIndexReader rankingIndexReader;

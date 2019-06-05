@@ -105,7 +105,7 @@ public class DocumentFieldsTranslator {
 				name, _geoBuilders.geoLocationPoint((String)value));
 		}
 		else {
-			documentBuilder.setValue(name, value);
+			documentBuilder.setValue(name, value); //  <==  @#$%^
 		}
 	}
 

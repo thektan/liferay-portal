@@ -89,12 +89,14 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 			Action action)
 		throws Exception {
 
-		if (rankingExistsForKeyword(actionRequest, action)) {
-			SessionErrors.add(actionRequest, Exception.class);
+		if (false) {
+			if (rankingExistsForKeyword(actionRequest, action)) {
+				SessionErrors.add(actionRequest, Exception.class);
 
-			actionResponse.setRenderParameter("mvcPath", "/error.jsp");
+				actionResponse.setRenderParameter("mvcPath", "/error.jsp");
 
-			return;
+				return;
+			}
 		}
 
 		Ranking ranking = addRanking(
@@ -267,12 +269,14 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 			Action action)
 		throws IOException {
 
-		if (rankingExistsForAliases(actionRequest)) {
-			SessionErrors.add(actionRequest, Exception.class);
+		if (false) {
+			if (rankingExistsForAliases(actionRequest)) {
+				SessionErrors.add(actionRequest, Exception.class);
 
-			actionResponse.setRenderParameter("mvcPath", "/error.jsp");
+				actionResponse.setRenderParameter("mvcPath", "/error.jsp");
 
-			return;
+				return;
+			}
 		}
 
 		updateRanking(actionRequest);
