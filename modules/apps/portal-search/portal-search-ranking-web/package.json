@@ -2,6 +2,7 @@
 	"dependencies": {
 		"@clayui/alert": "^3.0.0-milestone.1",
 		"@clayui/button": "^3.0.0-milestone.1",
+		"@clayui/checkbox": "^3.0.0-milestone.1",
 		"@clayui/icon": "^3.0.0-milestone.1",
 		"@clayui/link": "^3.0.0-milestone.1",
 		"@clayui/loading-indicator": "^3.0.0-milestone.1",
