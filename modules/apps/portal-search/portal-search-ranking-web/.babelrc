@@ -9,6 +9,7 @@
 					"test": "./test/js/"
 				}
 			}
-		]
+		],
+		["@babel/transform-modules-commonjs"]
 	]
 }
