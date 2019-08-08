@@ -18,24 +18,6 @@
 		"react-select": "^2.4.2",
 		"react-tabs": "^3.0.0"
 	},
-	"devDependencies": {
-		"@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-		"@storybook/addon-a11y": "^5.0.6",
-		"@storybook/addon-actions": "^5.0.6",
-		"@storybook/addon-knobs": "^5.0.6",
-		"@storybook/addon-options": "^5.0.6",
-		"@storybook/addon-viewport": "^5.0.6",
-		"@storybook/react": "^5.0.5",
-		"babel-jest": "^24.8.0",
-		"babel-loader": "^8.0.6",
-		"babel-plugin-module-resolver": "^3.2.0",
-		"css-loader": "^2.1.1",
-		"http-proxy-middleware": "^0.19.1",
-		"liferay-lang-key-dev-loader": "^1.0.3",
-		"node-sass": "^4.11.0",
-		"sass-loader": "^7.1.0",
-		"style-loader": "^0.23.1"
-	},
 	"jest": {
 		"setupFilesAfterEnv": [
 			"@testing-library/react/cleanup-after-each",
@@ -53,7 +35,7 @@
 		"build": "liferay-npm-scripts build --bundler",
 		"checkFormat": "liferay-npm-scripts lint",
 		"format": "liferay-npm-scripts format",
-		"storybook": "start-storybook -p 9000 -c ./src/main/resources/META-INF/resources/js/stories",
+		"storybook": "liferay-npm-scripts storybook",
 		"test": "liferay-npm-scripts test"
 	},
 	"version": "1.0.0"

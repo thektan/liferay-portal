@@ -1,25 +1,25 @@
 import React from 'react';
-import {action} from '@storybook/addon-actions';
-import {addDecorator, storiesOf} from '@storybook/react';
-import {array, boolean, select, text, withKnobs} from '@storybook/addon-knobs';
-import {withA11y} from '@storybook/addon-a11y';
+import {STORYBOOK_CONSTANTS, StorybookAddonActions, StorybookAddonKnobs, StorybookReact} from 'liferay-npm-scripts/src/storybook';
 
-import Alias from 'components/alias/Alias';
-import ClayEmptyState from 'components/shared/ClayEmptyState';
-import FilterDisplay from '../components/list/FilterDisplay';
-import FilterInput from 'components/list/FilterInput';
-import Item from 'components/list/Item';
-import ItemDragPreview from 'components/list/ItemDragPreview';
-import List from 'components/list/List';
-import PageToolbar from 'components/PageToolbar';
-import ResultsRankingForm from 'components/ResultsRankingForm';
-import ThemeContext from 'ThemeContext';
+import '../../src/main/resources/META-INF/resources/css/main.scss';
+
+import Alias from '../../src/main/resources/META-INF/resources/js/components/alias/Alias';
+import ClayEmptyState from '../../src/main/resources/META-INF/resources/js/components/shared/ClayEmptyState';
+import FilterDisplay from '../../src/main/resources/META-INF/resources/js/components/list/FilterDisplay';
+import FilterInput from '../../src/main/resources/META-INF/resources/js/components/list/FilterInput';
+import Item from '../../src/main/resources/META-INF/resources/js/components/list/Item';
+import ItemDragPreview from '../../src/main/resources/META-INF/resources/js/components/list/ItemDragPreview';
+import List from '../../src/main/resources/META-INF/resources/js/components/list/List';
+import PageToolbar from '../../src/main/resources/META-INF/resources/js/components/PageToolbar';
+import ResultsRankingForm from '../../src/main/resources/META-INF/resources/js/components/ResultsRankingForm';
+import ThemeContext from '../../src/main/resources/META-INF/resources/js/ThemeContext';
 import {ClayIconSpriteContext} from '@clayui/icon';
-import {mockDataMap} from 'stories/mock-data';
+import {mockDataMap} from './mock-data';
 
-import '../../css/main.scss';
+const {addDecorator, storiesOf} = StorybookReact;
+const {action} = StorybookAddonActions;
+const {array, boolean, select, text, withKnobs} = StorybookAddonKnobs;
 
-addDecorator(withA11y);
 addDecorator(withKnobs);
 
 addDecorator(storyFn => {
@@ -30,7 +30,7 @@ addDecorator(storyFn => {
 		},
 		namespace:
 			'_com_liferay_portal_search_ranking_web_portlet_ResultsRankingPortlet_',
-		spritemap: '/o/admin-theme/images/lexicon/icons.svg'
+		spritemap: STORYBOOK_CONSTANTS.SPRITEMAP_PATH
 	};
 
 	return (
