@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -9,10 +8,15 @@
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  */
---%>
 
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+import ClayMultiselect from '../../../../src/main/resources/META-INF/resources/js/components/shared/ClayMultiselect.es';
+import React from 'react';
+import {render} from '@testing-library/react';
 
-<liferay-ui:error-header />
+describe('ClayMultiselect', () => {
+	it('renders', () => {
+		const {container} = render(<ClayMultiselect />);
 
-<liferay-ui:error exception="<%= Exception.class %>" message="ranking-already-exists-for-the-keyword-and-or-alias" />
+		expect(container.firstChild).not.toBeNull();
+	});
+});

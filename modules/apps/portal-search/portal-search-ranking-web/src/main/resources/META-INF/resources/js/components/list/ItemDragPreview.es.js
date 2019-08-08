@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -9,10 +8,23 @@
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  */
---%>
 
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+import Item from './Item.es';
+import React from 'react';
 
-<liferay-ui:error-header />
+const DRAG_PREVIEW_STYLES = {
+	borderRadius: '2px',
+	borderWidth: 0,
+	boxShadow:
+		'0 0 0 0.125rem #FFF, 0 0 0 0.25rem #80ACFF, 0px 8px 16px rgba(39, 40, 51, 0.16)',
+	fontSize: '14px',
+	maxWidth: '800px'
+};
 
-<liferay-ui:error exception="<%= Exception.class %>" message="ranking-already-exists-for-the-keyword-and-or-alias" />
+const ItemDragPreview = props => (
+	<div className="list-group">
+		<Item.DecoratedComponent style={DRAG_PREVIEW_STYLES} {...props} />
+	</div>
+);
+
+export default ItemDragPreview;

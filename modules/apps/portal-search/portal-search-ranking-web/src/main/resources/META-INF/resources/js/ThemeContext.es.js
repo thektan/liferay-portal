@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -9,10 +8,12 @@
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  */
---%>
 
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+import React from 'react';
 
-<liferay-ui:error-header />
-
-<liferay-ui:error exception="<%= Exception.class %>" message="ranking-already-exists-for-the-keyword-and-or-alias" />
+export default React.createContext({
+	companyId: '',
+	constants: {},
+	namespace: '',
+	spritemap: ''
+});
