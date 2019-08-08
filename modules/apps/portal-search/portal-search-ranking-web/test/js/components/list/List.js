@@ -1,10 +1,10 @@
 import React from 'react';
-import List from 'components/list/List';
+import List from '../../../../src/main/resources/META-INF/resources/js/components/list/List';
 import {cleanup, fireEvent, render} from '@testing-library/react';
-import {getMockResultsData} from 'test/mock-data.js';
-import {resultsDataToMap} from 'utils/util';
+import {getMockResultsData} from '../../mock-data';
+import {resultsDataToMap} from '../../../../src/main/resources/META-INF/resources/js/utils/util';
 
-jest.mock('utils/api');
+jest.mock('../../../../src/main/resources/META-INF/resources/js/utils/__mocks__/api');
 
 const DATA_MAP = resultsDataToMap(
 	getMockResultsData(10, 0, '', false).documents

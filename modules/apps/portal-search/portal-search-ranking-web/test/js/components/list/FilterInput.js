@@ -1,5 +1,5 @@
 import React from 'react';
-import FilterInput from 'components/list/FilterInput';
+import FilterInput from '../../../../src/main/resources/META-INF/resources/js/components/list/FilterInput';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 
 describe('FilterInput', () => {

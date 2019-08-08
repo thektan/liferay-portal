@@ -1,13 +1,13 @@
 import React from 'react';
-import SearchBar from 'components/list/SearchBar';
+import SearchBar from '../../../../src/main/resources/META-INF/resources/js/components/list/SearchBar';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 import {
 	FETCH_VISIBLE_DOCUMENTS_URL,
 	getMockResultsData
-} from 'test/mock-data.js';
-import {resultsDataToMap} from 'utils/util';
+} from '../../mock-data';
+import {resultsDataToMap} from '../../../../src/main/resources/META-INF/resources/js/utils/util';
 
-jest.mock('utils/api');
+jest.mock('../../../../src/main/resources/META-INF/resources/js/utils/__mocks__/api');
 
 const DATA_MAP = resultsDataToMap(
 	getMockResultsData(10, 0, '', false).documents

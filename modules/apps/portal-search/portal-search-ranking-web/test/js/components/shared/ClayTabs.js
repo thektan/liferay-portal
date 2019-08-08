@@ -3,7 +3,7 @@ import {
 	ClayTabList,
 	ClayTabPanel,
 	ClayTabs
-} from 'components/shared/ClayTabs';
+} from '../../../../src/main/resources/META-INF/resources/js/components/shared/ClayTabs';
 import React from 'react';
 import {cleanup, render} from '@testing-library/react';
 

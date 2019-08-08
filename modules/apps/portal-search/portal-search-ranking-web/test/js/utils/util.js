@@ -4,7 +4,7 @@ import {
 	resultsDataToMap,
 	toggleListItem,
 	updateDataMap
-} from 'utils/util';
+} from '../../../src/main/resources/META-INF/resources/js/utils/util';
 
 const RESULTS_LIST = [
 	{

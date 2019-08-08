@@ -1,4 +1,4 @@
-import AddResult from 'components/add_result/AddResult';
+import AddResult from '../add_result/AddResult';
 import ClayButton from '@clayui/button';
 import ClayCheckbox from '@clayui/checkbox';
 import ClayIcon from '@clayui/icon';
@@ -6,7 +6,7 @@ import getCN from 'classnames';
 import ItemDropdown from './ItemDropdown';
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {sub} from 'utils/language';
+import {sub} from '../../utils/language';
 
 class SearchBar extends Component {
 	static propTypes = {

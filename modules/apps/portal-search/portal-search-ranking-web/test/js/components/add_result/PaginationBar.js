@@ -1,5 +1,5 @@
 import React from 'react';
-import PaginationBar from 'components/add_result/PaginationBar';
+import PaginationBar from '../../../../src/main/resources/META-INF/resources/js/components/add_result/PaginationBar';
 import {cleanup, render, fireEvent} from '@testing-library/react';
 
 const DELTAS = [5, 10, 20, 40, 50];

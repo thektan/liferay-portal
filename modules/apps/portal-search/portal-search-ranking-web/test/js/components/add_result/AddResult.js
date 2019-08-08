@@ -1,7 +1,7 @@
-import AddResult from 'components/add_result/AddResult';
+import AddResult from '../../../../src/main/resources/META-INF/resources/js/components/add_result/AddResult';
 import React from 'react';
 import ReactModal from 'react-modal';
-import {FETCH_VISIBLE_DOCUMENTS_URL} from 'test/mock-data.js';
+import {FETCH_VISIBLE_DOCUMENTS_URL} from '../../mock-data';
 import {
 	cleanup,
 	fireEvent,
@@ -9,7 +9,7 @@ import {
 	waitForElement
 } from '@testing-library/react';
 
-jest.mock('utils/api');
+jest.mock('../../../../src/main/resources/META-INF/resources/js/utils/api');
 jest.mock('react-dnd', () => ({
 	DragSource: el => el => el,
 	DropTarget: el => el => el

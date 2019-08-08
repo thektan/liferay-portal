@@ -1,5 +1,5 @@
 import React from 'react';
-import ResultsRankingForm from 'components/ResultsRankingForm';
+import ResultsRankingForm from '../../../src/main/resources/META-INF/resources/js/components/ResultsRankingForm';
 import {
 	cleanup,
 	fireEvent,
@@ -10,9 +10,9 @@ import {
 import {
 	FETCH_HIDDEN_DOCUMENTS_URL,
 	FETCH_VISIBLE_DOCUMENTS_URL
-} from 'test/mock-data';
+} from '../mock-data';
 
-jest.mock('utils/api');
+jest.mock('../../../src/main/resources/META-INF/resources/js/utils/api');
 
 const FORM_NAME = 'testForm';
 

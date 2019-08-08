@@ -1,7 +1,7 @@
 import {
 	FETCH_HIDDEN_DOCUMENTS_URL,
 	getMockResultsData
-} from 'test/mock-data.js';
+} from '../../../../../../../../test/js/mock-data';
 
 /**
  * Fetches documents.

@@ -1,5 +1,5 @@
 import React from 'react';
-import Item from 'components/list/Item';
+import Item from '../../../../src/main/resources/META-INF/resources/js/components/list/Item';
 import {cleanup, fireEvent, render, within} from '@testing-library/react';
 
 jest.mock('react-dnd', () => ({

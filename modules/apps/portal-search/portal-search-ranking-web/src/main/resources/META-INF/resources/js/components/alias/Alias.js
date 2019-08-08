@@ -1,6 +1,6 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
-import ClayMultiselect from 'components/shared/ClayMultiselect';
+import ClayMultiselect from '../shared/ClayMultiselect';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import ReactModal from 'react-modal';

@@ -1,25 +1,25 @@
-import Alias from 'components/alias/Alias';
-import ClayEmptyState, {DISPLAY_STATES} from 'components/shared/ClayEmptyState';
-import FormValueDebugger from 'utils/FormValueDebugger';
-import List from 'components/list/List';
+import Alias from './alias/Alias';
+import ClayEmptyState, {DISPLAY_STATES} from './shared/ClayEmptyState';
+import FormValueDebugger from '../utils/FormValueDebugger';
+import List from './list/List';
 import PageToolbar from './PageToolbar';
 import React, {Component} from 'react';
 import ReactModal from 'react-modal';
-import ThemeContext from 'ThemeContext';
+import ThemeContext from '../ThemeContext';
 import {
 	ClayTab,
 	ClayTabList,
 	ClayTabPanel,
 	ClayTabs
-} from 'components/shared/ClayTabs';
-import {fetchDocuments} from 'utils/api';
+} from './shared/ClayTabs';
+import {fetchDocuments} from '../utils/api';
 import {
 	isNil,
 	move,
 	removeIdFromList,
 	resultsDataToMap,
 	updateDataMap
-} from 'utils/util';
+} from '../utils/util';
 import {PropTypes} from 'prop-types';
 
 const DELTA = 10;

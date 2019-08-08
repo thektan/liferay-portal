@@ -1,5 +1,5 @@
 import React from 'react';
-import FilterDisplay from 'components/list/FilterDisplay';
+import FilterDisplay from '../../../../src/main/resources/META-INF/resources/js/components/list/FilterDisplay';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 
 describe('FilterDisplay', () => {

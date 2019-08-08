@@ -1,7 +1,7 @@
-import ItemDragPreview from 'components/list/ItemDragPreview';
+import ItemDragPreview from '../../../../src/main/resources/META-INF/resources/js/components/list/ItemDragPreview';
 import React from 'react';
 import {cleanup, render} from '@testing-library/react';
-import {mockDocument} from 'test/mock-data';
+import {mockDocument} from '../../mock-data';
 
 // Mock pinned document since only pinned results can be dragged.
 

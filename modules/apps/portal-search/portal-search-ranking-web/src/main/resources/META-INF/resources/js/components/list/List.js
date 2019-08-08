@@ -1,5 +1,5 @@
 import ClayButton from '@clayui/button';
-import ClayEmptyState, {DISPLAY_STATES} from 'components/shared/ClayEmptyState';
+import ClayEmptyState, {DISPLAY_STATES} from '../shared/ClayEmptyState';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Item from './Item';
@@ -7,8 +7,8 @@ import ItemDragLayer from './ItemDragLayer';
 import React, {PureComponent} from 'react';
 import SearchBar from './SearchBar';
 import {DragDropContext as dragDropContext} from 'react-dnd';
-import {isNull, toggleListItem} from 'utils/util';
-import {KEY_CODES} from 'utils/constants';
+import {isNull, toggleListItem} from '../../utils/util';
+import {KEY_CODES} from '../../utils/constants';
 import {PropTypes} from 'prop-types';
 
 class List extends PureComponent {

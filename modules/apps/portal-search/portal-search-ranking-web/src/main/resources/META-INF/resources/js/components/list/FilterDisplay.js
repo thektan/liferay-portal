@@ -1,7 +1,7 @@
 import ClayButton from '@clayui/button';
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {sub} from 'utils/language';
+import {sub} from '../../utils/language';
 
 class FilterDisplay extends Component {
 	static propTypes = {

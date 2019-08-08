@@ -1,4 +1,4 @@
-import DRAG_TYPES from 'utils/drag-types';
+import DRAG_TYPES from '../../utils/drag-types';
 import ItemDragPreview from './ItemDragPreview';
 import React from 'react';
 import {DragLayer as DndDragLayer} from 'react-dnd';

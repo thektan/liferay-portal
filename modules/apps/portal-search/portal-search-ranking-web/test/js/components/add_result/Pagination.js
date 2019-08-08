@@ -1,5 +1,5 @@
 import React from 'react';
-import Pagination from 'components/add_result/Pagination';
+import Pagination from '../../../../src/main/resources/META-INF/resources/js/components/add_result/Pagination';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 
 describe('Pagination', () => {

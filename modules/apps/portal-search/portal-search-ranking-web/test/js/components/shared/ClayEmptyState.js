@@ -1,4 +1,4 @@
-import ClayEmptyState from 'components/shared/ClayEmptyState';
+import ClayEmptyState from '../../../../src/main/resources/META-INF/resources/js/components/shared/ClayEmptyState';
 import React from 'react';
 import {cleanup, render} from '@testing-library/react';
 

@@ -3,7 +3,7 @@ import getCN from 'classnames';
 import Pagination from './Pagination';
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {sub} from 'utils/language';
+import {sub} from '../../utils/language';
 
 const deltaValues = [5, 10, 20, 30, 50];
 

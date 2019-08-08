@@ -1,4 +1,4 @@
-import Alias from 'components/alias/Alias';
+import Alias from '../../../../src/main/resources/META-INF/resources/js/components/alias/Alias';
 import React from 'react';
 import ReactModal from 'react-modal';
 import {cleanup, fireEvent, render} from '@testing-library/react';

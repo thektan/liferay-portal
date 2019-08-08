@@ -1,5 +1,5 @@
 import React from 'react';
-import ItemDropdown from 'components/list/ItemDropdown';
+import ItemDropdown from '../../../../src/main/resources/META-INF/resources/js/components/list/ItemDropdown';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 
 const DROPDOWN_TOGGLE_ID = 'dropdown-toggle';

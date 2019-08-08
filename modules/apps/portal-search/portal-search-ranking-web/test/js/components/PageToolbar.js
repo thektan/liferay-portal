@@ -1,5 +1,5 @@
 import React from 'react';
-import PageToolbar from 'components/PageToolbar';
+import PageToolbar from '../../../src/main/resources/META-INF/resources/js/components/PageToolbar';
 import {cleanup, render} from '@testing-library/react';
 
 describe('PageToolbar', () => {

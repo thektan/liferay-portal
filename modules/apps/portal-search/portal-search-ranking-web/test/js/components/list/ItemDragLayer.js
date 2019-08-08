@@ -1,4 +1,4 @@
-import ItemDragLayer from 'components/list/ItemDragLayer';
+import ItemDragLayer from '../../../../src/main/resources/META-INF/resources/js/components/list/ItemDragLayer';
 import React from 'react';
 import {cleanup, render} from '@testing-library/react';
 

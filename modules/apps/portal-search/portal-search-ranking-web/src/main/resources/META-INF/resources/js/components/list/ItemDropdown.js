@@ -2,7 +2,7 @@ import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import getCN from 'classnames';
 import React, {Component} from 'react';
-import {getPluralMessage} from 'utils/language';
+import {getPluralMessage} from '../../utils/language';
 import {PropTypes} from 'prop-types';
 
 class ItemDropdown extends Component {

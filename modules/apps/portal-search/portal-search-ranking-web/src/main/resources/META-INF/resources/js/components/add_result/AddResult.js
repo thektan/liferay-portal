@@ -1,18 +1,18 @@
 import ClayButton from '@clayui/button';
 import ClayCheckbox from '@clayui/checkbox';
-import ClayEmptyState, {DISPLAY_STATES} from 'components/shared/ClayEmptyState';
+import ClayEmptyState, {DISPLAY_STATES} from '../shared/ClayEmptyState';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import getCN from 'classnames';
-import Item from 'components/list/Item';
+import Item from '../list/Item';
 import PaginationBar from './PaginationBar';
 import React, {Component} from 'react';
 import ReactModal from 'react-modal';
-import ThemeContext from 'ThemeContext';
-import {fetchDocuments} from 'utils/api';
+import ThemeContext from '../../ThemeContext';
+import {fetchDocuments} from '../../utils/api';
 import {PropTypes} from 'prop-types';
-import {resultsDataToMap} from 'utils/util';
-import {sub} from 'utils/language';
+import {resultsDataToMap} from '../../utils/util';
+import {sub} from '../../utils/language';
 import {toggleListItem} from '../../utils/util';
 
 const DELTAS = [5, 10, 20, 40, 50];

@@ -1,5 +1,5 @@
 import React from 'react';
-import Tag from 'components/alias/Tag';
+import Tag from '../../../../src/main/resources/META-INF/resources/js/components/alias/Tag';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 
 describe('Tag', () => {
