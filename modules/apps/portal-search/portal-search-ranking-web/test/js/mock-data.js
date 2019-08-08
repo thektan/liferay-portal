@@ -33,7 +33,7 @@ export function getMockResultsData(
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
 			extension: typeOfItem === 'Document' ? 'pdf' : null,
-			hidden: hidden,
+			hidden,
 			id: k + LEVEL,
 			pinned: hidden ? false : k < PINNED_AMOUNT,
 			title: `${k + LEVEL} This is a ${typeOfItem} Example`,

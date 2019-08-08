@@ -1,20 +1,25 @@
 import React from 'react';
-import {STORYBOOK_CONSTANTS, StorybookAddonActions, StorybookAddonKnobs, StorybookReact} from 'liferay-npm-scripts/src/storybook';
+import {
+	STORYBOOK_CONSTANTS,
+	StorybookAddonActions,
+	StorybookAddonKnobs,
+	StorybookReact
+} from 'liferay-npm-scripts/src/storybook';
 
 import '../../src/main/resources/META-INF/resources/css/main.scss';
 
-import Alias from '../../src/main/resources/META-INF/resources/js/components/alias/Alias';
-import ClayEmptyState from '../../src/main/resources/META-INF/resources/js/components/shared/ClayEmptyState';
-import FilterDisplay from '../../src/main/resources/META-INF/resources/js/components/list/FilterDisplay';
-import FilterInput from '../../src/main/resources/META-INF/resources/js/components/list/FilterInput';
-import Item from '../../src/main/resources/META-INF/resources/js/components/list/Item';
-import ItemDragPreview from '../../src/main/resources/META-INF/resources/js/components/list/ItemDragPreview';
-import List from '../../src/main/resources/META-INF/resources/js/components/list/List';
-import PageToolbar from '../../src/main/resources/META-INF/resources/js/components/PageToolbar';
-import ResultsRankingForm from '../../src/main/resources/META-INF/resources/js/components/ResultsRankingForm';
-import ThemeContext from '../../src/main/resources/META-INF/resources/js/ThemeContext';
+import Alias from '../../src/main/resources/META-INF/resources/js/components/alias/Alias.es';
+import ClayEmptyState from '../../src/main/resources/META-INF/resources/js/components/shared/ClayEmptyState.es';
+import FilterDisplay from '../../src/main/resources/META-INF/resources/js/components/list/FilterDisplay.es';
+import FilterInput from '../../src/main/resources/META-INF/resources/js/components/list/FilterInput.es';
+import Item from '../../src/main/resources/META-INF/resources/js/components/list/Item.es';
+import ItemDragPreview from '../../src/main/resources/META-INF/resources/js/components/list/ItemDragPreview.es';
+import List from '../../src/main/resources/META-INF/resources/js/components/list/List.es';
+import PageToolbar from '../../src/main/resources/META-INF/resources/js/components/PageToolbar.es';
+import ResultsRankingForm from '../../src/main/resources/META-INF/resources/js/components/ResultsRankingForm.es';
+import ThemeContext from '../../src/main/resources/META-INF/resources/js/ThemeContext.es';
 import {ClayIconSpriteContext} from '@clayui/icon';
-import {mockDataMap} from './mock-data';
+import {mockDataMap} from './mock-data.es';
 
 const {addDecorator, storiesOf} = StorybookReact;
 const {action} = StorybookAddonActions;
@@ -36,14 +41,14 @@ addDecorator(storyFn => {
 	return (
 		<ClayIconSpriteContext.Provider value={context.spritemap}>
 			<ThemeContext.Provider value={context}>
-				<div className='results-rankings-root'>{storyFn()}</div>
+				<div className="results-rankings-root">{storyFn()}</div>
 			</ThemeContext.Provider>
 		</ClayIconSpriteContext.Provider>
 	);
 });
 
 const withSheet = storyFn => (
-	<div className='sheet sheet-lg' style={{marginTop: '24px'}}>
+	<div className="sheet sheet-lg" style={{marginTop: '24px'}}>
 		{storyFn()}
 	</div>
 );
@@ -51,22 +56,22 @@ const withSheet = storyFn => (
 storiesOf('Main|ResultsRankingForm', module)
 	.add('default', () => (
 		<ResultsRankingForm
-			cancelUrl=''
-			fetchDocumentsHiddenUrl=''
-			fetchDocumentsUrl=''
-			formName='testFm'
-			saveActionUrl='#'
+			cancelUrl=""
+			fetchDocumentsHiddenUrl=""
+			fetchDocumentsUrl=""
+			formName="testFm"
+			saveActionUrl="#"
 			searchTerm={text('Search Term', 'example')}
 		/>
 	))
 	.add('with mock api', () => (
 		<ResultsRankingForm
-			cancelUrl=''
-			fetchDocumentsHiddenUrl='http://www.mocky.io/v2/5cd31439310000e29a339bbd'
-			fetchDocumentsUrl='http://www.mocky.io/v2/5cca1d49310000bf0312ce66'
-			formName='testFm'
+			cancelUrl=""
+			fetchDocumentsHiddenUrl="http://www.mocky.io/v2/5cd31439310000e29a339bbd"
+			fetchDocumentsUrl="http://www.mocky.io/v2/5cca1d49310000bf0312ce66"
+			formName="testFm"
 			initialAliases={['one', 'two', 'three']}
-			saveActionUrl='#'
+			saveActionUrl="#"
 			searchTerm={text('Search Term', 'example')}
 		/>
 	));
@@ -91,7 +96,7 @@ storiesOf('Components|List', module)
 		<List
 			dataLoading={false}
 			dataMap={mockDataMap}
-			fetchDocumentsUrl=''
+			fetchDocumentsUrl=""
 			onAddResultSubmit={action('onAddResultSubmit')}
 			onClickHide={action('onClickHide')}
 			onClickPin={action('onClickPin')}
@@ -103,7 +108,7 @@ storiesOf('Components|List', module)
 		<List
 			dataLoading={false}
 			dataMap={{}}
-			fetchDocumentsUrl=''
+			fetchDocumentsUrl=""
 			onAddResultSubmit={action('onAddResultSubmit')}
 		/>
 	))
@@ -112,13 +117,13 @@ storiesOf('Components|List', module)
 			dataLoading={false}
 			dataMap={{}}
 			displayError
-			fetchDocumentsUrl=''
+			fetchDocumentsUrl=""
 			onAddResultSubmit={action('onAddResultSubmit')}
 			onLoadResults={action('load-results')}
 		/>
 	))
 	.add('item', () => (
-		<div className='list-group'>
+		<div className="list-group">
 			<Item.DecoratedComponent {...mockDataMap['1']} />
 
 			<Item.DecoratedComponent
@@ -130,19 +135,19 @@ storiesOf('Components|List', module)
 			<Item.DecoratedComponent />
 
 			<Item.DecoratedComponent
-				date='Apr 18 2018, 11:04 AM'
-				title='Item with date only'
+				date="Apr 18 2018, 11:04 AM"
+				title="Item with date only"
 			/>
 
 			<Item.DecoratedComponent
-				author='Test Test'
-				date='Apr 18 2018, 11:04 AM'
-				title='Item with date and title'
+				author="Test Test"
+				date="Apr 18 2018, 11:04 AM"
+				title="Item with date and title"
 			/>
 
 			<Item.DecoratedComponent
-				clicks='100'
-				title='Item with title and clicks'
+				clicks="100"
+				title="Item with title and clicks"
 			/>
 		</div>
 	))
@@ -167,9 +172,9 @@ storiesOf('Components|EmptyState', module)
 	))
 	.add('with action', () => (
 		<ClayEmptyState
-			actionLabel='Refresh'
+			actionLabel="Refresh"
 			description={text('Description')}
-			displayState='empty'
+			displayState="empty"
 			onClickAction={action('onClickAction')}
 			title={text('Title')}
 		/>
@@ -178,8 +183,8 @@ storiesOf('Components|EmptyState', module)
 storiesOf('Components|SearchBar', module)
 	.addDecorator(withSheet)
 	.add('input', () => (
-		<FilterInput disableSearch={false} searchBarTerm='example' />
+		<FilterInput disableSearch={false} searchBarTerm="example" />
 	))
 	.add('display', () => (
-		<FilterDisplay searchBarTerm='example' totalResultsCount={100} />
+		<FilterDisplay searchBarTerm="example" totalResultsCount={100} />
 	));

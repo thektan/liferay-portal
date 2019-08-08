@@ -70,7 +70,7 @@ RankingPortletDisplayContext rankingPortletDisplayContext = (RankingPortletDispl
 		>
 
 			<%
-				RankingEntryDisplayContext rankingEntryDisplayContext = rankingEntryDisplayContextModelVar;
+			RankingEntryDisplayContext rankingEntryDisplayContext = rankingEntryDisplayContextModelVar;
 			%>
 
 			<portlet:renderURL var="rowURL">
