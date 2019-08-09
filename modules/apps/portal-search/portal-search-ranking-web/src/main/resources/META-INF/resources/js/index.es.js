@@ -11,7 +11,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ResultsRankingForm from './components/ResultsRankingForm';
+import ResultsRankingForm from './components/ResultsRankingForm.es';
 import ThemeContext from './ThemeContext.es';
 import {ClayIconSpriteContext} from '@clayui/icon';
 
