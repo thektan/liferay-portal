@@ -174,75 +174,63 @@ AUI.add(
 					);
 
 					if (currentAdminIndexPanel) {
-						Liferay.Util.fetch(
-							instance.get(STR_URL),
-							{
-								method: 'POST'
-							}
-						)
-						.then(response => {
-							return response.text();
+						Liferay.Util.fetch(instance.get(STR_URL), {
+							method: 'POST'
 						})
-						.then(response => {
-							var responseDataNode = A.Node.create(
-								response
-							);
+							.then(response => {
+								return response.text();
+							})
+							.then(response => {
+								var responseDataNode = A.Node.create(response);
 
-							var responseAdminIndexPanel = responseDataNode.one(
-								instance.get(STR_INDEX_ACTIONS_PANEL)
-							);
-
-							var responseAdminIndexNodeList = responseAdminIndexPanel.all(
-								'.index-action-wrapper'
-							);
-
-							var currentAdminIndexNodeList = currentAdminIndexPanel.all(
-								'.index-action-wrapper'
-							);
-
-							currentAdminIndexNodeList.each(function(
-								item,
-								index
-							) {
-								var inProgress = item.one('.progress');
-
-								var responseAdminIndexNode = responseAdminIndexNodeList.item(
-									index
+								var responseAdminIndexPanel = responseDataNode.one(
+									instance.get(STR_INDEX_ACTIONS_PANEL)
 								);
 
-								if (!inProgress) {
-									inProgress = responseAdminIndexNode.one(
-										'.progress'
-									);
-								}
+								var responseAdminIndexNodeList = responseAdminIndexPanel.all(
+									'.index-action-wrapper'
+								);
 
-								if (inProgress) {
-									item.replace(
-										responseAdminIndexNode
+								var currentAdminIndexNodeList = currentAdminIndexPanel.all(
+									'.index-action-wrapper'
+								);
+
+								currentAdminIndexNodeList.each(function(
+									item,
+									index
+								) {
+									var inProgress = item.one('.progress');
+
+									var responseAdminIndexNode = responseAdminIndexNodeList.item(
+										index
+									);
+
+									if (!inProgress) {
+										inProgress = responseAdminIndexNode.one(
+											'.progress'
+										);
+									}
+
+									if (inProgress) {
+										item.replace(responseAdminIndexNode);
+									}
+								});
+
+								var controlMenuId =
+									'#' + instance.ns('controlMenu');
+
+								var currentControlMenu = A.one(controlMenuId);
+
+								var responseControlMenu = responseDataNode.one(
+									controlMenuId
+								);
+
+								if (currentControlMenu && responseControlMenu) {
+									currentControlMenu.replace(
+										responseControlMenu
 									);
 								}
 							});
-
-							var controlMenuId =
-								'#' + instance.ns('controlMenu');
-
-							var currentControlMenu = A.one(
-								controlMenuId
-							);
-
-							var responseControlMenu = responseDataNode.one(
-								controlMenuId
-							);
-
-							if (
-								currentControlMenu &&
-								responseControlMenu
-							) {
-								currentControlMenu.replace(
-									responseControlMenu
-								);
-							}
-						});
 					}
 
 					instance._laterTimeout = A.later(
