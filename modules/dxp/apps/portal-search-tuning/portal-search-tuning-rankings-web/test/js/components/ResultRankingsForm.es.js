@@ -47,7 +47,7 @@ describe('ResultRankingsForm', () => {
 				fetchDocumentsSearchUrl={FETCH_SEARCH_DOCUMENTS_URL}
 				fetchDocumentsVisibleUrl={FETCH_VISIBLE_DOCUMENTS_URL}
 				formName={FORM_NAME}
-				initialInactive={false}
+				initialInactive={true}
 				searchQuery="example"
 			/>
 		);
