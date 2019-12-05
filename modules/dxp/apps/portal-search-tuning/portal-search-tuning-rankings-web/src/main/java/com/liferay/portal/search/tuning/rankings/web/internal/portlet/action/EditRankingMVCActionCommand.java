@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.search.index.IndexNameBuilder;
 import com.liferay.portal.search.tuning.rankings.web.internal.configuration.DefaultResultRankingsConfiguration;
 import com.liferay.portal.search.tuning.rankings.web.internal.configuration.ResultRankingsConfiguration;
 import com.liferay.portal.search.tuning.rankings.web.internal.constants.ResultRankingsConstants;
@@ -417,6 +418,9 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 	protected DuplicateQueryStringsDetector duplicateQueryStringsDetector;
 
 	@Reference
+	protected IndexNameBuilder indexNameBuilder;
+
+	@Reference
 	protected Portal portal;
 
 	@Reference
@@ -493,9 +497,8 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 		String index = editRankingMVCActionRequest.getIndexName();
 
 		if (Validator.isBlank(index)) {
-			long companyId = portal.getCompanyId(actionRequest);
-
-			index = "liferay-" + companyId;
+			index = indexNameBuilder.getIndexName(
+				portal.getCompanyId(actionRequest));
 		}
 
 		return index;
