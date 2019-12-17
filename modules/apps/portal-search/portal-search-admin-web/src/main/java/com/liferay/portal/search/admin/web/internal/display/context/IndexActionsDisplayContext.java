@@ -14,6 +14,10 @@
 
 package com.liferay.portal.search.admin.web.internal.display.context;
 
+import com.liferay.portal.search.engine.ConnectionInformation;
+
+import java.util.List;
+
 /**
  * @author Adam Brandizzi
  */
@@ -21,6 +25,10 @@ public class IndexActionsDisplayContext {
 
 	public String getClientVersionString() {
 		return _clientVersionString;
+	}
+
+	public List<ConnectionInformation> getConnectionInformationList() {
+		return _connectionInformationList;
 	}
 
 	public String getNodesString() {
@@ -39,6 +47,12 @@ public class IndexActionsDisplayContext {
 		_clientVersionString = clientVersionString;
 	}
 
+	public void setConnectionInformationList(
+		List<ConnectionInformation> connectionInformationList) {
+
+		_connectionInformationList = connectionInformationList;
+	}
+
 	public void setMissingSearchEngine(boolean missingSearchEngine) {
 		_missingSearchEngine = missingSearchEngine;
 	}
@@ -52,6 +66,7 @@ public class IndexActionsDisplayContext {
 	}
 
 	private String _clientVersionString;
+	private List<ConnectionInformation> _connectionInformationList;
 	private boolean _missingSearchEngine;
 	private String _nodesString;
 	private String _vendorString;

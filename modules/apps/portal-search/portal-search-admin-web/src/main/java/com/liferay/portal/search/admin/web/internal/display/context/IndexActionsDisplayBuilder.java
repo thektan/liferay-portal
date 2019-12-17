@@ -28,6 +28,8 @@ public class IndexActionsDisplayBuilder {
 		if (_searchEngineInformation != null) {
 			indexActionsDisplayContext.setClientVersionString(
 				_searchEngineInformation.getClientVersionString());
+			indexActionsDisplayContext.setConnectionInformationList(
+				_searchEngineInformation.getConnectionInformationList());
 			indexActionsDisplayContext.setNodesString(
 				_searchEngineInformation.getNodesString());
 			indexActionsDisplayContext.setVendorString(
