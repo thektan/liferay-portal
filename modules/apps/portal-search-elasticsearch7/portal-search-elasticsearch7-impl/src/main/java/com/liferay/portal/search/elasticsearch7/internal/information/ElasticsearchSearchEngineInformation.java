@@ -25,12 +25,22 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.configuration.CrossClusterReplicationConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration;
+import com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration;
 import com.liferay.portal.search.elasticsearch7.configuration.OperationMode;
 import com.liferay.portal.search.elasticsearch7.internal.ElasticsearchSearchEngine;
+import com.liferay.portal.search.elasticsearch7.internal.connection.ElasticsearchConnection;
 import com.liferay.portal.search.elasticsearch7.internal.connection.ElasticsearchConnectionManager;
+import com.liferay.portal.search.engine.ConnectionInformation;
+import com.liferay.portal.search.engine.NodeInformation;
 import com.liferay.portal.search.engine.SearchEngineInformation;
+import com.liferay.portal.search.engine.adapter.SearchEngineAdapter;
+import com.liferay.portal.search.engine.adapter.cluster.ClusterHealthStatus;
+import com.liferay.portal.search.engine.adapter.cluster.HealthClusterRequest;
+import com.liferay.portal.search.engine.adapter.cluster.HealthClusterResponse;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,6 +56,8 @@ import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -65,6 +77,54 @@ public class ElasticsearchSearchEngineInformation
 	@Override
 	public String getClientVersionString() {
 		return Version.CURRENT.toString();
+	}
+
+	@Override
+	public List<ConnectionInformation> getConnectionInformationList() {
+		List<ConnectionInformation> connectionInformationList =
+			new LinkedList<>();
+
+		addMainConnection(
+			elasticsearchConnectionManager.getElasticsearchConnection(),
+			connectionInformationList);
+
+		String filterString = String.format(
+			"(&(service.factoryPid=%s)(active=%s)",
+			ElasticsearchConnectionConfiguration.class.getName(), true);
+
+		if (!isOperationModeEmbedded()) {
+			filterString = filterString.concat(
+				String.format(
+					"(!(connectionId=%s))",
+					elasticsearchConfiguration.remoteClusterConnectionId()));
+		}
+
+		if (isCrossClusterReplicationEnabled()) {
+			String connectionId =
+				crossClusterReplicationConfigurationWrapper.
+					getCCRLocalClusterConnectionId();
+
+			addCCRConnection(
+				elasticsearchConnectionManager.getElasticsearchConnection(
+					connectionId),
+				connectionInformationList);
+
+			filterString = filterString.concat(
+				String.format("(!(connectionId=%s))", connectionId));
+		}
+
+		filterString = filterString.concat(")");
+
+		try {
+			addActiveConnections(filterString, connectionInformationList);
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to get active connections", e);
+			}
+		}
+
+		return connectionInformationList;
 	}
 
 	@Override
@@ -95,10 +155,7 @@ public class ElasticsearchSearchEngineInformation
 
 	@Override
 	public String getVendorString() {
-		OperationMode operationMode =
-			elasticsearchConfiguration.operationMode();
-
-		if (Objects.equals(operationMode, OperationMode.EMBEDDED)) {
+		if (isOperationModeEmbedded()) {
 			return elasticsearchSearchEngine.getVendor() + StringPool.SPACE +
 				"(Embedded)";
 		}
@@ -113,6 +170,90 @@ public class ElasticsearchSearchEngineInformation
 			ElasticsearchConfiguration.class, properties);
 	}
 
+	protected void addActiveConnections(
+			String filterString,
+			List<ConnectionInformation> connectionInformationList)
+		throws Exception {
+
+		Configuration[] configurations = configurationAdmin.listConfigurations(
+			filterString);
+
+		for (Configuration configuration : configurations) {
+			Dictionary<String, Object> properties =
+				configuration.getProperties();
+
+			String connectionId = (String)properties.get("connectionId");
+
+			addConnectionInformation(
+				elasticsearchConnectionManager.getElasticsearchConnection(
+					connectionId),
+				null, connectionInformationList);
+		}
+	}
+
+	protected void addCCRConnection(
+		ElasticsearchConnection elasticsearchConnection,
+		List<ConnectionInformation> connectionInformationList) {
+
+		addConnectionInformation(
+			elasticsearchConnection, "read", connectionInformationList);
+	}
+
+	protected void addConnectionInformation(
+		ElasticsearchConnection elasticsearchConnection, String label,
+		List<ConnectionInformation> connectionInformationList) {
+
+		ConnectionInformation connectionInformation =
+			new ConnectionInformation();
+
+		try {
+			_setClusterAndNodeInformation(
+				connectionInformation,
+				elasticsearchConnection.getRestHighLevelClient());
+		}
+		catch (Exception e) {
+			connectionInformation.setError(e.toString());
+
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to get node information", e);
+			}
+		}
+
+		connectionInformation.setConnectionId(
+			elasticsearchConnection.getConnectionId());
+
+		try {
+			_setHealthInformation(
+				connectionInformation,
+				elasticsearchConnection.getConnectionId());
+		}
+		catch (RuntimeException re) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to get health information", re);
+			}
+		}
+
+		if (!Validator.isBlank(label)) {
+			connectionInformation.setLabel(label);
+		}
+
+		connectionInformationList.add(connectionInformation);
+	}
+
+	protected void addMainConnection(
+		ElasticsearchConnection elasticsearchConnection,
+		List<ConnectionInformation> connectionInformationList) {
+
+		String label = "read-write";
+
+		if (isCrossClusterReplicationEnabled()) {
+			label = "write";
+		}
+
+		addConnectionInformation(
+			elasticsearchConnection, label, connectionInformationList);
+	}
+
 	protected String getClusterNodesString(
 		RestHighLevelClient restHighLevelClient) {
 
@@ -121,13 +262,18 @@ public class ElasticsearchSearchEngineInformation
 				return StringPool.BLANK;
 			}
 
-			ClusterInfo clusterInfo = _getClusterInfo(restHighLevelClient);
+			ConnectionInformation connectionInformation =
+				new ConnectionInformation();
 
-			String clusterName = clusterInfo.getClusterName();
+			_setClusterAndNodeInformation(
+				connectionInformation, restHighLevelClient);
 
-			List<NodeInfo> nodeInfos = clusterInfo.getNodeInfoList();
+			String clusterName = connectionInformation.getClusterName();
 
-			Stream<NodeInfo> stream = nodeInfos.stream();
+			List<NodeInformation> nodeInformations =
+				connectionInformation.getNodeInformationList();
+
+			Stream<NodeInformation> stream = nodeInformations.stream();
 
 			String nodesString = stream.map(
 				nodeInfo -> {
@@ -180,6 +326,16 @@ public class ElasticsearchSearchEngineInformation
 		return crossClusterReplicationConfigurationWrapper.isCCREnabled();
 	}
 
+	protected boolean isOperationModeEmbedded() {
+		OperationMode operationMode =
+			elasticsearchConfiguration.operationMode();
+
+		return Objects.equals(operationMode, OperationMode.EMBEDDED);
+	}
+
+	@Reference
+	protected ConfigurationAdmin configurationAdmin;
+
 	@Reference(cardinality = ReferenceCardinality.OPTIONAL)
 	protected volatile CrossClusterReplicationConfigurationWrapper
 		crossClusterReplicationConfigurationWrapper;
@@ -192,10 +348,13 @@ public class ElasticsearchSearchEngineInformation
 	@Reference
 	protected ElasticsearchSearchEngine elasticsearchSearchEngine;
 
-	private ClusterInfo _getClusterInfo(RestHighLevelClient restHighLevelClient)
-		throws Exception {
+	@Reference
+	protected SearchEngineAdapter searchEngineAdapter;
 
-		ClusterInfo clusterInfo = new ClusterInfo();
+	private void _setClusterAndNodeInformation(
+			ConnectionInformation connectionInformation,
+			RestHighLevelClient restHighLevelClient)
+		throws Exception {
 
 		RestClient restClient = restHighLevelClient.getLowLevelClient();
 
@@ -215,78 +374,48 @@ public class ElasticsearchSearchEngineInformation
 		String clusterName = GetterUtil.getString(
 			responseJSONObject.get("cluster_name"));
 
-		clusterInfo.setClusterName(clusterName);
+		connectionInformation.setClusterName(clusterName);
 
 		JSONObject nodesJSONObject = responseJSONObject.getJSONObject("nodes");
 
 		Set<String> nodes = nodesJSONObject.keySet();
 
-		List<NodeInfo> nodeInfoList = new ArrayList<>();
+		List<NodeInformation> nodeInformationList = new ArrayList<>();
 
 		for (String node : nodes) {
 			JSONObject nodeJSONObject = nodesJSONObject.getJSONObject(node);
 
-			NodeInfo nodeInfo = new NodeInfo();
+			NodeInformation nodeInformation = new NodeInformation();
 
-			nodeInfo.setName(GetterUtil.getString(nodeJSONObject.get("name")));
-			nodeInfo.setVersion(
+			nodeInformation.setName(
+				GetterUtil.getString(nodeJSONObject.get("name")));
+			nodeInformation.setVersion(
 				GetterUtil.getString(nodeJSONObject.get("version")));
 
-			nodeInfoList.add(nodeInfo);
+			nodeInformationList.add(nodeInformation);
 		}
 
-		clusterInfo.setNodeInfoList(nodeInfoList);
+		connectionInformation.setNodeInformationList(nodeInformationList);
+	}
 
-		return clusterInfo;
+	private void _setHealthInformation(
+		ConnectionInformation connectionInformation, String connectionId) {
+
+		HealthClusterRequest healthClusterRequest = new HealthClusterRequest();
+
+		healthClusterRequest.setConnectionId(connectionId);
+		healthClusterRequest.setTimeout(1000);
+
+		HealthClusterResponse healthClusterResponse =
+			searchEngineAdapter.execute(healthClusterRequest);
+
+		ClusterHealthStatus clusterHealthStatus =
+			healthClusterResponse.getClusterHealthStatus();
+
+		connectionInformation.setHealth(clusterHealthStatus.toString());
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ElasticsearchSearchEngineInformation.class);
-
-	private class ClusterInfo {
-
-		public String getClusterName() {
-			return _clusterName;
-		}
-
-		public List<NodeInfo> getNodeInfoList() {
-			return _nodeInfoList;
-		}
-
-		public void setClusterName(String clusterName) {
-			_clusterName = clusterName;
-		}
-
-		public void setNodeInfoList(List<NodeInfo> nodeInfoList) {
-			_nodeInfoList = nodeInfoList;
-		}
-
-		private String _clusterName;
-		private List<NodeInfo> _nodeInfoList;
-
-	}
-
-	private class NodeInfo {
-
-		public String getName() {
-			return _name;
-		}
-
-		public String getVersion() {
-			return _version;
-		}
-
-		public void setName(String name) {
-			_name = name;
-		}
-
-		public void setVersion(String version) {
-			_version = version;
-		}
-
-		private String _name;
-		private String _version;
-
-	}
 
 }
