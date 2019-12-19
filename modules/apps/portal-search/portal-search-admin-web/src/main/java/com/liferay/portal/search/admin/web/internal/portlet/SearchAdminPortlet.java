@@ -100,6 +100,17 @@ public class SearchAdminPortlet extends MVCPortlet {
 				SearchAdminWebKeys.INDEX_ACTIONS_DISPLAY_CONTEXT,
 				indexActionsDisplayBuilder.build());
 		}
+		else if (tab.equals("connections")) {
+			IndexActionsDisplayBuilder indexActionsDisplayBuilder =
+				new IndexActionsDisplayBuilder();
+
+			indexActionsDisplayBuilder.setSearchEngineInformation(
+				searchEngineInformation);
+
+			renderRequest.setAttribute(
+				SearchAdminWebKeys.INDEX_ACTIONS_DISPLAY_CONTEXT,
+				indexActionsDisplayBuilder.build());
+		}
 		else {
 			FieldMappingsDisplayBuilder fieldMappingsDisplayBuilder =
 				new FieldMappingsDisplayBuilder(_http);

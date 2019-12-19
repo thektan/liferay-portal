@@ -14,8 +14,40 @@
  */
 --%>
 
-<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<liferay-theme:defineObjects />
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
-Connections
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %><%@
+taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+
+<%@ page import="com.liferay.portal.search.admin.web.internal.constants.SearchAdminWebKeys" %><%@
+page import="com.liferay.portal.search.admin.web.internal.display.context.IndexActionsDisplayContext" %>
+
+<portlet:defineObjects />
+
+<%
+	IndexActionsDisplayContext indexActionsDisplayContext = (IndexActionsDisplayContext)request.getAttribute(
+		SearchAdminWebKeys.INDEX_ACTIONS_DISPLAY_CONTEXT);
+%>
+
+<div class="container-fluid container-fluid-max-xl container-form-lg">
+	<div class="sheet sheet-lg">
+		<c:choose>
+			<c:when test="<%= !indexActionsDisplayContext.isMissingSearchEngine() %>">
+				<dl>
+					<dt><liferay-ui:message key="search-engine-vendor" /></dt>
+					<dd><%= indexActionsDisplayContext.getVendorString() %></dd>
+
+					<dt><liferay-ui:message key="client-version" /></dt>
+					<dd><%= indexActionsDisplayContext.getClientVersionString() %></dd>
+				</dl>
+			</c:when>
+			<c:otherwise>
+				<div class="alert alert-warning">
+					<liferay-ui:message key="no-search-engine-detected-help" />
+				</div>
+			</c:otherwise>
+		</c:choose>
+	</div>
+</div>
