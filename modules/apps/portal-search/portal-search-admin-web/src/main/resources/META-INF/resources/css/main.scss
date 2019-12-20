@@ -52,4 +52,52 @@
 			color: #272833;
 		}
 	}
+
+	.status-page-container {
+		max-width: 800px;
+
+		.connection-info-item {
+			.connection-health-indicator {
+				color: #A7A9BC;
+
+				.connection-health-indicator-text {
+					color: #6B6C7E;
+				}
+
+				&.green {
+					color: #5ACA75;
+
+					.connection-health-indicator-text {
+						color: #287D3C;
+					}
+				}
+
+				&.red {
+					color: #DA1414;
+
+					.connection-health-indicator-text {
+						color: #DA1414;
+					}
+				}
+
+				&.yellow {
+					color: #FF8F39;
+
+					.connection-health-indicator-text {
+						color: #B95000;
+					}
+				}
+			}
+
+			.connection-id {
+				margin: 0;
+			}
+
+			.connection-info-item-header {
+				align-items: flex-start;
+				display: flex;
+				justify-content: space-between;
+			}
+		}
+	}
 }
