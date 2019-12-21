@@ -59,6 +59,8 @@ public class SearchAdminDisplayBuilder {
 				navigationItemList, "field-mappings", selectedTab);
 		}
 
+		addNavigationItemList(navigationItemList, "status", selectedTab);
+
 		searchAdminDisplayContext.setNavigationItemList(navigationItemList);
 		searchAdminDisplayContext.setSelectedTab(selectedTab);
 
@@ -92,9 +94,6 @@ public class SearchAdminDisplayBuilder {
 			Objects.equals(selectedTab, "field-mappings")) {
 
 			selectedTab = "field-mappings";
-		}
-		else {
-			selectedTab = "index-actions";
 		}
 
 		return selectedTab;
