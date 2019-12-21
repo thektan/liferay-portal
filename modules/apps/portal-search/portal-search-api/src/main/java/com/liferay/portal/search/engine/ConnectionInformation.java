@@ -14,6 +14,9 @@
 
 package com.liferay.portal.search.engine;
 
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +45,10 @@ public class ConnectionInformation {
 	}
 
 	public List<NodeInformation> getNodeInformationList() {
+		if (_nodeInformationList) {
+			return new ArrayList<>();
+		}
+
 		return _nodeInformationList;
 	}
 

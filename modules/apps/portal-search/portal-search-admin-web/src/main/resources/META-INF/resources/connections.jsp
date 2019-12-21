@@ -16,40 +16,41 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %><%@
+<%@ taglib uri="http://liferay.com/tld/clay" prefix="clay-ui" %><%@
+taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
-<%@ taglib prefix="clay-ui" uri="http://liferay.com/tld/clay" %>
-<%@ taglib prefix="liferay-frontend" uri="http://liferay.com/tld/frontend" %>
+<%@ taglib prefix="clay" uri="http://liferay.com/tld/clay" %>
 
-<%@ page import="com.liferay.portal.search.admin.web.internal.constants.SearchAdminWebKeys" %><%@
-page import="com.liferay.portal.search.admin.web.internal.display.context.IndexActionsDisplayContext" %>
-<%@ page import="com.liferay.portal.search.engine.ConnectionInformation" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.liferay.portal.kernel.util.Validator" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="com.liferay.portal.search.engine.NodeInformation" %>
-<%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
+page import="com.liferay.portal.search.admin.web.internal.constants.SearchAdminWebKeys" %><%@
+page import="com.liferay.portal.search.admin.web.internal.display.context.IndexActionsDisplayContext" %><%@
+page import="com.liferay.portal.search.engine.ConnectionInformation" %><%@
+page import="com.liferay.portal.search.engine.NodeInformation" %>
 
-<portlet:defineObjects />
+<%@ page import="java.util.ArrayList" %><%@
+page import="java.util.List" %>
+<%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 
 <%
-	IndexActionsDisplayContext indexActionsDisplayContext = (IndexActionsDisplayContext)request.getAttribute(
-		SearchAdminWebKeys.INDEX_ACTIONS_DISPLAY_CONTEXT);
+IndexActionsDisplayContext indexActionsDisplayContext = (IndexActionsDisplayContext)request.getAttribute(SearchAdminWebKeys.INDEX_ACTIONS_DISPLAY_CONTEXT);
 %>
 
 <div class="container-fluid container-fluid-max-xl container-form-lg status-page-container">
-	<div class="sheet sheet-lg">
+	<div class="connection-info-item connection-info-item-header sheet sheet-lg">
 		<c:choose>
 			<c:when test="<%= !indexActionsDisplayContext.isMissingSearchEngine() %>">
-				<dl>
-					<dt><liferay-ui:message key="search-engine-vendor" /></dt>
-					<dd><%= indexActionsDisplayContext.getVendorString() %></dd>
+				<div class="connection-info-data-container">
+					<div class="data-item">
+						<div class="key"><liferay-ui:message key="search-engine-vendor" /></div>
+						<div class="value"><%= indexActionsDisplayContext.getVendorString() %></div>
+					</div>
 
-					<dt><liferay-ui:message key="client-version" /></dt>
-					<dd><%= indexActionsDisplayContext.getClientVersionString() %></dd>
-				</dl>
+					<div class="data-item">
+						<div class="key"><liferay-ui:message key="client-version" /></div>
+						<div class="value"><%= indexActionsDisplayContext.getClientVersionString() %></div>
+					</div>
+				</div>
 			</c:when>
 			<c:otherwise>
 				<div class="alert alert-warning">
@@ -61,26 +62,24 @@ page import="com.liferay.portal.search.admin.web.internal.display.context.IndexA
 
 	<%
 	List<ConnectionInformation> connectionInformationList = indexActionsDisplayContext.getConnectionInformationList();
-
-	if (Validator.isNull(connectionInformationList)) {
-		connectionInformationList = new ArrayList<>();
-	}
 	%>
-		<h2>
-			<liferay-ui:message key="active-connections" />
 
-			<span class="badge badge-secondary">
-				<span class="badge-item badge-item-expand">
-					<%= connectionInformationList.size() %>
-				</span>
+	<h3 class="status-page-title">
+		<liferay-ui:message key="active-connections" />
+
+		<span class="badge badge-secondary">
+			<span class="badge-item badge-item-expand">
+				<%= connectionInformationList.size() %>
 			</span>
-		</h2>
+		</span>
+	</h3>
 
-		<c:choose>
-			<c:when test="<%= connectionInformationList.size() > 0 %>">
-				<%
-					for (ConnectionInformation connectionInformation : connectionInformationList) {
-				%>
+	<c:choose>
+		<c:when test="<%= connectionInformationList.size() > 0 %>">
+
+			<%
+			for (ConnectionInformation connectionInformation : connectionInformationList) {
+			%>
 
 				<div class="connection-info-item sheet sheet-lg">
 					<div class="connection-info-item-header">
@@ -93,41 +92,32 @@ page import="com.liferay.portal.search.admin.web.internal.display.context.IndexA
 						</div>
 
 						<div class="connection-info-item-header-block">
-							<div class="connection-health-indicator <%= connectionInformation.getHealth() %>">
-								<clay-ui:icon symbol="simple-circle" />
+							<div class="connection-health-indicator <%= StringUtil.lowerCase(connectionInformation.getHealth()) %>">
+								<div class="indicator-item">
+									<clay-ui:icon symbol="simple-circle" />
+								</div>
 
-								<span class="connection-health-indicator-text">
+								<div class="connection-health-indicator-text indicator-item">
 									<liferay-ui:message arguments="<%= new String[] {connectionInformation.getHealth()} %>" key="health-x" />
-								</span>
+								</div>
 							</div>
 						</div>
 					</div>
 
+					<%
+					List<NodeInformation> nodeInformationList = connectionInformation.getNodeInformationList();
+					%>
+
 					<liferay-frontend:fieldset
 						collapsed="<%= true %>"
-						collapsible="<%= true %>"
-						label="nodes"
+						collapsible="<%= nodeInformationList.size() > 0 %>"
+						cssClass="connection-info-node-list"
+						label='<%= LanguageUtil.format(request, "nodes-x", nodeInformationList.size(), false) %>'
 					>
-						<%
-							List<NodeInformation> nodeInformationList = connectionInformation.getNodeInformationList();
-
-							if (Validator.isNull(nodeInformationList)) {
-								nodeInformationList = new ArrayList<>();
-
-								NodeInformation nodeInformation = new NodeInformation();
-
-								nodeInformation.setName("master-7.3.0");
-								nodeInformation.setVersion("7.3.0");
-
-								nodeInformationList.add(nodeInformation);
-							}
-						%>
-
 						<liferay-ui:search-container
-							curParam="cur1"
 							deltaConfigurable="<%= false %>"
-							emptyResultsMessage="no-nodes-found"
-							headerNames="node-name,version"
+							emptyResultsMessage="no-nodes"
+							headerNames="name,version"
 							total="<%= nodeInformationList.size() %>"
 						>
 							<liferay-ui:search-container-results
@@ -138,22 +128,48 @@ page import="com.liferay.portal.search.admin.web.internal.display.context.IndexA
 								className="com.liferay.portal.search.engine.NodeInformation"
 								escapedModel="<%= true %>"
 								keyProperty="name"
-								modelVar="curNodeInformation"
+								modelVar="nodeInformation"
 							>
-								<liferay-ui:search-container-column-text property="name" />
+								<liferay-ui:search-container-column-text
+									property="name"
+								/>
 
-								<liferay-ui:search-container-column-text property="version" />
+								<liferay-ui:search-container-column-text
+									property="version"
+								/>
 							</liferay-ui:search-container-row>
+
+							<liferay-ui:search-iterator
+								markupView="lexicon"
+								paginate="<%= false %>"
+							/>
 						</liferay-ui:search-container>
 					</liferay-frontend:fieldset>
+
+					<%
+						String errorMessage = connectionInformation.getError();
+					%>
+
+					<c:if test="<%= Validator.isNotNull(errorMessage) %>">
+						<clay:alert
+							message="<%= errorMessage %>"
+							style="danger"
+							title='<%= LanguageUtil.get(request, "error") %>'
+						/>
+					</c:if>
 				</div>
 
-				<%
-					}
-				%>
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:alert message="no-active-connections" type="info" />
-			</c:otherwise>
-		</c:choose>
+			<%
+			}
+			%>
+
+		</c:when>
+		<c:otherwise>
+			<clay:alert
+				message="no-active-connections"
+				style="info"
+				title='<%= LanguageUtil.get(request, "info") %>'
+			/>
+		</c:otherwise>
+	</c:choose>
 </div>

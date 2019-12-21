@@ -57,34 +57,68 @@
 		max-width: 800px;
 
 		.connection-info-item {
+			margin-bottom: 16px;
+
+			.connection-cluster-name {
+				font-size: 14px;
+			}
+
+			.connection-info-data-container {
+				display: flex;
+				margin-bottom: 24px;
+
+				.data-item {
+					.key {
+						color: #A7A9BC;
+						font-weight: 600;
+						font-size: 10px;
+						text-transform: uppercase;
+					}
+
+					.value {
+						font-weight: 600;
+					}
+
+					+ .data-item {
+						margin-left: 24px;
+					}
+				}
+			}
+
 			.connection-health-indicator {
-				color: #A7A9BC;
+				align-items: center;
+				color: #a7a9bc;
+				display: flex;
+				line-height: 1;
 
 				.connection-health-indicator-text {
-					color: #6B6C7E;
+					color: #6b6c7e;
+					font-size: 10px;
+					font-weight: 600;
+					text-transform: uppercase;
 				}
 
 				&.green {
-					color: #5ACA75;
+					color: #5aca75;
 
 					.connection-health-indicator-text {
-						color: #287D3C;
+						color: #287d3c;
 					}
 				}
 
 				&.red {
-					color: #DA1414;
+					color: #da1414;
 
 					.connection-health-indicator-text {
-						color: #DA1414;
+						color: #da1414;
 					}
 				}
 
 				&.yellow {
-					color: #FF8F39;
+					color: #ff8f39;
 
 					.connection-health-indicator-text {
-						color: #B95000;
+						color: #b95000;
 					}
 				}
 			}
@@ -97,6 +131,25 @@
 				align-items: flex-start;
 				display: flex;
 				justify-content: space-between;
+				margin-bottom: 16px;
+			}
+
+			.connection-info-node-list .panel-body {
+				padding: 0;
+			}
+
+			&.connection-info-item-header {
+				margin-bottom: 24px;
+			}
+		}
+
+		.status-page-title {
+			align-items: center;
+			display: flex;
+			margin-bottom: 16px;
+
+			.badge {
+				margin-left: 8px;
 			}
 		}
 	}

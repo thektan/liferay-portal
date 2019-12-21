@@ -14,8 +14,10 @@
 
 package com.liferay.portal.search.admin.web.internal.display.context;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.engine.ConnectionInformation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +30,10 @@ public class IndexActionsDisplayContext {
 	}
 
 	public List<ConnectionInformation> getConnectionInformationList() {
+		if (Validator.isNull(_connectionInformationList)) {
+			return new ArrayList<>();
+		}
+
 		return _connectionInformationList;
 	}
 
