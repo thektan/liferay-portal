@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<root>
+	<template>
+		<template-key>category-facet-default-ftl</template-key>
+		<name>portlet-display-template-name-default-layout</name>
+		<description>portlet-display-template-description-default</description>
+		<language>ftl</language>
+		<script-file>com/liferay/portal/search/web/internal/category/facet/template/dependencies/portlet_display_template_default.ftl</script-file>
+		<cacheable>false</cacheable>
+	</template>
+</root>

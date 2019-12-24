@@ -30,7 +30,7 @@ assetCategoriesSearchFacetDisplayBuilder.setMaxTerms(dataJSONObject.getInt("maxT
 assetCategoriesSearchFacetDisplayBuilder.setParameterName(facet.getFieldId());
 assetCategoriesSearchFacetDisplayBuilder.setParameterValue(fieldParam);
 
-AssetCategoriesSearchFacetDisplayContext assetCategoriesSearchFacetDisplayContext = assetCategoriesSearchFacetDisplayBuilder.build();
+AssetCategoriesSearchFacetDisplayContext assetCategoriesSearchFacetDisplayContext = assetCategoriesSearchFacetDisplayBuilder.build(renderRequest);
 %>
 
 <c:choose>

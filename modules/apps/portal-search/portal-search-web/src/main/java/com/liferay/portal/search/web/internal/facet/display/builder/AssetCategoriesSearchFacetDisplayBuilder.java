@@ -17,6 +17,7 @@ package com.liferay.portal.search.web.internal.facet.display.builder;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.facet.collector.TermCollector;
@@ -36,17 +37,21 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.portlet.RenderRequest;
+
 /**
  * @author Lino Alves
  */
 public class AssetCategoriesSearchFacetDisplayBuilder implements Serializable {
 
-	public AssetCategoriesSearchFacetDisplayContext build() {
+	public AssetCategoriesSearchFacetDisplayContext build(
+		RenderRequest renderRequest) {
+
 		_buckets = collectBuckets(_facet.getFacetCollector());
 
 		AssetCategoriesSearchFacetDisplayContext
 			assetCategoriesSearchFacetDisplayContext =
-				new AssetCategoriesSearchFacetDisplayContext();
+				createAssetCategoriesSearchFacetDisplayContext(renderRequest);
 
 		assetCategoriesSearchFacetDisplayContext.setCloud(isCloud());
 		assetCategoriesSearchFacetDisplayContext.setNothingSelected(
@@ -248,6 +253,20 @@ public class AssetCategoriesSearchFacetDisplayBuilder implements Serializable {
 		}
 
 		return buckets;
+	}
+
+	protected AssetCategoriesSearchFacetDisplayContext
+		createAssetCategoriesSearchFacetDisplayContext(
+			RenderRequest renderRequest) {
+
+		try {
+			return new AssetCategoriesSearchFacetDisplayContext(
+				com.liferay.portal.kernel.util.PortalUtil.getHttpServletRequest(
+					renderRequest));
+		}
+		catch (ConfigurationException ce) {
+			throw new RuntimeException(ce);
+		}
 	}
 
 	protected Optional<AssetCategoriesSearchFacetTermDisplayContext>

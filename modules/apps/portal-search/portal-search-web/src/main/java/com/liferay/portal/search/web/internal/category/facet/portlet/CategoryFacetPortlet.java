@@ -157,7 +157,7 @@ public class CategoryFacetPortlet extends MVCPortlet {
 				parameterName, renderRequest),
 			assetCategoriesSearchFacetDisplayBuilder::setParameterValues);
 
-		return assetCategoriesSearchFacetDisplayBuilder.build();
+		return assetCategoriesSearchFacetDisplayBuilder.build(renderRequest);
 	}
 
 	protected String getAggregationName(RenderRequest renderRequest) {
