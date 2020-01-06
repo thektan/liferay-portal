@@ -1,0 +1,31 @@
+	<ul class="list-unstyled" id="category-facet-display-list">
+		<#if entries?has_content>
+			<#list entries as entry>
+				<li class="facet-value tag-popularity-${entry.getPopularity()}">
+					<div class="custom-checkbox custom-control">
+						<label class="facet-checkbox-label" for="${namespace + 'term_' + entry.getAssetCategoryId()}">
+							<input class="custom-control-input facet-term" data-term-id=${entry.getAssetCategoryId()} id="${namespace + 'term_' + entry.getAssetCategoryId()}" name="${namespace + 'term_' + entry.getAssetCategoryId()}" onChange="Liferay.Search.FacetUtil.changeSelection(event);" type="checkbox" ${(entry.isSelected())?then("checked","")} />
+
+							<span class="custom-control-label term-name ${(entry.isSelected())?then('facet-term-selected','facet-term-unselected')}">
+							<span class="custom-control-label-text">${htmlUtil.escape(entry.getDisplayName())}</span>
+							</span>
+
+							<#if entry.isFrequencyVisible()>
+								<small class="term-count">
+									(${entry.getFrequency()})
+								</small>
+							</#if>
+						</label>
+					</div>
+				</li>
+			</#list>
+		</#if>
+	</ul>
+
+<#if !assetCategoriesSearchFacetDisplayContext.isNothingSelected()>
+	<@liferay_aui.button
+		cssClass="btn-link btn-unstyled facet-clear-btn"
+		onClick="Liferay.Search.FacetUtil.clearSelections(event);"
+		value="clear"
+	 />
+</#if>

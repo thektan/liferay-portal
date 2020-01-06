@@ -64,6 +64,7 @@ CategoryFacetPortletPreferences categoryFacetPortletPreferences = new CategoryFa
 						displayStyle="<%= categoryFacetPortletInstanceConfiguration.displayStyle() %>"
 						displayStyleGroupId="<%= assetCategoriesSearchFacetDisplayContext.getDisplayStyleGroupId() %>"
 						refreshURL="<%= configurationRenderURL %>"
+						showEmptyOption="<%= true %>"
 					/>
 				</div>
 			</liferay-frontend:fieldset>

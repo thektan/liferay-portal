@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
-import com.liferay.portal.search.web.internal.category.facet.configuration.CategoryFacetWebTemplateConfiguration;
 import com.liferay.portal.search.web.internal.category.facet.constants.CategoryFacetPortletKeys;
 import com.liferay.portal.search.web.internal.facet.display.context.AssetCategoriesSearchFacetDisplayContext;
 import com.liferay.portal.search.web.internal.facet.display.context.AssetCategoriesSearchFacetTermDisplayContext;
@@ -54,12 +53,6 @@ public class CategoryFacetPortletDisplayTemplateHandler
 	}
 
 	@Override
-	public String getDefaultTemplateKey() {
-		return _categoryFacetWebTemplateConfiguration.
-			categoryFacetTemplateKeyDefault();
-	}
-
-	@Override
 	public String getName(Locale locale) {
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
@@ -89,7 +82,7 @@ public class CategoryFacetPortletDisplayTemplateHandler
 		templateVariableGroup.empty();
 
 		templateVariableGroup.addVariable(
-			"search-facet-display-context",
+			"category-facet-display-context",
 			AssetCategoriesSearchFacetDisplayContext.class,
 			"assetCategoriesSearchFacetDisplayContext");
 
@@ -106,23 +99,12 @@ public class CategoryFacetPortletDisplayTemplateHandler
 		return templateVariableGroups;
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_categoryFacetWebTemplateConfiguration =
-			ConfigurableUtil.createConfigurable(
-				CategoryFacetWebTemplateConfiguration.class, properties);
-	}
 
 	@Override
 	protected String getTemplatesConfigPath() {
 		return "com/liferay/portal/search/web/internal/category/facet" +
 			"/template/dependencies/portlet-display-templates.xml";
 	}
-
-	private volatile CategoryFacetWebTemplateConfiguration
-		_categoryFacetWebTemplateConfiguration;
-
 	@Reference
 	private Portal _portal;
 
