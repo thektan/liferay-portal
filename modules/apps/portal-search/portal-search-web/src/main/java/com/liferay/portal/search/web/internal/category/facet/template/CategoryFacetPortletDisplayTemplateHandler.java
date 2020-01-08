@@ -14,7 +14,6 @@
 
 package com.liferay.portal.search.web.internal.category.facet.template;
 
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portletdisplaytemplate.BasePortletDisplayTemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandler;
@@ -29,10 +28,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -99,12 +96,12 @@ public class CategoryFacetPortletDisplayTemplateHandler
 		return templateVariableGroups;
 	}
 
-
 	@Override
 	protected String getTemplatesConfigPath() {
 		return "com/liferay/portal/search/web/internal/category/facet" +
 			"/template/dependencies/portlet-display-templates.xml";
 	}
+
 	@Reference
 	private Portal _portal;
 

@@ -58,7 +58,6 @@ List<AssetCategoriesSearchFacetTermDisplayContext> assetCategoriesSearchFacetTer
 		<aui:input autocomplete="off" name="<%= HtmlUtil.escapeAttribute(assetCategoriesSearchFacetDisplayContext.getParameterName()) %>" type="hidden" value="<%= assetCategoriesSearchFacetDisplayContext.getParameterValue() %>" />
 	</c:when>
 	<c:otherwise>
-
 		<liferay-ui:panel-container
 			extended="<%= true %>"
 			id='<%= renderResponse.getNamespace() + "facetAssetCategoriesPanelContainer" %>'
