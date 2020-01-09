@@ -23,7 +23,9 @@ import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.search.web.internal.category.facet.constants.CategoryFacetPortletKeys;
 import com.liferay.portal.search.web.internal.facet.display.context.AssetCategoriesSearchFacetDisplayContext;
 import com.liferay.portal.search.web.internal.facet.display.context.AssetCategoriesSearchFacetTermDisplayContext;
+import com.liferay.portlet.display.template.constants.PortletDisplayTemplateConstants;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -82,6 +84,17 @@ public class CategoryFacetPortletDisplayTemplateHandler
 			"category-facet-display-context",
 			AssetCategoriesSearchFacetDisplayContext.class,
 			"assetCategoriesSearchFacetDisplayContext");
+		templateVariableGroup.addCollectionVariable(
+			"facets", List.class, PortletDisplayTemplateConstants.ENTRIES,
+			"facet", AssetCategoriesSearchFacetTermDisplayContext.class,
+			PortletDisplayTemplateConstants.ENTRY, "getDisplayName()");
+		templateVariableGroup.addVariable(
+			"facet-name", AssetCategoriesSearchFacetTermDisplayContext.class,
+			PortletDisplayTemplateConstants.ENTRY, "getDisplayName()");
+		templateVariableGroup.addVariable(
+			"facet-frequency",
+			AssetCategoriesSearchFacetTermDisplayContext.class,
+			PortletDisplayTemplateConstants.ENTRY, "getFrequency()");
 
 		TemplateVariableGroup categoriesServicesTemplateVariableGroup =
 			new TemplateVariableGroup(

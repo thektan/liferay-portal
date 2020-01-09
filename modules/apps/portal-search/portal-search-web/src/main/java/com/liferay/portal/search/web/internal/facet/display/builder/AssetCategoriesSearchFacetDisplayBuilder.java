@@ -45,14 +45,18 @@ import javax.portlet.RenderRequest;
  */
 public class AssetCategoriesSearchFacetDisplayBuilder implements Serializable {
 
-	public AssetCategoriesSearchFacetDisplayContext build(
+	public AssetCategoriesSearchFacetDisplayBuilder(
 		RenderRequest renderRequest) {
 
+		_renderRequest = renderRequest;
+	}
+
+	public AssetCategoriesSearchFacetDisplayContext build() {
 		_buckets = collectBuckets(_facet.getFacetCollector());
 
 		AssetCategoriesSearchFacetDisplayContext
 			assetCategoriesSearchFacetDisplayContext =
-				createAssetCategoriesSearchFacetDisplayContext(renderRequest);
+				createAssetCategoriesSearchFacetDisplayContext();
 
 		assetCategoriesSearchFacetDisplayContext.setCloud(isCloud());
 		assetCategoriesSearchFacetDisplayContext.setNothingSelected(
@@ -257,12 +261,11 @@ public class AssetCategoriesSearchFacetDisplayBuilder implements Serializable {
 	}
 
 	protected AssetCategoriesSearchFacetDisplayContext
-		createAssetCategoriesSearchFacetDisplayContext(
-			RenderRequest renderRequest) {
+		createAssetCategoriesSearchFacetDisplayContext() {
 
 		try {
 			return new AssetCategoriesSearchFacetDisplayContext(
-				PortalUtil.getHttpServletRequest(renderRequest));
+				PortalUtil.getHttpServletRequest(_renderRequest));
 		}
 		catch (ConfigurationException ce) {
 			throw new RuntimeException(ce);
@@ -401,6 +404,7 @@ public class AssetCategoriesSearchFacetDisplayBuilder implements Serializable {
 	private Locale _locale;
 	private int _maxTerms;
 	private String _parameterName;
+	private final RenderRequest _renderRequest;
 	private List<Long> _selectedCategoryIds = Collections.emptyList();
 
 }

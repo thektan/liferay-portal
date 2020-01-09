@@ -58,31 +58,31 @@ List<AssetCategoriesSearchFacetTermDisplayContext> assetCategoriesSearchFacetTer
 		<aui:input autocomplete="off" name="<%= HtmlUtil.escapeAttribute(assetCategoriesSearchFacetDisplayContext.getParameterName()) %>" type="hidden" value="<%= assetCategoriesSearchFacetDisplayContext.getParameterValue() %>" />
 	</c:when>
 	<c:otherwise>
-		<liferay-ui:panel-container
-			extended="<%= true %>"
-			id='<%= renderResponse.getNamespace() + "facetAssetCategoriesPanelContainer" %>'
-			markupView="lexicon"
-			persistState="<%= true %>"
+		<liferay-ddm:template-renderer
+			className="<%= AssetCategoriesSearchFacetTermDisplayContext.class.getName() %>"
+			contextObjects="<%= contextObjects %>"
+			displayStyle="<%= categoryFacetPortletInstanceConfiguration.displayStyle() %>"
+			displayStyleGroupId="<%= assetCategoriesSearchFacetDisplayContext.getDisplayStyleGroupId() %>"
+			entries="<%= assetCategoriesSearchFacetTermDisplayContexts %>"
 		>
-			<liferay-ui:panel
-				collapsible="<%= true %>"
-				cssClass="search-facet"
-				id='<%= renderResponse.getNamespace() + "facetAssetCategoriesPanel" %>'
+			<liferay-ui:panel-container
+				extended="<%= true %>"
+				id='<%= renderResponse.getNamespace() + "facetAssetCategoriesPanelContainer" %>'
 				markupView="lexicon"
 				persistState="<%= true %>"
-				title="category"
 			>
-				<aui:form method="post" name="categoryFacetForm">
-					<aui:input autocomplete="off" name="<%= HtmlUtil.escapeAttribute(assetCategoriesSearchFacetDisplayContext.getParameterName()) %>" type="hidden" value="<%= assetCategoriesSearchFacetDisplayContext.getParameterValue() %>" />
-					<aui:input cssClass="facet-parameter-name" name="facet-parameter-name" type="hidden" value="<%= assetCategoriesSearchFacetDisplayContext.getParameterName() %>" />
+				<liferay-ui:panel
+					collapsible="<%= true %>"
+					cssClass="search-facet"
+					id='<%= renderResponse.getNamespace() + "facetAssetCategoriesPanel" %>'
+					markupView="lexicon"
+					persistState="<%= true %>"
+					title="category"
+				>
+					<aui:form method="post" name="categoryFacetForm">
+						<aui:input autocomplete="off" name="<%= HtmlUtil.escapeAttribute(assetCategoriesSearchFacetDisplayContext.getParameterName()) %>" type="hidden" value="<%= assetCategoriesSearchFacetDisplayContext.getParameterValue() %>" />
+						<aui:input cssClass="facet-parameter-name" name="facet-parameter-name" type="hidden" value="<%= assetCategoriesSearchFacetDisplayContext.getParameterName() %>" />
 
-					<liferay-ddm:template-renderer
-						className="<%= AssetCategoriesSearchFacetTermDisplayContext.class.getName() %>"
-						contextObjects="<%= contextObjects %>"
-						displayStyle="<%= categoryFacetPortletInstanceConfiguration.displayStyle() %>"
-						displayStyleGroupId="<%= assetCategoriesSearchFacetDisplayContext.getDisplayStyleGroupId() %>"
-						entries="<%= assetCategoriesSearchFacetTermDisplayContexts %>"
-					>
 						<aui:fieldset>
 							<ul class="<%= assetCategoriesSearchFacetDisplayContext.isCloud() ? "tag-cloud" : "tag-list" %> list-unstyled">
 
@@ -121,10 +121,10 @@ List<AssetCategoriesSearchFacetTermDisplayContext> assetCategoriesSearchFacetTer
 						<c:if test="<%= !assetCategoriesSearchFacetDisplayContext.isNothingSelected() %>">
 							<aui:button cssClass="btn-link btn-unstyled facet-clear-btn" onClick="Liferay.Search.FacetUtil.clearSelections(event);" value="clear" />
 						</c:if>
-					</liferay-ddm:template-renderer>
-				</aui:form>
-			</liferay-ui:panel>
-		</liferay-ui:panel-container>
+					</aui:form>
+				</liferay-ui:panel>
+			</liferay-ui:panel-container>
+		</liferay-ddm:template-renderer>
 	</c:otherwise>
 </c:choose>
 

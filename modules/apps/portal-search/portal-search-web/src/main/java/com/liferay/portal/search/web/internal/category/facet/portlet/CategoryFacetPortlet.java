@@ -113,7 +113,7 @@ public class CategoryFacetPortlet extends MVCPortlet {
 
 		AssetCategoriesSearchFacetDisplayBuilder
 			assetCategoriesSearchFacetDisplayBuilder =
-				new AssetCategoriesSearchFacetDisplayBuilder();
+				new AssetCategoriesSearchFacetDisplayBuilder(renderRequest);
 
 		assetCategoriesSearchFacetDisplayBuilder.setAssetCategoryLocalService(
 			assetCategoryLocalService);
@@ -157,7 +157,7 @@ public class CategoryFacetPortlet extends MVCPortlet {
 				parameterName, renderRequest),
 			assetCategoriesSearchFacetDisplayBuilder::setParameterValues);
 
-		return assetCategoriesSearchFacetDisplayBuilder.build(renderRequest);
+		return assetCategoriesSearchFacetDisplayBuilder.build();
 	}
 
 	protected String getAggregationName(RenderRequest renderRequest) {
