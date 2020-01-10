@@ -22,6 +22,7 @@
 				type="hidden"
 				value=assetCategoriesSearchFacetDisplayContext.getParameterValue()
 			/>
+
 			<@liferay_aui.input
 				cssClass="facet-parameter-name"
 				name="facet-parameter-name"
@@ -29,16 +30,16 @@
 				value=assetCategoriesSearchFacetDisplayContext.getParameterName()
 			/>
 
-			<ul class="${(assetCategoriesSearchFacetDisplayContext.isCloud())?then('tag-cloud','tag-list')} list-unstyled">
+			<ul class="${(assetCategoriesSearchFacetDisplayContext.isCloud())?then('tag-cloud', 'tag-list')} list-unstyled">
 				<#if entries?has_content>
 					<#list entries as entry>
 						<li class="facet-value tag-popularity-${entry.getPopularity()}">
 							<div class="custom-checkbox custom-control">
 								<label class="facet-checkbox-label" for="${namespace + 'term_' + entry?index}">
-									<input class="custom-control-input facet-term" data-term-id=${entry.getAssetCategoryId()} id="${namespace + 'term_' + entry?index}" name="${namespace + 'term_' + entry?index}" onChange="Liferay.Search.FacetUtil.changeSelection(event);" type="checkbox" ${(entry.isSelected())?then("checked","")} />
+									<input class="custom-control-input facet-term" data-term-id=${entry.getAssetCategoryId()} id="${namespace + 'term_' + entry?index}" name="${namespace + 'term_' + entry?index}" onChange="Liferay.Search.FacetUtil.changeSelection(event);" type="checkbox" ${(entry.isSelected())?then("checked", "")} />
 
-									<span class="custom-control-label term-name ${(entry.isSelected())?then('facet-term-selected','facet-term-unselected')}">
-									<span class="custom-control-label-text">${htmlUtil.escape(entry.getDisplayName())}</span>
+									<span class="custom-control-label term-name ${(entry.isSelected())?then('facet-term-selected', 'facet-term-unselected')}">
+										<span class="custom-control-label-text">${htmlUtil.escape(entry.getDisplayName())}</span>
 									</span>
 
 									<#if entry.isFrequencyVisible()>
