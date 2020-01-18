@@ -12,19 +12,14 @@
 		} />
 
 		<#if searchBarPortletDisplayContext.isLetTheUserChooseTheSearchScope()>
-			<@liferay_aui.input
-				autoFocus=true
-				cssClass="search-bar-keywords-input"
-				data=data
-				label=""
-				name=htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())
-				placeholder=searchBarPortletDisplayContext.getInputPlaceholder()
-				title="search"
-				type="text"
-				useNamespace=false
-				value=searchBarPortletDisplayContext.getKeywords()
-				wrapperCssClass="input-group-item input-group-prepend search-bar-keywords-input-wrapper"
-			/>
+			<div class="input-group-item input-group-item-shrink input-group-prepend">
+				<@clay.button
+					ariaLabel=languageUtil.get(locale, "submit")
+					icon="search"
+					style="secondary"
+					type="submit"
+				/>
+			</div>
 
 			<@liferay_aui.select
 				cssClass="search-bar-scope-select"
@@ -32,12 +27,12 @@
 				name=htmlUtil.escape(searchBarPortletDisplayContext.getScopeParameterName())
 				title="scope"
 				useNamespace=false
-				wrapperCssClass="input-group-item input-group-item-shrink input-group-prepend search-bar-search-select-wrapper"
+				wrapperCssClass="input-group-item input-group-item-shrink input-group-append search-bar-search-select-wrapper"
 			>
 				<@liferay_aui.option
-					label="this-site"
-					selected=searchBarPortletDisplayContext.isSelectedCurrentSiteSearchScope()
-					value=searchBarPortletDisplayContext.getCurrentSiteSearchScopeParameterString()
+				label="this-site"
+				selected=searchBarPortletDisplayContext.isSelectedCurrentSiteSearchScope()
+				value=searchBarPortletDisplayContext.getCurrentSiteSearchScopeParameterString()
 				/>
 
 				<#if searchBarPortletDisplayContext.isAvailableEverythingSearchScope()>
@@ -49,16 +44,30 @@
 				</#if>
 			</@>
 
-			<div class="input-group-append input-group-item input-group-item-shrink">
-				<@clay.button
-					ariaLabel=languageUtil.get(locale, "submit")
-					icon="search"
-					style="secondary"
-					type="submit"
-				/>
-			</div>
+			<@liferay_aui.input
+				autoFocus=true
+				cssClass="search-bar-keywords-input"
+				data=data
+				label=""
+				name=htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())
+				placeholder=searchBarPortletDisplayContext.getInputPlaceholder()
+				title="search"
+				type="text"
+				useNamespace=false
+				value=searchBarPortletDisplayContext.getKeywords()
+				wrapperCssClass="input-group-item input-group-append search-bar-keywords-input-wrapper"
+			/>
 		<#else>
 			<div class="input-group-item search-bar-keywords-input-wrapper">
+				<div class="input-group-inset-item input-group-inset-item-before">
+					<@clay.button
+						ariaLabel=languageUtil.get(locale, "submit")
+						icon="search"
+						style="unstyled"
+						type="submit"
+					/>
+				</div>
+
 				<input
 					class="form-control input-group-inset input-group-inset-after search-bar-keywords-input" data-qa-id="searchInput"
 				id="${namespace + stringUtil.randomId()}" name="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())}" placeholder="${searchBarPortletDisplayContext.getInputPlaceholder()}" title="${languageUtil.get(locale, 'search')}" type="text" value="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywords())}" />
@@ -68,15 +77,6 @@
 					type="hidden"
 					value=searchBarPortletDisplayContext.getScopeParameterValue()
 				/>
-
-				<div class="input-group-inset-item input-group-inset-item-after">
-					<@clay.button
-						ariaLabel=languageUtil.get(locale, "submit")
-						icon="search"
-						style="unstyled"
-						type="submit"
-					/>
-				</div>
 			</div>
 		</#if>
 	</div>
