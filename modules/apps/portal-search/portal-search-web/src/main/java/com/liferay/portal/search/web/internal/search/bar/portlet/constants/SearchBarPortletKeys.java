@@ -15,7 +15,7 @@
 package com.liferay.portal.search.web.internal.search.bar.portlet.constants;
 
 /**
- * @author André de Oliveira
+ * @author Olivia Yu
  */
 public class SearchBarPortletKeys {
 

@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Kevin Tan
+ * @author Olivia Yu
  */
 @Component(
 	configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true,

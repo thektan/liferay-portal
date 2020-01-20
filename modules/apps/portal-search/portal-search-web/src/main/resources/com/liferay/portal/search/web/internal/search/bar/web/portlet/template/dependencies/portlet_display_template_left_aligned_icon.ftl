@@ -3,14 +3,10 @@
 		cssClass="search-bar-empty-search-input"
 		name="emptySearchEnabled"
 		type="hidden"
-		value="${searchBarPortletDisplayContext.isEmptySearchEnabled()?c}"
+		value=searchBarPortletDisplayContext.isEmptySearchEnabled()
 	/>
 
 	<div class="input-group ${searchBarPortletDisplayContext.isLetTheUserChooseTheSearchScope()?then("search-bar-scope","search-bar-simple")}">
-		<#assign data = {
-			"test-id": "searchInput"
-		} />
-
 		<#if searchBarPortletDisplayContext.isLetTheUserChooseTheSearchScope()>
 			<div class="input-group-item input-group-item-shrink input-group-prepend">
 				<@clay.button
@@ -27,7 +23,7 @@
 				name=htmlUtil.escape(searchBarPortletDisplayContext.getScopeParameterName())
 				title="scope"
 				useNamespace=false
-				wrapperCssClass="input-group-item input-group-item-shrink input-group-append search-bar-search-select-wrapper"
+				wrapperCssClass="input-group-item input-group-item-shrink input-group-prepend search-bar-search-select-wrapper"
 			>
 				<@liferay_aui.option
 				label="this-site"
@@ -44,6 +40,10 @@
 				</#if>
 			</@>
 
+			<#assign data = {
+				"test-id": "searchInput"
+			} />
+
 			<@liferay_aui.input
 				autoFocus=true
 				cssClass="search-bar-keywords-input"
@@ -59,6 +59,10 @@
 			/>
 		<#else>
 			<div class="input-group-item search-bar-keywords-input-wrapper">
+				<input
+				class="form-control input-group-inset input-group-inset-before search-bar-keywords-input" data-qa-id="searchInput"
+				id="${namespace + stringUtil.randomId()}" name="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())}" placeholder="${searchBarPortletDisplayContext.getInputPlaceholder()}" title="${languageUtil.get(locale, 'search')}" type="text" value="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywords())}" />
+
 				<div class="input-group-inset-item input-group-inset-item-before">
 					<@clay.button
 						ariaLabel=languageUtil.get(locale, "submit")
@@ -67,10 +71,6 @@
 						type="submit"
 					/>
 				</div>
-
-				<input
-					class="form-control input-group-inset input-group-inset-after search-bar-keywords-input" data-qa-id="searchInput"
-				id="${namespace + stringUtil.randomId()}" name="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())}" placeholder="${searchBarPortletDisplayContext.getInputPlaceholder()}" title="${languageUtil.get(locale, 'search')}" type="text" value="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywords())}" />
 
 				<@liferay_aui.input
 					name=htmlUtil.escape(searchBarPortletDisplayContext.getScopeParameterName())

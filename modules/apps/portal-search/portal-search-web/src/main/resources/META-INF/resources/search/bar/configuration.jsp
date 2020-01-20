@@ -52,7 +52,10 @@ SearchBarPortletPreferences searchBarPortletPreferences = new SearchBarPortletPr
 
 	<liferay-frontend:edit-form-body>
 		<liferay-frontend:fieldset-group>
-			<aui:fieldset collapsible="<%= true %>" label="display-settings">
+			<liferay-frontend:fieldset
+				collapsible="<%= true %>"
+				label="display-settings"
+			>
 				<liferay-ddm:template-selector
 					className="<%= SearchBarPortletDisplayContext.class.getName() %>"
 					displayStyle="<%= searchBarPortletInstanceConfiguration.displayStyle() %>"
@@ -60,9 +63,12 @@ SearchBarPortletPreferences searchBarPortletPreferences = new SearchBarPortletPr
 					refreshURL="<%= configurationRenderURL %>"
 					showEmptyOption="<%= true %>"
 				/>
-			</aui:fieldset>
+			</liferay-frontend:fieldset>
 
-			<aui:fieldset collapsible="<%= true %>" label="advanced-configuration">
+			<liferay-frontend:fieldset
+				collapsible="<%= true %>"
+				label="advanced-configuration"
+			>
 				<aui:input label="keywords-parameter-name" name="<%= PortletPreferencesJspUtil.getInputName(SearchBarPortletPreferences.PREFERENCE_KEY_KEYWORDS_PARAMETER_NAME) %>" value="<%= searchBarPortletPreferences.getKeywordsParameterName() %>" />
 
 				<aui:select label="scope" name="<%= PortletPreferencesJspUtil.getInputName(SearchBarPortletPreferences.PREFERENCE_KEY_SEARCH_SCOPE) %>" value="<%= searchBarPortletPreferences.getSearchScopePreferenceString() %>">
@@ -80,7 +86,7 @@ SearchBarPortletPreferences searchBarPortletPreferences = new SearchBarPortletPr
 				<aui:input helpMessage="invisible-help" label="invisible" name="<%= PortletPreferencesJspUtil.getInputName(SearchBarPortletPreferences.PREFERENCE_KEY_INVISIBLE) %>" type="checkbox" value="<%= searchBarPortletPreferences.isInvisible() %>" />
 
 				<aui:input helpMessage="federated-search-key-help" label="federated-search-key" name="<%= PortletPreferencesJspUtil.getInputName(SearchBarPortletPreferences.PREFERENCE_KEY_FEDERATED_SEARCH_KEY) %>" type="text" value="<%= searchBarPortletPreferences.getFederatedSearchKeyString() %>" />
-			</aui:fieldset>
+			</liferay-frontend:fieldset>
 		</liferay-frontend:fieldset-group>
 	</liferay-frontend:edit-form-body>
 

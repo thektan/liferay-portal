@@ -43,19 +43,6 @@ page import="java.util.Map" %>
 
 <%
 SearchBarPortletDisplayContext searchBarPortletDisplayContext = (SearchBarPortletDisplayContext)java.util.Objects.requireNonNull(request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT));
-
-if (searchBarPortletDisplayContext.isDestinationUnreachable()) {
-	return;
-}
-
-SearchBarPortletInstanceConfiguration searchBarPortletInstanceConfiguration = searchBarPortletDisplayContext.getSearchBarPortletInstanceConfiguration();
-
-List<SearchBarPortletDisplayContext> entries = new ArrayList<>();
-
-Map<String, Object> contextObjects = new HashMap<String, Object>();
-
-contextObjects.put("namespace", renderResponse.getNamespace());
-contextObjects.put("searchBarPortletDisplayContext", searchBarPortletDisplayContext);
 %>
 
 <c:choose>
@@ -71,6 +58,17 @@ contextObjects.put("searchBarPortletDisplayContext", searchBarPortletDisplayCont
 			<c:if test="<%= !Validator.isBlank(searchBarPortletDisplayContext.getPaginationStartParameterName()) %>">
 				<input class="search-bar-reset-start-page" name="<%= searchBarPortletDisplayContext.getPaginationStartParameterName() %>" type="hidden" value="0" />
 			</c:if>
+
+			<%
+			SearchBarPortletInstanceConfiguration searchBarPortletInstanceConfiguration = searchBarPortletDisplayContext.getSearchBarPortletInstanceConfiguration();
+
+			List<SearchBarPortletDisplayContext> entries = new ArrayList<>();
+
+			Map<String, Object> contextObjects = new HashMap<String, Object>();
+
+			contextObjects.put("namespace", renderResponse.getNamespace());
+			contextObjects.put("searchBarPortletDisplayContext", searchBarPortletDisplayContext);
+			%>
 
 			<liferay-ddm:template-renderer
 				className="<%= SearchBarPortletDisplayContext.class.getName() %>"

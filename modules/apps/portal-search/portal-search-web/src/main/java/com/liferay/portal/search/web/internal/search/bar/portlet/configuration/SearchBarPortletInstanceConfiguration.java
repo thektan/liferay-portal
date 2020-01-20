@@ -19,7 +19,7 @@ import aQute.bnd.annotation.metatype.Meta;
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 
 /**
- * @author Kevin Tan
+ * @author Olivia Yu
  */
 @ExtendedObjectClassDefinition(
 	category = "search",

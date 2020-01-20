@@ -83,8 +83,8 @@ public class SearchBarPortlet extends MVCPortlet {
 
 		SearchBarPortletDisplayContext searchBarPortletDisplayContext =
 			buildDisplayContext(
-				searchBarPortletPreferences, portletSharedSearchResponse,
-				renderRequest);
+				portletSharedSearchResponse, renderRequest,
+				searchBarPortletPreferences);
 
 		renderRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, searchBarPortletDisplayContext);
@@ -98,9 +98,9 @@ public class SearchBarPortlet extends MVCPortlet {
 	}
 
 	protected SearchBarPortletDisplayContext buildDisplayContext(
-			SearchBarPortletPreferences searchBarPortletPreferences,
 			PortletSharedSearchResponse portletSharedSearchResponse,
-			RenderRequest renderRequest)
+			RenderRequest renderRequest,
+			SearchBarPortletPreferences searchBarPortletPreferences)
 		throws PortletException {
 
 		SearchBarPortletDisplayBuilder searchBarPortletDisplayBuilder =

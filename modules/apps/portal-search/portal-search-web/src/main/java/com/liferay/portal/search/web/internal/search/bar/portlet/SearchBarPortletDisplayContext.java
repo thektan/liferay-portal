@@ -33,11 +33,10 @@ public class SearchBarPortletDisplayContext {
 
 		_httpServletRequest = httpServletRequest;
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
+		_themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+		PortletDisplay portletDisplay = _themeDisplay.getPortletDisplay();
 
 		_searchBarPortletInstanceConfiguration =
 			portletDisplay.getPortletInstanceConfiguration(
@@ -57,11 +56,10 @@ public class SearchBarPortletDisplayContext {
 			_searchBarPortletInstanceConfiguration.displayStyleGroupId();
 
 		if (_displayStyleGroupId <= 0) {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)_httpServletRequest.getAttribute(
-					WebKeys.THEME_DISPLAY);
+			_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
-			_displayStyleGroupId = themeDisplay.getScopeGroupId();
+			_displayStyleGroupId = _themeDisplay.getScopeGroupId();
 		}
 
 		return _displayStyleGroupId;
@@ -228,5 +226,6 @@ public class SearchBarPortletDisplayContext {
 	private String _searchURL;
 	private boolean _selectedCurrentSiteSearchScope;
 	private boolean _selectedEverythingSearchScope;
+	private ThemeDisplay _themeDisplay;
 
 }
