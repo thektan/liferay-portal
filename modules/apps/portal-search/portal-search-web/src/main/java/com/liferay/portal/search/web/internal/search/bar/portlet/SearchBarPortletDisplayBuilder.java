@@ -199,8 +199,8 @@ public class SearchBarPortletDisplayBuilder {
 			return new SearchBarPortletDisplayContext(
 				getHttpServletRequest(_renderRequest));
 		}
-		catch (ConfigurationException ce) {
-			throw new RuntimeException(ce);
+		catch (ConfigurationException configurationException) {
+			throw new RuntimeException(configurationException);
 		}
 	}
 
