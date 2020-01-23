@@ -56,9 +56,6 @@ public class SearchBarPortletDisplayContext {
 			_searchBarPortletInstanceConfiguration.displayStyleGroupId();
 
 		if (_displayStyleGroupId <= 0) {
-			_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
 			_displayStyleGroupId = _themeDisplay.getScopeGroupId();
 		}
 
@@ -226,6 +223,6 @@ public class SearchBarPortletDisplayContext {
 	private String _searchURL;
 	private boolean _selectedCurrentSiteSearchScope;
 	private boolean _selectedEverythingSearchScope;
-	private ThemeDisplay _themeDisplay;
+	private final ThemeDisplay _themeDisplay;
 
 }
