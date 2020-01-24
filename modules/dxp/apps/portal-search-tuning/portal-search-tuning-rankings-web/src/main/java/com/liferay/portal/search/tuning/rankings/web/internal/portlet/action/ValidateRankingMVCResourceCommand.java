@@ -36,6 +36,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -88,12 +89,14 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 		List<String> duplicateQueryStrings = _getDuplicateAliases(
 			resourceRequest, validateRankingMVCResourceRequest);
 
-		if (ListUtil.isNotEmpty(duplicateQueryStrings)) {
+		if (ListUtil.isNotEmpty(duplicateQueryStrings) &&
+			!validateRankingMVCResourceRequest.getInactive()) {
+
 			jsonArray.put(
 				LanguageUtil.format(
 					portal.getHttpServletRequest(resourceRequest),
-					"aliases-must-be-unique-across-all-rankings.-the-" +
-						"following-aliases-already-exist-x",
+					"active-search-queries-and-aliases-must-be-unique-across-" +
+						"all-rankings.-the-following-ones-already-exist-x",
 					StringUtil.merge(
 						duplicateQueryStrings, StringPool.COMMA_AND_SPACE),
 					false));
@@ -160,12 +163,23 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 
 		List<String> aliases = _getAliases(validateRankingMVCResourceRequest);
 
+		Collection<String> queryStrings = Stream.concat(
+			Stream.of(validateRankingMVCResourceRequest.getQueryString()),
+			aliases.stream()
+		).filter(
+			string -> !Validator.isBlank(string)
+		).distinct(
+		).sorted(
+		).collect(
+			Collectors.toList()
+		);
+
 		return duplicateQueryStringsDetector.detect(
 			duplicateQueryStringsDetector.builder(
 			).index(
 				index
 			).queryStrings(
-				aliases
+				queryStrings
 			).unlessRankingId(
 				validateRankingMVCResourceRequest.getResultsRankingUid()
 			).build());
@@ -205,19 +219,29 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 			ResourceRequest resourceRequest) {
 
 			_indexName = ParamUtil.getString(resourceRequest, "index-name");
+			_inactive = ParamUtil.getBoolean(resourceRequest, "inactive");
 			_resultsRankingUid = ParamUtil.getString(
 				resourceRequest, "resultsRankingUid");
 
 			_aliases = Arrays.asList(
 				ParamUtil.getStringValues(resourceRequest, PARAM_ALIASES));
+			_queryString = ParamUtil.getString(resourceRequest, PARAM_KEYWORDS);
 		}
 
 		public List<String> getAliases() {
 			return Collections.unmodifiableList(_aliases);
 		}
 
+		public boolean getInactive() {
+			return _inactive;
+		}
+
 		public String getIndexName() {
 			return _indexName;
+		}
+
+		public String getQueryString() {
+			return _queryString;
 		}
 
 		public String getResultsRankingUid() {
@@ -225,7 +249,9 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 		}
 
 		private final List<String> _aliases;
+		private final boolean _inactive;
 		private final String _indexName;
+		private final String _queryString;
 		private final String _resultsRankingUid;
 
 	}
