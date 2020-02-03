@@ -26,7 +26,7 @@ AUI.add(
 				'.search-bar-empty-search-input'
 			);
 
-			if (emptySearchInput.val() === 'true') {
+			if (emptySearchInput && emptySearchInput.val() === 'true') {
 				instance.emptySearchEnabled = true;
 			} else {
 				instance.emptySearchEnabled = false;
