@@ -211,21 +211,16 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 
 	private class ValidateRankingMVCResourceRequest {
 
-		public static final String PARAM_ALIASES = "aliases";
-
-		public static final String PARAM_KEYWORDS = "keywords";
-
 		public ValidateRankingMVCResourceRequest(
 			ResourceRequest resourceRequest) {
 
+			_aliases = Arrays.asList(
+				ParamUtil.getStringValues(resourceRequest, "aliases"));
 			_indexName = ParamUtil.getString(resourceRequest, "index-name");
 			_inactive = ParamUtil.getBoolean(resourceRequest, "inactive");
+			_queryString = ParamUtil.getString(resourceRequest, "keywords");
 			_resultsRankingUid = ParamUtil.getString(
 				resourceRequest, "resultsRankingUid");
-
-			_aliases = Arrays.asList(
-				ParamUtil.getStringValues(resourceRequest, PARAM_ALIASES));
-			_queryString = ParamUtil.getString(resourceRequest, PARAM_KEYWORDS);
 		}
 
 		public List<String> getAliases() {
