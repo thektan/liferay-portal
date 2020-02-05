@@ -86,7 +86,7 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
-		List<String> duplicateQueryStrings = _getDuplicateAliases(
+		List<String> duplicateQueryStrings = _getDuplicateQueryStrings(
 			resourceRequest, validateRankingMVCResourceRequest);
 
 		if (ListUtil.isNotEmpty(duplicateQueryStrings) &&
@@ -140,9 +140,6 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 		List<String> strings = new ArrayList<>(
 			validateRankingMVCResourceRequest.getAliases());
 
-		strings.remove(_ACTIVATE_SPECIAL);
-		strings.remove(_DEACTIVATE_SPECIAL);
-
 		Stream<String> stream = strings.stream();
 
 		Predicate<String> predicate = this::_isUpdateSpecial;
@@ -154,7 +151,7 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 		);
 	}
 
-	private List<String> _getDuplicateAliases(
+	private List<String> _getDuplicateQueryStrings(
 		ResourceRequest resourceRequest,
 		ValidateRankingMVCResourceRequest validateRankingMVCResourceRequest) {
 
@@ -202,10 +199,6 @@ public class ValidateRankingMVCResourceCommand implements MVCResourceCommand {
 	private boolean _isUpdateSpecial(String string) {
 		return string.startsWith(_UPDATE_SPECIAL);
 	}
-
-	private static final String _ACTIVATE_SPECIAL = StringPool.PLUS;
-
-	private static final String _DEACTIVATE_SPECIAL = StringPool.MINUS;
 
 	private static final String _UPDATE_SPECIAL = StringPool.GREATER_THAN;
 
