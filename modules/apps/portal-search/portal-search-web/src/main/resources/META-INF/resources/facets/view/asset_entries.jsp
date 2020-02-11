@@ -32,7 +32,14 @@ if (dataJSONObject.has("values")) {
 	}
 }
 
-AssetEntriesSearchFacetDisplayBuilder assetEntriesSearchFacetDisplayBuilder = new AssetEntriesSearchFacetDisplayBuilder();
+AssetEntriesSearchFacetDisplayBuilder assetEntriesSearchFacetDisplayBuilder = null;
+
+try {
+	assetEntriesSearchFacetDisplayBuilder = new AssetEntriesSearchFacetDisplayBuilder(renderRequest);
+}
+catch (ConfigurationException configurationException) {
+	throw new RuntimeException(configurationException);
+}
 
 assetEntriesSearchFacetDisplayBuilder.setClassNames(values);
 assetEntriesSearchFacetDisplayBuilder.setFacet(facet);
