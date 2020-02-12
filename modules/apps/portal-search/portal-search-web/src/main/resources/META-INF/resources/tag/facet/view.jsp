@@ -45,6 +45,7 @@ if (assetTagsSearchFacetDisplayContext.isRenderNothing()) {
 TagFacetPortletInstanceConfiguration tagFacetPortletInstanceConfiguration = assetTagsSearchFacetDisplayContext.getTagFacetPortletInstanceConfiguration();
 
 Map<String, Object> contextObjects = new HashMap<String, Object>();
+
 contextObjects.put("assetTagsSearchFacetDisplayContext", assetTagsSearchFacetDisplayContext);
 contextObjects.put("namespace", renderResponse.getNamespace());
 
