@@ -81,7 +81,7 @@ public class TagFacetPortletDisplayTemplateHandler
 		templateVariableGroup.empty();
 
 		templateVariableGroup.addVariable(
-			"asset-tag-search-facet-display-context",
+			"tag-facet-display-context",
 			AssetTagsSearchFacetDisplayContext.class,
 			"assetTagsSearchFacetDisplayContext");
 		templateVariableGroup.addVariable(
