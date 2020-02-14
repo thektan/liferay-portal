@@ -70,9 +70,6 @@ public class AssetEntriesSearchFacetDisplayBuilder implements Serializable {
 
 		assetEntriesSearchFacetDisplayContext.setDisplayStyleGroupId(
 			getDisplayStyleGroupId());
-		assetEntriesSearchFacetDisplayContext.
-			setTypeFacetPortletInstanceConfiguration(
-				_typeFacetPortletInstanceConfiguration);
 		assetEntriesSearchFacetDisplayContext.setNothingSelected(
 			isNothingSelected());
 		assetEntriesSearchFacetDisplayContext.setParameterName(_parameterName);
@@ -84,6 +81,9 @@ public class AssetEntriesSearchFacetDisplayBuilder implements Serializable {
 			ListUtil.isEmpty(termDisplayContexts));
 		assetEntriesSearchFacetDisplayContext.setTermDisplayContexts(
 			termDisplayContexts);
+		assetEntriesSearchFacetDisplayContext.
+			setTypeFacetPortletInstanceConfiguration(
+				_typeFacetPortletInstanceConfiguration);
 
 		return assetEntriesSearchFacetDisplayContext;
 	}
