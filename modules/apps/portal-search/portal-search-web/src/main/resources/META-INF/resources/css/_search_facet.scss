@@ -1,17 +1,17 @@
 .search-facet {
 	.custom-control-label,
 	.term-name {
-		&.label.label-lg {
-			font-size: 12px;
-			padding: 5px 8px;
-		}
-
 		&.facet-term-unselected {
 			font-weight: 400;
 		}
 
 		&.facet-term-selected {
 			font-weight: 600;
+		}
+
+		&.label.label-lg {
+			font-size: 12px;
+			padding: 5px 8px;
 		}
 	}
 
