@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.web.internal.sort.portlet;
 
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.web.internal.sort.constants.SortPortletKeys;
@@ -95,13 +96,26 @@ public class SortPortlet extends MVCPortlet {
 			portletSharedSearchResponse.getParameterValues(
 				parameterName, renderRequest);
 
-		return new SortDisplayBuilder(
-			sortPortletPreferences
+		return createSortDisplayBuilder(
+			renderRequest, sortPortletPreferences
 		).parameterName(
 			parameterName
 		).parameterValues(
 			parameterValues.orElse(null)
 		).build();
+	}
+
+	protected SortDisplayBuilder createSortDisplayBuilder(
+		RenderRequest renderRequest,
+		SortPortletPreferences sortPortletPreferences) {
+
+		try {
+			return new SortDisplayBuilder(
+				renderRequest, sortPortletPreferences);
+		}
+		catch (ConfigurationException configurationException) {
+			throw new RuntimeException(configurationException);
+		}
 	}
 
 	@Reference

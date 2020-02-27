@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<root>
+	<template>
+		<template-key>sort-left-aligned-label-ftl</template-key>
+		<name>portlet-display-template-name-left-aligned-label-layout</name>
+		<description>portlet-display-template-description-left-aligned-label</description>
+		<language>ftl</language>
+		<script-file>com/liferay/portal/search/web/internal/sort/template/dependencies/portlet_display_template_left_aligned_label.ftl</script-file>
+		<cacheable>false</cacheable>
+	</template>
+</root>
