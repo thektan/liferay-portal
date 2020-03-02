@@ -14,10 +14,12 @@
 
 package com.liferay.portal.search.web.internal.sort.portlet.action;
 
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.web.internal.sort.constants.SortPortletKeys;
 import com.liferay.portal.search.web.internal.sort.display.context.SortDisplayBuilder;
@@ -68,7 +70,7 @@ public class SortConfigurationAction extends DefaultConfigurationAction {
 					renderRequest));
 
 		SortDisplayBuilder sortDisplayBuilder = createSortDisplayBuilder(
-			renderRequest, sortPortletPreferences);
+			language, portal, renderRequest, sortPortletPreferences);
 
 		httpServletRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, sortDisplayBuilder.build());
@@ -77,17 +79,23 @@ public class SortConfigurationAction extends DefaultConfigurationAction {
 	}
 
 	protected SortDisplayBuilder createSortDisplayBuilder(
-		RenderRequest renderRequest,
+		Language language, Portal portal, RenderRequest renderRequest,
 		SortPortletPreferences sortPortletPreferences) {
 
 		try {
 			return new SortDisplayBuilder(
-				renderRequest, sortPortletPreferences);
+				language, portal, renderRequest, sortPortletPreferences);
 		}
 		catch (ConfigurationException configurationException) {
 			throw new RuntimeException(configurationException);
 		}
 	}
+
+	@Reference
+	protected Language language;
+
+	@Reference
+	protected Portal portal;
 
 	@Reference
 	private PortletSharedSearchRequest _portletSharedSearchRequest;

@@ -16,11 +16,11 @@ package com.liferay.portal.search.web.internal.sort.display.context;
 
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.web.internal.sort.configuration.SortPortletInstanceConfiguration;
 import com.liferay.portal.search.web.internal.sort.portlet.SortPortletPreferences;
@@ -39,10 +39,12 @@ import javax.portlet.RenderRequest;
 public class SortDisplayBuilder {
 
 	public SortDisplayBuilder(
-			RenderRequest renderRequest,
+			Language language, Portal portal, RenderRequest renderRequest,
 			SortPortletPreferences sortPortletPreferences)
 		throws ConfigurationException {
 
+		_language = language;
+		_portal = portal;
 		_renderRequest = renderRequest;
 		_sortPortletPreferences = sortPortletPreferences;
 
@@ -97,8 +99,8 @@ public class SortDisplayBuilder {
 
 		sortTermDisplayContext.setLabel(label);
 		sortTermDisplayContext.setLanguageLabel(
-			LanguageUtil.get(
-				PortalUtil.getHttpServletRequest(_renderRequest), label));
+			_language.get(
+				_portal.getHttpServletRequest(_renderRequest), label));
 		sortTermDisplayContext.setField(field);
 		sortTermDisplayContext.setSelected(_selectedFields.contains(field));
 
@@ -157,7 +159,9 @@ public class SortDisplayBuilder {
 		return false;
 	}
 
+	private final Language _language;
 	private String _parameterName;
+	private final Portal _portal;
 	private final RenderRequest _renderRequest;
 	private List<String> _selectedFields = Collections.emptyList();
 	private final SortPortletInstanceConfiguration
