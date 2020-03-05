@@ -16,6 +16,8 @@ package com.liferay.portal.search.web.internal.search.results.portlet;
 
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.asset.util.AssetRendererFactoryLookup;
+import com.liferay.info.item.renderer.InfoItemRendererTracker;
+import com.liferay.info.list.provider.InfoListProviderTracker;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -48,6 +50,9 @@ import com.liferay.portal.search.web.internal.result.display.context.SearchResul
 import com.liferay.portal.search.web.internal.search.results.constants.SearchResultsPortletKeys;
 import com.liferay.portal.search.web.portlet.shared.search.PortletSharedSearchRequest;
 import com.liferay.portal.search.web.portlet.shared.search.PortletSharedSearchResponse;
+import com.liferay.portal.search.web.provider.DocumentInfoListProviderContext;
+import com.liferay.portal.search.web.provider.DocumentProvider;
+import com.liferay.portal.search.web.provider.DocumentRenderer;
 import com.liferay.portal.search.web.search.result.SearchResultImageContributor;
 
 import java.io.IOException;
@@ -122,6 +127,19 @@ public class SearchResultsPortlet extends MVCPortlet {
 			WebKeys.PORTLET_DISPLAY_CONTEXT,
 			searchResultsPortletDisplayContext);
 
+		DocumentRenderer documentRenderer =
+			(DocumentRenderer)infoItemRendererTracker.getInfoItemRenderer(
+				DocumentRenderer.class.getName());
+
+		renderRequest.setAttribute("DOCUMENT_RENDERER", documentRenderer);
+
+		renderRequest.setAttribute(
+			"HTTP_SERVLET_REQUEST",
+			_portal.getHttpServletRequest(renderRequest));
+		renderRequest.setAttribute(
+			"HTTP_SERVLET_RESPONSE",
+			_portal.getHttpServletResponse(renderResponse));
+
 		super.render(renderRequest, renderResponse);
 	}
 
@@ -182,10 +200,42 @@ public class SearchResultsPortlet extends MVCPortlet {
 
 		searchResultsPortletDisplayContext.setSearchResultsSummariesHolder(
 			searchResultsSummariesHolder);
-		searchResultsPortletDisplayContext.
-			setSearchResultSummaryDisplayContexts(
-				searchResultsPortletDisplayContext.
-					translateSearchResultSummaryDisplayContexts(documents));
+
+		ThemeDisplay themeDisplay = portletSharedSearchResponse.getThemeDisplay(
+			renderRequest);
+
+		DocumentFormPermissionChecker documentFormPermissionChecker =
+			new DocumentFormPermissionCheckerImpl(themeDisplay);
+
+		SearchResultPreferences searchResultPreferences =
+			new SearchResultPreferencesImpl(
+				searchResultsPortletPreferences, documentFormPermissionChecker);
+
+		DocumentInfoListProviderContext documentInfoListProviderContext =
+			new DocumentInfoListProviderContext(
+				themeDisplay.getScopeGroup(), themeDisplay.getUser());
+
+		documentInfoListProviderContext.setPortletSharedSearchResponse(
+			portletSharedSearchResponse);
+		documentInfoListProviderContext.setPortletURLFactory(
+			getPortletURLFactory(renderRequest, renderResponse));
+		documentInfoListProviderContext.setRenderRequest(renderRequest);
+		documentInfoListProviderContext.setRenderResponse(renderResponse);
+		documentInfoListProviderContext.setSearchResultsPortletPreferences(
+			searchResultsPortletPreferences);
+		documentInfoListProviderContext.setSearchResultPreferences(
+			searchResultPreferences);
+		documentInfoListProviderContext.setSearchResultSummaryDisplayBuilder(
+			new SearchResultSummaryDisplayBuilder());
+		documentInfoListProviderContext.setThemeDisplay(themeDisplay);
+
+		DocumentProvider documentProvider =
+			(DocumentProvider)infoListProviderTracker.getInfoListProvider(
+				DocumentProvider.class.getName());
+
+		searchResultsPortletDisplayContext.setInfoMap(
+			documentProvider.getInfoMap(documentInfoListProviderContext));
+
 		searchResultsPortletDisplayContext.setTotalHits(
 			searchResponse.getTotalHits());
 
@@ -458,6 +508,12 @@ public class SearchResultsPortlet extends MVCPortlet {
 
 	@Reference
 	protected IndexerRegistry indexerRegistry;
+
+	@Reference
+	protected InfoItemRendererTracker infoItemRendererTracker;
+
+	@Reference
+	protected InfoListProviderTracker infoListProviderTracker;
 
 	@Reference
 	protected Language language;

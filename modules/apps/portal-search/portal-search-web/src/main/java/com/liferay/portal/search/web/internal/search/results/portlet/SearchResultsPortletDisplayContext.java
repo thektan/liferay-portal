@@ -27,6 +27,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,6 +77,10 @@ public class SearchResultsPortletDisplayContext implements Serializable {
 		return _documents;
 	}
 
+	public Map<String, Object> getInfoMap() {
+		return _infoMap;
+	}
+
 	public String getKeywords() {
 		return _keywords;
 	}
@@ -116,6 +121,10 @@ public class SearchResultsPortletDisplayContext implements Serializable {
 
 	public void setDocuments(List<Document> documents) {
 		_documents = documents;
+	}
+
+	public void setInfoMap(Map<String, Object> infoMap) {
+		_infoMap = infoMap;
 	}
 
 	public void setKeywords(String keywords) {
@@ -166,6 +175,7 @@ public class SearchResultsPortletDisplayContext implements Serializable {
 	private long _displayStyleGroupId;
 	private List<Document> _documents;
 	private final HttpServletRequest _httpServletRequest;
+	private Map<String, Object> _infoMap;
 	private String _keywords;
 	private boolean _renderNothing;
 	private SearchContainer<Document> _searchContainer;
