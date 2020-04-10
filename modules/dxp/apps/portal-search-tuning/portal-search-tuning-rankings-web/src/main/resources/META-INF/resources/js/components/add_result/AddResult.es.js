@@ -11,16 +11,33 @@
 
 import ClayButton from '@clayui/button';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import ErrorBoundary from '../shared/ErrorBoundary.es';
 import AddResultModal from './AddResultModal.es';
+
+
+function useIsMounted() {
+	const mountedRef = useRef(false);
+	const isMounted = useCallback(() => mountedRef.current, []);
+
+	useLayoutEffect(() => {
+		mountedRef.current = true;
+
+		return () => {
+			mountedRef.current = false;
+		};
+	}, []);
+
+	return isMounted;
+}
 
 /**
  * A button that opens a modal to be able to search, select, and add results.
  */
 function AddResult({fetchDocumentsSearchUrl, onAddResultSubmit}) {
 	const [showModal, setShowModal] = useState(false);
+	const isMounted = useIsMounted();
 
 	/**
 	 * Opens the modal when the add result button is clicked.
@@ -35,6 +52,10 @@ function AddResult({fetchDocumentsSearchUrl, onAddResultSubmit}) {
 	function _handleCloseModal() {
 		setShowModal(false);
 	}
+
+	useEffect(() => {
+		if (!isMounted()) { return; }
+	}, [isMounted]);
 
 	return (
 		<>

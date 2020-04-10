@@ -20,7 +20,7 @@ import {ClayTooltipProvider} from '@clayui/tooltip';
 import getCN from 'classnames';
 import {usePrevious} from 'frontend-js-react-web';
 import PropTypes from 'prop-types';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import ThemeContext from '../../ThemeContext.es';
 import {
@@ -34,6 +34,21 @@ import {buildUrl, resultsDataToMap, toggleListItem} from '../../utils/util.es';
 import Item from '../list/Item.es';
 import ClayEmptyState, {DISPLAY_STATES} from '../shared/ClayEmptyState.es';
 import AddResultSearchBar from './AddResultSearchBar.es';
+
+function useIsMounted() {
+	const mountedRef = useRef(false);
+	const isMounted = useCallback(() => mountedRef.current, []);
+
+	useLayoutEffect(() => {
+		mountedRef.current = true;
+
+		return () => {
+			mountedRef.current = false;
+		};
+	}, []);
+
+	return isMounted;
+}
 
 /**
  * A button that opens a modal to be able to search, select, and add results.
@@ -65,6 +80,8 @@ function AddResultModal({
 	const prevDelta = usePrevious(delta);
 	const prevPage = usePrevious(page);
 
+	const isMounted = useIsMounted();
+
 	/**
 	 * Stores the full object data of selected results. This is used to
 	 * transform the `selectedIds` into a the list of objects to send to
@@ -95,10 +112,12 @@ function AddResultModal({
 	 * Fetches for new data when the delta or page change.
 	 */
 	useEffect(() => {
+		if (!isMounted()) { return; }
+
 		if (prevDelta !== delta || prevPage !== page) {
 			refetch();
 		}
-	}, [delta, page, prevDelta, prevPage, refetch]);
+	}, [delta, isMounted, page, prevDelta, prevPage, refetch]);
 
 	/**
 	 * Deselects all items on the current page.
