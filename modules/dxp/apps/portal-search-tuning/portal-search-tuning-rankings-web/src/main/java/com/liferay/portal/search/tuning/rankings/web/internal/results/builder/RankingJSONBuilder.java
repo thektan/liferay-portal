@@ -117,7 +117,7 @@ public class RankingJSONBuilder {
 
 	public RankingJSONBuilder viewURL(String viewURL) {
 		_viewURL = viewURL;
-		
+
 		return this;
 	}
 
