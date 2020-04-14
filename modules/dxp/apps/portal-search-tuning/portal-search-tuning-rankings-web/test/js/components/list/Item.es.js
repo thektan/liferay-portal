@@ -125,7 +125,7 @@ describe('Item', () => {
 	});
 
 	it('renders a link to viewURL', () => {
-		const viewURL = 'http://www.google.com';
+		const viewURL = '#';
 
 		const {container} = renderTestItem({viewURL});
 

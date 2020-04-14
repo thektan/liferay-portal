@@ -470,16 +470,14 @@ class Item extends PureComponent {
 						<div className="list-group-title">
 							<span className="text-truncate-inline">
 								{viewURL ? (
-									<>
-										<a
-											href={viewURL}
-											rel="noopener noreferrer"
-											target="_blank"
-										>
-											{`${title} `}
-											<ClayIcon symbol="shortcut" />
-										</a>
-									</>
+									<a
+										href={viewURL}
+										rel="noopener noreferrer"
+										target="_blank"
+									>
+										{`${title} `}
+										<ClayIcon symbol="shortcut" />
+									</a>
 								) : (
 									title
 								)}
