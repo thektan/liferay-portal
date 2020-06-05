@@ -1,0 +1,5 @@
+Bundle-Name: portal-search-tuning-gsearch-results-web
+Bundle-SymbolicName: portal.search.tuning.gsearch.results.web
+Bundle-Version: 1.0.0
+Export-Package: portal.search.tuning.gsearch.results.web.constants
+Web-ContextPath: /portal-search-tuning-gsearch-results-web
