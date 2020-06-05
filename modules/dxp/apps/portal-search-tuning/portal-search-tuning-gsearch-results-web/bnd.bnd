@@ -1,5 +1,5 @@
-Bundle-Name: portal-search-tuning-gsearch-results-web
-Bundle-SymbolicName: portal.search.tuning.gsearch.results.web
+Bundle-Name: Liferay Portal Search Tuning GSearch Results Web
+Bundle-SymbolicName: com.liferay.portal.search.tuning.gsearch.results.web
 Bundle-Version: 1.0.0
-Export-Package: portal.search.tuning.gsearch.results.web.constants
 Web-ContextPath: /portal-search-tuning-gsearch-results-web
+-includeresource: package.json
