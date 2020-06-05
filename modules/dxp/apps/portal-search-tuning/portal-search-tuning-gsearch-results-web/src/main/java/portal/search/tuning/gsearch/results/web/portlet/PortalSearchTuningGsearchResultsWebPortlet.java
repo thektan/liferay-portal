@@ -19,7 +19,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author ktan
+ * @author Kevin Tan
  */
 @Component(
 	immediate = true,
@@ -41,16 +41,7 @@ public class PortalSearchTuningGsearchResultsWebPortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-		JSPackage jsPackage = _npmResolver.getJSPackage();
-
-		renderRequest.setAttribute(
-			PortalSearchTuningGsearchResultsWebWebKeys.BOOTSTRAP_REQUIRE,
-			jsPackage.getResolvedId() + " as bootstrapRequire");
-
 		super.doView(renderRequest, renderResponse);
 	}
-
-	@Reference
-	private NPMResolver _npmResolver;
 
 }
