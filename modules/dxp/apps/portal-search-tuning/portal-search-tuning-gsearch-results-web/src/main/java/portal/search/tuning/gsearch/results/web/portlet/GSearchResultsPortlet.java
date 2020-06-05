@@ -1,11 +1,6 @@
 package portal.search.tuning.gsearch.results.web.portlet;
 
-import portal.search.tuning.gsearch.results.web.constants.PortalSearchTuningGsearchResultsWebPortletKeys;
-import portal.search.tuning.gsearch.results.web.constants.PortalSearchTuningGsearchResultsWebWebKeys;
-
-import com.liferay.frontend.js.loader.modules.extender.npm.JSPackage;
-import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
-
+import portal.search.tuning.gsearch.results.web.constants.GSearchResultsPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
@@ -28,13 +23,13 @@ import org.osgi.service.component.annotations.Reference;
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + PortalSearchTuningGsearchResultsWebPortletKeys.PortalSearchTuningGsearchResultsWeb,
+		"javax.portlet.name=" + GSearchResultsPortletKeys.GSearchResultsWeb,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
 	service = Portlet.class
 )
-public class PortalSearchTuningGsearchResultsWebPortlet extends MVCPortlet {
+public class GSearchResultsPortlet extends MVCPortlet {
 
 	@Override
 	public void doView(

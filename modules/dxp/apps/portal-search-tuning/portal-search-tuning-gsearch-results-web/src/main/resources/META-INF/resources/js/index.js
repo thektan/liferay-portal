@@ -11,8 +11,10 @@
 
 import React from 'react';
 
-export default function(props) {
+export default function(data) {
+	console.log(data);
+
 	return (
-		<div>Hello World {props}</div>
+		<div>Hello World!</div>
 	)
 }
