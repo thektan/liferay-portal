@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -8,20 +7,13 @@
  * contacting Liferay, Inc. See the License for the specific language governing
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
- *
- *
- *
  */
---%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+import {cancelDebounce, debounce} from 'frontend-js-web';
+import {useRef} from 'react';
 
-<%@ taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
-taglib uri="http://liferay.com/tld/react" prefix="react" %><%@
-taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+export const useDebounceCallback = (callback, milliseconds) => {
+	const callbackRef = useRef(debounce(callback, milliseconds));
 
-<liferay-frontend:defineObjects />
-
-<liferay-theme:defineObjects />
-
-<react:component module="js/index" />
+	return [callbackRef.current, () => cancelDebounce(callbackRef.current)];
+};

@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -7,14 +8,22 @@
  * contacting Liferay, Inc. See the License for the specific language governing
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
+ *
+ *
+ *
  */
+--%>
 
-import React from 'react';
+<%@ taglib uri="http://liferay.com/tld/react" prefix="react" %>
 
-export default function(data) {
-	console.log(data);
+<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.HashMapBuilder" %>
+<%@ page import="java.util.Map" %>
 
-	return (
-		<div>Hello World!</div>
-	)
-}
+<%
+Map<String, Object> data = HashMapBuilder.<String, Object>put(
+	"searchKey", "LIFERAY_PORTAL"
+).build();
+%>
+
+<react:component data="<%= data %>" module="js/search-bar/index" />

@@ -1,7 +1,7 @@
-package portal.search.tuning.gsearch.results.web.constants;
+package portal.search.tuning.gsearch.web.constants;
 
 /**
- * @author ktan
+ * @author Kevin Tan
  */
 public class GSearchResultsPortletKeys {
 
