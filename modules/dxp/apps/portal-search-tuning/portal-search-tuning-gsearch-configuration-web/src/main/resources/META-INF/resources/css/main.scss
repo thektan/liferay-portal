@@ -2,6 +2,7 @@
 
 .configuration-set-root {
 	@import '_page_toolbar';
+	@import '_configuration_fragments';
 
 	.bold {
 		font-weight: 700;

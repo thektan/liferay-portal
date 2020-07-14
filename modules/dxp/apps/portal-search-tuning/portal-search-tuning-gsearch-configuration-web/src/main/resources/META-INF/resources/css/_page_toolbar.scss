@@ -1,6 +1,7 @@
 .page-toolbar-root {
-	.configuration-name {
+	&.navbar {
 		font-size: 1.125rem;
+		height: 4rem;
 	}
 
 	.nav-item {

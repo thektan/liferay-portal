@@ -1,0 +1,12 @@
+.configuration-fragments {
+	.configuration-header {
+		padding-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.c-empty-state-title {
+		.text-truncate {
+			overflow: unset;
+		}
+	}
+}

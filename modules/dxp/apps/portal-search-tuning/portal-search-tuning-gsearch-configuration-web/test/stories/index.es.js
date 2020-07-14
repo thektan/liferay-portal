@@ -46,8 +46,6 @@ const withSheet = (storyFn) => (
 	<ClayLayout.Sheet style={{marginTop: '24px'}}>{storyFn()}</ClayLayout.Sheet>
 );
 
-storiesOf('Pages|ConfigurationSetForm', module)
-	.addDecorator(withSheet)
-	.add('default', () => (
-		<ConfigurationSetForm cancelUrl="" formName="testFm" title="" />
-	));
+storiesOf('Pages|ConfigurationSetForm', module).add('default', () => (
+	<ConfigurationSetForm cancelUrl="" formName="testFm" title="" />
+));

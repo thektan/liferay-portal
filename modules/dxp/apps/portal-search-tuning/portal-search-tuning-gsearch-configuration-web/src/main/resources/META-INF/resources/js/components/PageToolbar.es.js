@@ -86,10 +86,7 @@ export default function PageToolbar({
 						value={title}
 					/>
 				) : (
-					<div
-						className="bold configuration-title"
-						onClick={onClickEdit}
-					>
+					<div className="bold" onClick={onClickEdit}>
 						{title ? (
 							title
 						) : (

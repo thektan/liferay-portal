@@ -9,9 +9,11 @@
  * distribution rights of the Software.
  */
 
+import ClayLayout from '@clayui/layout';
 import {PropTypes} from 'prop-types';
 import React from 'react';
 
+import ConfigurationFragments from './ConfigurationFragments.es';
 import PageToolbar from './PageToolbar.es';
 
 export default function ConfigurationSetForm({
@@ -31,6 +33,13 @@ export default function ConfigurationSetForm({
 				onPublish={handlePublish}
 				submitDisabled={true} //will depend on required values
 			/>
+
+			<ClayLayout.ContainerFluid
+				className="configuration-fragments configuration-set-container"
+				size="md"
+			>
+				<ConfigurationFragments />
+			</ClayLayout.ContainerFluid>
 		</>
 	);
 }
