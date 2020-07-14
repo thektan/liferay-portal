@@ -1,0 +1,33 @@
+.builder {
+	max-width: 624px;
+	padding-top: 6rem;
+
+	.configuration-fragment {
+		background-color: $white;
+		margin-bottom: 1.5rem;
+
+		.configuration-editor {
+			padding-bottom: 1.5rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+
+		.list-group {
+			margin-bottom: 0;
+			padding: 0.5rem 0;
+
+			.list-group-item {
+				border: 0;
+			}
+		}
+	}
+
+	.configuration-header {
+		margin-bottom: 1rem;
+		padding-top: 1rem;
+	}
+}
+
+.shifted {
+	margin-right: 384px;
+}
