@@ -50,6 +50,18 @@ String redirect = ParamUtil.getString(request, "redirect", currentURL);
 
 <aui:model-context bean="<%= searchConfiguration %>" model="<%= SearchConfiguration.class %>" />
 
+<aui:form action="<%= editConfigurationActionURL%>" >
+	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value='<%= (searchConfiguration != null) ? searchConfiguration.getSearchConfigurationId() : "" %>' />
+	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE %>" type="hidden" value="<%= searchConfigurationType %>" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+
+	<div class="configuration-set-form">
+		<react:component
+			module="js/ConfigurationSetApp.es.js"
+		/>
+	</div>
+</aui:form>
+
 <liferay-frontend:edit-form
 	action="<%= editConfigurationActionURL %>"
 >

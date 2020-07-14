@@ -1,0 +1,23 @@
+{
+	"dependencies": {
+		"@clayui/button": "3.3.1",
+		"@clayui/form": "3.8.0",
+		"@clayui/link": "3.2.0",
+		"@clayui/management-toolbar": "3.2.1",
+		"classnames": "2.2.6",
+		"frontend-js-react-web": "*",
+		"prop-types": "15.7.2",
+		"react": "16.12.0"
+	},
+	"main": "js/index.es.js",
+	"name": "portal-search-tuning-gsearch-configuration-web",
+	"private": true,
+	"scripts": {
+		"build": "liferay-npm-scripts build",
+		"checkFormat": "liferay-npm-scripts check",
+		"format": "liferay-npm-scripts fix",
+		"storybook": "liferay-npm-scripts storybook",
+		"test": "liferay-npm-scripts test"
+	},
+	"version": "1.0.0"
+}

@@ -1,0 +1,17 @@
+@import '_variables';
+
+.configuration-set-root {
+	@import '_page_toolbar';
+
+	.bold {
+		font-weight: 700;
+	}
+
+	.italic {
+		font-style: italic;
+	}
+
+	.secondary {
+		color: $secondaryL1;
+	}
+}
