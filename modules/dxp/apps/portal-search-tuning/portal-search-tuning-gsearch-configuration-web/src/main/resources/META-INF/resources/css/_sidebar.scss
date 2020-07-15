@@ -1,0 +1,29 @@
+.sidebar {
+	position: fixed;
+	z-index: 200;
+	top: 4rem;
+	right: 0;
+	width: 20%;
+	min-width: 380px;
+
+	.component-title {
+		font-size: 1rem;
+	}
+
+	.sidebar-list-item {
+		border: 0;
+
+		&.hover {
+			background-color: $primaryL4;
+		}
+
+		.add-fragment-button {
+			position: absolute;
+			right: 0.5rem;
+		}
+
+		.icon-lighten {
+			background-color: $secondaryHover;
+		}
+	}
+}

@@ -15,7 +15,7 @@ import ClayLayout from '@clayui/layout';
 import {PropTypes} from 'prop-types';
 import React from 'react';
 
-export default function ConfigurationFragments({fragments = []}) {
+export default function ConfigurationFragments({clickAddFragment}) {
 	const emptyState = (
 		<ClayEmptyState
 			description={Liferay.Language.get(
@@ -24,7 +24,7 @@ export default function ConfigurationFragments({fragments = []}) {
 			imgSrc="/o/admin-theme/images/states/empty_state.gif"
 			title={Liferay.Language.get('there-are-no-configuration-fragments')}
 		>
-			<ClayButton displayType="secondary">
+			<ClayButton displayType="secondary" onClick={clickAddFragment}>
 				{Liferay.Language.get('add-configuration-fragment')}
 			</ClayButton>
 		</ClayEmptyState>
@@ -33,19 +33,13 @@ export default function ConfigurationFragments({fragments = []}) {
 	return (
 		<>
 			<ClayLayout.SheetHeader className="bold configuration-header">
-				{Liferay.Language.get('configuration-fragments')}
+				{Liferay.Language.get('builder')}
 			</ClayLayout.SheetHeader>
-			<ClayLayout.Sheet>
-				{fragments.length === 0 ? emptyState : <></>}
-			</ClayLayout.Sheet>
+			<ClayLayout.Sheet></ClayLayout.Sheet>
 		</>
 	);
 }
 
 ConfigurationFragments.propTypes = {
-	fragments: PropTypes.arrayOf(
-		PropTypes.shape({
-			name: PropTypes.string,
-		})
-	),
+	clickAddFragment: PropTypes.func,
 };

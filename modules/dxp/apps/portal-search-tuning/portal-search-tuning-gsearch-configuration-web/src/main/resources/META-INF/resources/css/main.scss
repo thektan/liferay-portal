@@ -1,8 +1,9 @@
 @import '_variables';
 
 .configuration-set-root {
-	@import '_page_toolbar';
 	@import '_configuration_fragments';
+	@import '_page_toolbar';
+	@import '_sidebar';
 
 	.bold {
 		font-weight: 700;

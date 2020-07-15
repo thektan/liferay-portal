@@ -1,4 +1,10 @@
 .configuration-fragments {
+	padding-top: 6rem;
+
+	&.shifted {
+		margin-right: 380px;
+	}
+
 	.configuration-header {
 		padding-top: 1rem;
 		margin-bottom: 1rem;

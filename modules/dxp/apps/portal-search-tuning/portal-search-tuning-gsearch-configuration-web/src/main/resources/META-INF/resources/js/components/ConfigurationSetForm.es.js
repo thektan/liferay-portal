@@ -11,16 +11,19 @@
 
 import ClayLayout from '@clayui/layout';
 import {PropTypes} from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 
 import ConfigurationFragments from './ConfigurationFragments.es';
 import PageToolbar from './PageToolbar.es';
+import Sidebar from './Sidebar.es';
 
 export default function ConfigurationSetForm({
 	cancelURL = '',
 	formName = '',
 	title = '',
 }) {
+	const [showSidebar, setShowSidebar] = useState(true);
+
 	function handlePublish() {
 		submitForm(document[formName]);
 	}
@@ -34,12 +37,22 @@ export default function ConfigurationSetForm({
 				submitDisabled={true} //will depend on required values
 			/>
 
-			<ClayLayout.ContainerFluid
-				className="configuration-fragments configuration-set-container"
-				size="md"
+			<div
+				className={`configuration-fragments ${
+					showSidebar ? 'shifted' : ''
+				}`}
 			>
-				<ConfigurationFragments />
-			</ClayLayout.ContainerFluid>
+				<ClayLayout.ContainerFluid
+					className="configuration-set-container"
+					size="md"
+				>
+					<ConfigurationFragments
+						clickAddFragment={() => setShowSidebar(!showSidebar)}
+					/>
+				</ClayLayout.ContainerFluid>
+			</div>
+
+			{showSidebar && <Sidebar />}
 		</>
 	);
 }
