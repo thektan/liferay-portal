@@ -10,98 +10,63 @@
  */
 
 import ClayButton from '@clayui/button';
-import {ClayInput} from '@clayui/form';
 import ClayLink from '@clayui/link';
+import ClayLocalizedInput from '@clayui/localized-input';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import PropTypes from 'prop-types';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import ThemeContext from '../ThemeContext.es';
 
 export default function PageToolbar({
-	initialTitle,
 	onCancel,
 	onPublish,
 	submitDisabled,
+	titleTranslations,
 }) {
-	const inputRef = useRef(null);
-
-	const [showEditor, setShowEditor] = useState(false);
-	const [title, setTitle] = useState(initialTitle);
-
 	const {namespace} = useContext(ThemeContext);
 
-	useClickOutside(inputRef);
+	const locales = [
+		{
+			label: 'en-US',
+			symbol: 'en-us',
+		},
+		{
+			label: 'es-ES',
+			symbol: 'es-es',
+		},
+		{
+			label: 'fr-FR',
+			symbol: 'fr-fr',
+		},
+		{
+			label: 'hr-HR',
+			symbol: 'hr-hr',
+		},
+	];
 
-	useEffect(() => {
-		if (showEditor) {
-			inputRef.current.focus();
-		}
-	}, [showEditor]);
-
-	function onClickEdit() {
-		setShowEditor(true);
-	}
-
-	function useClickOutside(ref) {
-		useEffect(() => {
-			function handleClickOutside(event) {
-				if (ref.current && !ref.current.contains(event.target)) {
-					setShowEditor(false);
-				}
-			}
-
-			document.addEventListener('mousedown', handleClickOutside);
-
-			return () => {
-				document.removeEventListener('mousedown', handleClickOutside);
-			};
-		}, [ref]);
-	}
+	const [selectedLocale, setSelectedLocale] = useState(locales[0]);
+	const [translations, setTranslations] = useState(titleTranslations);
 
 	return (
 		<ClayManagementToolbar
 			aria-label={Liferay.Language.get('save')}
 			className="page-toolbar-root"
 		>
-			<ClayManagementToolbar.ItemList>
-				<ClayManagementToolbar.Item></ClayManagementToolbar.Item>
-			</ClayManagementToolbar.ItemList>
-
 			<ClayManagementToolbar.ItemList expand>
-				{showEditor ? (
-					<ClayInput
-						aria-label="title"
-						className="form-control input-group-inset"
+				<ClayManagementToolbar.Item className="localized-title">
+					<ClayLocalizedInput
+						className="form-control form-control-inline input-group-inset"
 						id={`${namespace}title`}
-						onChange={(event) => setTitle(event.target.value)}
-						onKeyDown={(event) => {
-							if (event.key === 'Enter') {
-								setShowEditor(false);
-							}
-						}}
+						label=""
+						locales={locales}
+						onSelectedLocaleChange={setSelectedLocale}
+						onTranslationsChange={setTranslations}
 						placeholder={Liferay.Language.get('untitled')}
-						ref={inputRef}
-						type="text"
-						value={title}
+						selectedLocale={selectedLocale}
+						translations={translations}
 					/>
-				) : (
-					<div className="bold" onClick={onClickEdit}>
-						{title ? (
-							title
-						) : (
-							<span className="italic secondary">
-								{Liferay.Language.get('untitled')}
-							</span>
-						)}
-						<input
-							id={`${namespace}title`}
-							name={`${namespace}title`}
-							type="hidden"
-							value={title}
-						/>
-					</div>
-				)}
+				</ClayManagementToolbar.Item>
 			</ClayManagementToolbar.ItemList>
 
 			<ClayManagementToolbar.ItemList>
@@ -117,7 +82,7 @@ export default function PageToolbar({
 
 				<ClayManagementToolbar.Item>
 					<ClayButton
-						disabled={submitDisabled && !title}
+						disabled={!translations[selectedLocale.label]}
 						onClick={onPublish}
 						small
 						type="submit"
@@ -131,8 +96,8 @@ export default function PageToolbar({
 }
 
 PageToolbar.propTypes = {
-	initialTitle: PropTypes.string,
 	onCancel: PropTypes.string.isRequired,
 	onPublish: PropTypes.func.isRequired,
 	submitDisabled: PropTypes.bool,
+	titleTranslations: PropTypes.object,
 };

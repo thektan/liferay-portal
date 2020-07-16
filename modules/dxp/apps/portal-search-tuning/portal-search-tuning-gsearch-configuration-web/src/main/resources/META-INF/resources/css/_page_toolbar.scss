@@ -12,6 +12,19 @@
 		z-index: 971;
 	}
 
+	.localized-title {
+		width: 100%;
+
+		.form-group {
+			margin-bottom: 0;
+			width: 100%;
+
+			.form-text {
+				display: none;
+			}
+		}
+	}
+
 	.nav-item {
 		padding-left: 0.5rem;
 		padding-right: 0.5rem;
