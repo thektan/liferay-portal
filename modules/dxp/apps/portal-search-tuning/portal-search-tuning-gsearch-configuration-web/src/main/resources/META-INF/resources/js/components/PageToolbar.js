@@ -56,6 +56,7 @@ export default function PageToolbar({
 			<ClayManagementToolbar.ItemList expand>
 				<ClayManagementToolbar.Item className="localized-title">
 					<ClayLocalizedInput
+						aria-label={Liferay.Language.get('title')}
 						className="form-control form-control-inline input-group-inset"
 						id={`${namespace}title`}
 						label=""
@@ -82,7 +83,10 @@ export default function PageToolbar({
 
 				<ClayManagementToolbar.Item>
 					<ClayButton
-						disabled={!translations[selectedLocale.label]}
+						disabled={
+							submitDisabled ||
+							!translations[selectedLocale.label]
+						}
 						onClick={onPublish}
 						small
 						type="submit"

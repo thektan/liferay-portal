@@ -9,27 +9,10 @@
  * distribution rights of the Software.
  */
 
-import ClayButton from '@clayui/button';
-import ClayEmptyState from '@clayui/empty-state';
 import ClayLayout from '@clayui/layout';
-import {PropTypes} from 'prop-types';
 import React from 'react';
 
-export default function ConfigurationFragments({clickAddFragment}) {
-	const emptyState = (
-		<ClayEmptyState
-			description={Liferay.Language.get(
-				'add-a-configuration-fragment-to-begin-relevance-tuning'
-			)}
-			imgSrc="/o/admin-theme/images/states/empty_state.gif"
-			title={Liferay.Language.get('there-are-no-configuration-fragments')}
-		>
-			<ClayButton displayType="secondary" onClick={clickAddFragment}>
-				{Liferay.Language.get('add-configuration-fragment')}
-			</ClayButton>
-		</ClayEmptyState>
-	);
-
+export default function ConfigurationFragments() {
 	return (
 		<>
 			<ClayLayout.SheetHeader className="bold configuration-header">
@@ -39,7 +22,3 @@ export default function ConfigurationFragments({clickAddFragment}) {
 		</>
 	);
 }
-
-ConfigurationFragments.propTypes = {
-	clickAddFragment: PropTypes.func,
-};

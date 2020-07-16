@@ -13,7 +13,6 @@ import ClayButton from '@clayui/button';
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClaySticker from '@clayui/sticker';
-import {PropTypes} from 'prop-types';
 import React, {useState} from 'react';
 
 export default function Sidebar() {
@@ -51,6 +50,7 @@ export default function Sidebar() {
 			<nav className="component-tbar tbar">
 				<div className="container-fluid">
 					<ClayInput
+						aria-label={Liferay.Language.get('search')}
 						placeholder={Liferay.Language.get('search')}
 						type="text"
 					/>
@@ -103,7 +103,3 @@ export default function Sidebar() {
 		</div>
 	);
 }
-
-Sidebar.propTypes = {
-	sample: PropTypes.string,
-};
