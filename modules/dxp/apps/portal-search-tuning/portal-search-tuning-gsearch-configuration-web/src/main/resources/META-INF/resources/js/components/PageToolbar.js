@@ -16,7 +16,7 @@ import ClayManagementToolbar from '@clayui/management-toolbar';
 import PropTypes from 'prop-types';
 import React, {useContext, useState} from 'react';
 
-import ThemeContext from '../ThemeContext.es';
+import ThemeContext from '../ThemeContext';
 
 export default function PageToolbar({
 	onCancel,

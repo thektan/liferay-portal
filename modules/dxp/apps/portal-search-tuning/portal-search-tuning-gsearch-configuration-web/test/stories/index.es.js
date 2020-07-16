@@ -21,7 +21,7 @@ import '../../src/main/resources/META-INF/resources/css/main.scss';
 
 import ClayLayout from '@clayui/layout';
 
-import ConfigurationSetForm from '../../src/main/resources/META-INF/resources/js/components/ConfigurationSetForm.es';
+import ConfigurationSetForm from '../../src/main/resources/META-INF/resources/js/components/ConfigurationSetForm';
 
 const {addDecorator, storiesOf} = StorybookReact;
 const {withKnobs} = StorybookAddonKnobs;

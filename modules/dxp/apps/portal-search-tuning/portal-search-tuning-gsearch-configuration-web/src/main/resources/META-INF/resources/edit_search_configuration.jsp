@@ -81,6 +81,6 @@ String redirect = ParamUtil.getString(request, "redirect", currentURL);
 
 	<react:component
 		data="<%= data %>"
-		module="js/ConfigurationSetApp.es"
+		module="js/ConfigurationSetApp"
 	/>
 </aui:form>
