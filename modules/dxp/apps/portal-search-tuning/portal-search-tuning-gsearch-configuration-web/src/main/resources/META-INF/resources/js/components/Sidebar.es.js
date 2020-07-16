@@ -64,7 +64,7 @@ export default function Sidebar() {
 							className={`sidebar-list-item list-group-item list-group-item-flex ${
 								showAdd === index ? 'hover' : ''
 							}`}
-							key={item.icon}
+							key={index}
 							onMouseEnter={() => setShowAdd(index)}
 							onMouseLeave={() => setShowAdd(-1)}
 						>
