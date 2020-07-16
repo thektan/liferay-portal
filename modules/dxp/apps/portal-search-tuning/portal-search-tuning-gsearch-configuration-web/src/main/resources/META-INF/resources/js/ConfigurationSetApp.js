@@ -11,7 +11,7 @@
 
 import React from 'react';
 
-import ConfigurationSetForm from './components/ConfigurationSetForm.es';
+import ConfigurationSetForm from './components/ConfigurationSetForm';
 
 export default function ({props}) {
 	return (

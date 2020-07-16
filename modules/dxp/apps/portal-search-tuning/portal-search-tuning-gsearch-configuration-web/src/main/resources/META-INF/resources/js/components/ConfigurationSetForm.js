@@ -13,9 +13,9 @@ import ClayLayout from '@clayui/layout';
 import {PropTypes} from 'prop-types';
 import React, {useState} from 'react';
 
-import ConfigurationFragments from './ConfigurationFragments.es';
-import PageToolbar from './PageToolbar.es';
-import Sidebar from './Sidebar.es';
+import ConfigurationFragments from './ConfigurationFragments';
+import PageToolbar from './PageToolbar';
+import Sidebar from './Sidebar';
 
 export default function ConfigurationSetForm({
 	cancelURL = '',
