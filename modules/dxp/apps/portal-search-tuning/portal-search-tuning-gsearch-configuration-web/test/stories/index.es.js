@@ -12,6 +12,7 @@
 import {ClayIconSpriteContext} from '@clayui/icon';
 import {
 	STORYBOOK_CONSTANTS,
+	StorybookAddonActions,
 	StorybookAddonKnobs,
 	StorybookReact,
 } from 'liferay-npm-scripts/src/storybook';
@@ -21,10 +22,14 @@ import '../../src/main/resources/META-INF/resources/css/main.scss';
 
 import ClayLayout from '@clayui/layout';
 
+import ConfigurationFragments from '../../src/main/resources/META-INF/resources/js/components/ConfigurationFragments';
 import ConfigurationSetForm from '../../src/main/resources/META-INF/resources/js/components/ConfigurationSetForm';
+import PageToolbar from '../../src/main/resources/META-INF/resources/js/components/PageToolbar';
+import Sidebar from '../../src/main/resources/META-INF/resources/js/components/Sidebar';
 
 const {addDecorator, storiesOf} = StorybookReact;
-const {withKnobs} = StorybookAddonKnobs;
+const {action} = StorybookAddonActions;
+const {boolean, withKnobs} = StorybookAddonKnobs;
 
 addDecorator(withKnobs);
 
@@ -42,10 +47,25 @@ addDecorator((storyFn) => {
 	);
 });
 
-const withSheet = (storyFn) => (
-	<ClayLayout.Sheet style={{marginTop: '24px'}}>{storyFn()}</ClayLayout.Sheet>
+const withContainer = (storyFn) => (
+	<ClayLayout.ContainerFluid size="md">{storyFn()}</ClayLayout.ContainerFluid>
 );
 
 storiesOf('Pages|ConfigurationSetForm', module).add('default', () => (
 	<ConfigurationSetForm cancelUrl="" formName="testFm" title="" />
 ));
+
+storiesOf('Components|PageToolbar', module).add('PageToolbar', () => (
+	<PageToolbar
+		onCancel={action('onCancel')}
+		onPublish={action('onPublish')}
+		submitDisabled={boolean('Disabled', false)}
+		titleTranslations={{}}
+	/>
+));
+
+storiesOf('Components|Sidebar', module).add('Sidebar', () => <Sidebar />);
+
+storiesOf('Components|ConfigurationFragments', module)
+	.addDecorator(withContainer)
+	.add('ConfigurationFragments', () => <ConfigurationFragments />);

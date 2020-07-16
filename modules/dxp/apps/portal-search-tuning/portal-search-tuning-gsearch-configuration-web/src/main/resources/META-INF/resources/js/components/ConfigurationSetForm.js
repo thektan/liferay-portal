@@ -22,7 +22,7 @@ export default function ConfigurationSetForm({
 	formName = '',
 	titleTranslations = {},
 }) {
-	const [showSidebar, setShowSidebar] = useState(true);
+	const [showSidebar] = useState(true);
 
 	function handlePublish() {
 		submitForm(document[formName]);
@@ -33,9 +33,11 @@ export default function ConfigurationSetForm({
 			<PageToolbar
 				onCancel={cancelURL}
 				onPublish={handlePublish}
-				submitDisabled={true} //will depend on required values
+				submitDisabled={false} //will depend on required values
 				titleTranslations={titleTranslations}
 			/>
+
+			{showSidebar && <Sidebar />}
 
 			<div
 				className={`configuration-fragments ${
@@ -46,13 +48,9 @@ export default function ConfigurationSetForm({
 					className="configuration-set-container"
 					size="md"
 				>
-					<ConfigurationFragments
-						clickAddFragment={() => setShowSidebar(!showSidebar)}
-					/>
+					<ConfigurationFragments />
 				</ClayLayout.ContainerFluid>
 			</div>
-
-			{showSidebar && <Sidebar />}
 		</>
 	);
 }
