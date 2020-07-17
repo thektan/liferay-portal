@@ -1,9 +1,8 @@
 .sidebar {
 	margin-top: 4rem;
-	min-width: 380px;
+	min-width: 384px;
 	position: fixed;
 	right: 0;
-	top: 4rem;
 	width: 20%;
 	z-index: 200;
 
@@ -18,12 +17,25 @@
 			background-color: $primaryL4;
 		}
 
-		.add-fragment-button {
-			position: absolute;
-			right: 1rem;
+		.autofit-col:first-of-type {
+			padding-right: 0.5rem;
 		}
 
-		.icon-lighten {
+		.button-wrapper {
+			background-color: $primaryL4;
+			display: table;
+			height: 100%;
+			padding-left: 1rem;
+			position: absolute;
+			right: 0.5rem;
+
+			.add-fragment-button {
+				display: table-cell;
+				vertical-align: middle;
+			}
+		}
+
+		.fragment-icon {
 			background-color: $secondaryHover;
 		}
 	}
