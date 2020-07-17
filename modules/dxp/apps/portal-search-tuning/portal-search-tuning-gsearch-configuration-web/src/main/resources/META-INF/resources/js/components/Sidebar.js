@@ -20,7 +20,7 @@ export default function Sidebar() {
 	const queryFragments = [
 		{
 			description:
-				'broadest-query-catching-documents-matching-any-keyword',
+				'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
 			icon: 'pin',
 			title: 'matches-any-keyword',
 		},
@@ -70,12 +70,13 @@ export default function Sidebar() {
 						>
 							<div className="autofit-col">
 								<ClaySticker
-									className="icon-lighten"
+									className="fragment-icon"
 									displayType="secondary"
 								>
 									<ClayIcon symbol={item.icon} />
 								</ClaySticker>
 							</div>
+
 							<div className="autofit-col autofit-col-expand">
 								<section className="autofit-section">
 									<div className="list-group-title">
@@ -87,15 +88,21 @@ export default function Sidebar() {
 									</div>
 								</section>
 							</div>
-							{showAdd === index && (
-								<ClayButton
-									className="add-fragment-button"
-									displayType="secondary"
-									small
-								>
-									{Liferay.Language.get('add')}
-								</ClayButton>
-							)}
+
+							<div className="autofit-col">
+								{showAdd === index && (
+									<div className="button-wrapper">
+										<div className="add-fragment-button">
+											<ClayButton
+												displayType="secondary"
+												small
+											>
+												{Liferay.Language.get('add')}
+											</ClayButton>
+										</div>
+									</div>
+								)}
+							</div>
 						</li>
 					);
 				})}
