@@ -12,6 +12,7 @@
 import ClayButton from '@clayui/button';
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
+import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
 import React, {useState} from 'react';
 
@@ -21,17 +22,17 @@ export default function Sidebar() {
 		{
 			description:
 				'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
-			icon: 'pin',
+			icon: 'vocabulary',
 			title: 'matches-any-keyword',
 		},
 		{
 			description: 'boost-content-last-modified-within-a-time-frame',
-			icon: 'pin',
+			icon: 'time',
 			title: 'freshness',
 		},
 		{
 			description: "boost-content-created-closer-to-user's-location",
-			icon: 'pin',
+			icon: 'geolocation',
 			title: "user's-geolocation",
 		},
 	];
@@ -57,43 +58,43 @@ export default function Sidebar() {
 				</div>
 			</nav>
 
-			<ul className="list-group">
+			<ClayList>
 				{queryFragments.map((item, index) => {
 					return (
-						<li
-							className={`sidebar-list-item list-group-item list-group-item-flex ${
-								showAdd === index ? 'hover' : ''
-							}`}
+						<ClayList.Item
+							className={`${showAdd === index ? 'hover' : ''}`}
+							flex
 							key={index}
 							onMouseEnter={() => setShowAdd(index)}
 							onMouseLeave={() => setShowAdd(-1)}
 						>
-							<div className="autofit-col">
+							<ClayList.ItemField>
 								<ClaySticker
-									className="fragment-icon"
+									className="icon"
 									displayType="secondary"
 								>
 									<ClayIcon symbol={item.icon} />
 								</ClaySticker>
-							</div>
+							</ClayList.ItemField>
 
-							<div className="autofit-col autofit-col-expand">
-								<section className="autofit-section">
-									<div className="list-group-title">
-										{item.title}
-									</div>
+							<ClayList.ItemField expand>
+								<ClayList.ItemTitle>
+									{item.title}
+								</ClayList.ItemTitle>
 
-									<div className="list-group-subtitle">
-										{item.description}
-									</div>
-								</section>
-							</div>
+								<ClayList.ItemText subtext={true}>
+									{item.description}
+								</ClayList.ItemText>
+							</ClayList.ItemField>
 
-							<div className="autofit-col">
+							<ClayList.ItemField>
 								{showAdd === index && (
 									<div className="button-wrapper">
 										<div className="add-fragment-button">
 											<ClayButton
+												aria-label={Liferay.Language.get(
+													'add'
+												)}
 												displayType="secondary"
 												small
 											>
@@ -102,11 +103,11 @@ export default function Sidebar() {
 										</div>
 									</div>
 								)}
-							</div>
-						</li>
+							</ClayList.ItemField>
+						</ClayList.Item>
 					);
 				})}
-			</ul>
+			</ClayList>
 		</div>
 	);
 }

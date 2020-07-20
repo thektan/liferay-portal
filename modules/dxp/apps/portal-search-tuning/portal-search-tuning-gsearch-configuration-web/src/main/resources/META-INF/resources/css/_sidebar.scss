@@ -10,7 +10,7 @@
 		font-size: 1rem;
 	}
 
-	.sidebar-list-item {
+	.list-group-item {
 		border: 0;
 
 		&.hover {
@@ -33,10 +33,6 @@
 				display: table-cell;
 				vertical-align: middle;
 			}
-		}
-
-		.fragment-icon {
-			background-color: $secondaryHover;
 		}
 	}
 }

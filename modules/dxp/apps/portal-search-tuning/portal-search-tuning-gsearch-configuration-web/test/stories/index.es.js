@@ -22,8 +22,9 @@ import '../../src/main/resources/META-INF/resources/css/main.scss';
 
 import ClayLayout from '@clayui/layout';
 
-import ConfigurationFragments from '../../src/main/resources/META-INF/resources/js/components/ConfigurationFragments';
+import Builder from '../../src/main/resources/META-INF/resources/js/components/Builder';
 import ConfigurationSetForm from '../../src/main/resources/META-INF/resources/js/components/ConfigurationSetForm';
+import Fragment from '../../src/main/resources/META-INF/resources/js/components/Fragment';
 import PageToolbar from '../../src/main/resources/META-INF/resources/js/components/PageToolbar';
 import Sidebar from '../../src/main/resources/META-INF/resources/js/components/Sidebar';
 
@@ -66,6 +67,17 @@ storiesOf('Components|PageToolbar', module).add('PageToolbar', () => (
 
 storiesOf('Components|Sidebar', module).add('Sidebar', () => <Sidebar />);
 
-storiesOf('Components|ConfigurationFragments', module)
+storiesOf('Components|Builder', module)
 	.addDecorator(withContainer)
-	.add('ConfigurationFragments', () => <ConfigurationFragments />);
+	.add('Builder', () => <Builder />);
+
+storiesOf('Components|Fragment', module)
+	.addDecorator(withContainer)
+	.add('Fragment', () => (
+		<Fragment
+			deleteURL="/"
+			description="Sample description"
+			icon="time"
+			title="Sample Title"
+		/>
+	));

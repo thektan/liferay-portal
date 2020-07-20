@@ -9,11 +9,10 @@
  * distribution rights of the Software.
  */
 
-import ClayLayout from '@clayui/layout';
 import {PropTypes} from 'prop-types';
 import React, {useState} from 'react';
 
-import ConfigurationFragments from './ConfigurationFragments';
+import Builder from './Builder';
 import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
 
@@ -39,17 +38,8 @@ export default function ConfigurationSetForm({
 
 			{showSidebar && <Sidebar />}
 
-			<div
-				className={`configuration-fragments ${
-					showSidebar ? 'shifted' : ''
-				}`}
-			>
-				<ClayLayout.ContainerFluid
-					className="configuration-set-container"
-					size="md"
-				>
-					<ConfigurationFragments />
-				</ClayLayout.ContainerFluid>
+			<div className={`${showSidebar ? 'shifted' : ''}`}>
+				<Builder />
 			</div>
 		</>
 	);
