@@ -22,6 +22,124 @@ export default function ConfigurationSetForm({
 	initialTitleTranslations = {},
 }) {
 	const [showSidebar] = useState(true);
+	const [selectedFragments, setSelectedFragments] = useState([]);
+
+	const queryFragments = [
+		{
+			description:
+				'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
+			icon: 'vocabulary',
+			json: {
+				clauses: [
+					{
+						configuration: {
+							boost: 20,
+							field_name:
+								'gsearch_locations_$_context.language_id_$',
+							query: '$_geolocation.city_$',
+						},
+						occur: 'should',
+						query_type: 'match',
+					},
+					{
+						configuration: {
+							boost: 10,
+							field_name:
+								'gsearch_locations_$_context.language_id_$',
+							query: '$_geolocation.country_name_$',
+						},
+						occur: 'should',
+						query_type: 'match',
+					},
+				],
+				conditions: [],
+				description:
+					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
+				enabled: true,
+			},
+			title: 'matches-any-keyword',
+		},
+		{
+			description: 'boost-content-last-modified-within-a-time-frame',
+			icon: 'time',
+			json: {
+				clauses: [
+					{
+						configuration: {
+							boost: 20,
+							field_name:
+								'gsearch_locations_$_context.language_id_$',
+							query: '$_geolocation.city_$',
+						},
+						occur: 'should',
+						query_type: 'match',
+					},
+					{
+						configuration: {
+							boost: 10,
+							field_name:
+								'gsearch_locations_$_context.language_id_$',
+							query: '$_geolocation.country_name_$',
+						},
+						occur: 'should',
+						query_type: 'match',
+					},
+				],
+				conditions: [],
+				description:
+					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
+				enabled: true,
+			},
+			title: 'freshness',
+		},
+		{
+			description: "boost-content-created-closer-to-user's-location",
+			icon: 'geolocation',
+			json: {
+				clauses: [
+					{
+						configuration: {
+							boost: 20,
+							field_name:
+								'gsearch_locations_$_context.language_id_$',
+							query: '$_geolocation.city_$',
+						},
+						occur: 'should',
+						query_type: 'match',
+					},
+					{
+						configuration: {
+							boost: 10,
+							field_name:
+								'gsearch_locations_$_context.language_id_$',
+							query: '$_geolocation.country_name_$',
+						},
+						occur: 'should',
+						query_type: 'match',
+					},
+				],
+				conditions: [],
+				description:
+					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
+				enabled: true,
+			},
+			title: "user's-geolocation",
+		},
+	];
+
+	const fragmentMap = queryFragments.reduce((acc, cur) => {
+		return acc[cur.title] ? acc : {...acc, [cur.title]: cur};
+	}, {});
+
+	function addFragment(id) {
+		if (!selectedFragments.includes(id)) {
+			setSelectedFragments([...selectedFragments, id]);
+		}
+	}
+
+	function deleteFragment(id) {
+		setSelectedFragments(selectedFragments.filter((item) => item !== id));
+	}
 
 	function handlePublish() {
 		submitForm(document[formName]);
@@ -35,10 +153,20 @@ export default function ConfigurationSetForm({
 				onPublish={handlePublish} //will depend on required values
 			/>
 
-			{showSidebar && <Sidebar />}
+			{showSidebar && (
+				<Sidebar
+					addFragment={addFragment}
+					queryFragments={queryFragments}
+				/>
+			)}
 
 			<div className={`${showSidebar ? 'shifted' : ''}`}>
-				<Builder />
+				<Builder
+					deleteFragment={deleteFragment}
+					selectedFragments={selectedFragments.map(
+						(id) => fragmentMap[id]
+					)}
+				/>
 			</div>
 		</>
 	);

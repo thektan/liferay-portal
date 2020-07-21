@@ -15,7 +15,7 @@ import ClayIcon from '@clayui/icon';
 import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
 import {PropTypes} from 'prop-types';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 class AceEditor extends React.Component {
 	constructor(props) {
@@ -28,11 +28,10 @@ class AceEditor extends React.Component {
 		AUI().use('aui-ace-editor', (A) => {
 			const editor = new A.AceEditor({
 				boundingBox: this.container.current,
-				highlightActiveLine: false,
 				mode: 'json',
-				readOnly: 'false',
+				readOnly: false,
 				tabSize: 4,
-				value: this.props.json,
+				value: JSON.stringify(this.props.value, null, '\t'),
 				width: '100%',
 			}).render();
 
@@ -57,19 +56,32 @@ class AceEditor extends React.Component {
 }
 
 AceEditor.propTypes = {
-	json: PropTypes.string,
 	onRender: PropTypes.func,
+	value: PropTypes.object,
 };
 
-export default function Fragment({deleteURL, description, icon, json, title}) {
+export default function Fragment({
+	collapse,
+	deleteFragment,
+	description,
+	icon,
+	json,
+	title,
+}) {
 	const [active, setActive] = useState(false);
 	const [expand, setExpand] = useState(true);
 
 	const editorElementRef = useRef();
 	const editorTextInputRef = useRef();
 
+	useEffect(() => {
+		if (collapse) {
+			setExpand(false);
+		}
+	}, [collapse]);
+
 	return (
-		<div className="configuration-fragment" key={title}>
+		<div className="configuration-fragment sheet" key={title}>
 			<ClayList>
 				<ClayList.Item flex>
 					<ClayList.ItemField>
@@ -104,7 +116,9 @@ export default function Fragment({deleteURL, description, icon, json, title}) {
 						}
 					>
 						<ClayDropDown.ItemList>
-							<ClayDropDown.Item href={deleteURL}>
+							<ClayDropDown.Item
+								onClick={() => deleteFragment(title)}
+							>
 								{Liferay.Language.get('delete')}
 							</ClayDropDown.Item>
 						</ClayDropDown.ItemList>
@@ -124,23 +138,26 @@ export default function Fragment({deleteURL, description, icon, json, title}) {
 				</ClayList.Item>
 			</ClayList>
 
-			<div className="configuration-editor">
-				<AceEditor
-					json={json}
-					onRender={({editorElement, editorTextInput}) => {
-						editorElementRef.current = editorElement;
-						editorTextInputRef.current = editorTextInput;
-					}}
-				/>
-			</div>
+			{expand && (
+				<div className="configuration-editor">
+					<AceEditor
+						onRender={({editorElement, editorTextInput}) => {
+							editorElementRef.current = editorElement;
+							editorTextInputRef.current = editorTextInput;
+						}}
+						value={json}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }
 
 Fragment.propTypes = {
-	deleteURL: PropTypes.string,
+	collapse: PropTypes.number,
+	deleteFragment: PropTypes.func,
 	description: PropTypes.string,
 	icon: PropTypes.string,
-	json: PropTypes.string,
+	json: PropTypes.object,
 	title: PropTypes.string,
 };

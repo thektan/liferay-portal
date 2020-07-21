@@ -16,26 +16,8 @@ import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
 import React, {useState} from 'react';
 
-export default function Sidebar() {
+export default function Sidebar({addFragment, queryFragments}) {
 	const [showAdd, setShowAdd] = useState(-1);
-	const queryFragments = [
-		{
-			description:
-				'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
-			icon: 'vocabulary',
-			title: 'matches-any-keyword',
-		},
-		{
-			description: 'boost-content-last-modified-within-a-time-frame',
-			icon: 'time',
-			title: 'freshness',
-		},
-		{
-			description: "boost-content-created-closer-to-user's-location",
-			icon: 'geolocation',
-			title: "user's-geolocation",
-		},
-	];
 
 	return (
 		<div className="sidebar sidebar-light">
@@ -96,6 +78,9 @@ export default function Sidebar() {
 													'add'
 												)}
 												displayType="secondary"
+												onClick={() =>
+													addFragment(item.title)
+												}
 												small
 											>
 												{Liferay.Language.get('add')}
