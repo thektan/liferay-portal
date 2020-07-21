@@ -102,7 +102,7 @@ export default function PageToolbar({
 }
 
 PageToolbar.propTypes = {
+	initialTitleTranslations: PropTypes.object,
 	onCancel: PropTypes.string.isRequired,
 	onPublish: PropTypes.func.isRequired,
-	titleTranslations: PropTypes.object,
 };

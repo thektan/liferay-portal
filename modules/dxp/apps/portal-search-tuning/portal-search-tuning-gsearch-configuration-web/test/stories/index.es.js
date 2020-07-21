@@ -30,7 +30,7 @@ import Sidebar from '../../src/main/resources/META-INF/resources/js/components/S
 
 const {addDecorator, storiesOf} = StorybookReact;
 const {action} = StorybookAddonActions;
-const {boolean, withKnobs} = StorybookAddonKnobs;
+const {withKnobs} = StorybookAddonKnobs;
 
 addDecorator(withKnobs);
 
@@ -52,32 +52,139 @@ const withContainer = (storyFn) => (
 	<ClayLayout.ContainerFluid size="md">{storyFn()}</ClayLayout.ContainerFluid>
 );
 
+const queryFragments = [
+	{
+		description:
+			'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
+		icon: 'vocabulary',
+		json: {
+			clauses: [
+				{
+					configuration: {
+						boost: 20,
+						field_name: 'gsearch_locations_$_context.language_id_$',
+						query: '$_geolocation.city_$',
+					},
+					occur: 'should',
+					query_type: 'match',
+				},
+				{
+					configuration: {
+						boost: 10,
+						field_name: 'gsearch_locations_$_context.language_id_$',
+						query: '$_geolocation.country_name_$',
+					},
+					occur: 'should',
+					query_type: 'match',
+				},
+			],
+			conditions: [],
+			description:
+				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
+			enabled: true,
+		},
+		title: 'matches-any-keyword',
+	},
+	{
+		description: 'boost-content-last-modified-within-a-time-frame',
+		icon: 'time',
+		json: {
+			clauses: [
+				{
+					configuration: {
+						boost: 20,
+						field_name: 'gsearch_locations_$_context.language_id_$',
+						query: '$_geolocation.city_$',
+					},
+					occur: 'should',
+					query_type: 'match',
+				},
+				{
+					configuration: {
+						boost: 10,
+						field_name: 'gsearch_locations_$_context.language_id_$',
+						query: '$_geolocation.country_name_$',
+					},
+					occur: 'should',
+					query_type: 'match',
+				},
+			],
+			conditions: [],
+			description:
+				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
+			enabled: true,
+		},
+		title: 'freshness',
+	},
+	{
+		description: "boost-content-created-closer-to-user's-location",
+		icon: 'geolocation',
+		json: {
+			clauses: [
+				{
+					configuration: {
+						boost: 20,
+						field_name: 'gsearch_locations_$_context.language_id_$',
+						query: '$_geolocation.city_$',
+					},
+					occur: 'should',
+					query_type: 'match',
+				},
+				{
+					configuration: {
+						boost: 10,
+						field_name: 'gsearch_locations_$_context.language_id_$',
+						query: '$_geolocation.country_name_$',
+					},
+					occur: 'should',
+					query_type: 'match',
+				},
+			],
+			conditions: [],
+			description:
+				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
+			enabled: true,
+		},
+		title: "user's-geolocation",
+	},
+];
+
 storiesOf('Pages|ConfigurationSetForm', module).add('default', () => (
 	<ConfigurationSetForm cancelUrl="" formName="testFm" title="" />
 ));
 
 storiesOf('Components|PageToolbar', module).add('PageToolbar', () => (
 	<PageToolbar
-		onCancel={action('onCancel')}
+		initialTitleTranslations={{}}
+		onCancel=""
 		onPublish={action('onPublish')}
-		submitDisabled={boolean('Disabled', false)}
-		titleTranslations={{}}
 	/>
 ));
 
-storiesOf('Components|Sidebar', module).add('Sidebar', () => <Sidebar />);
+storiesOf('Components|Sidebar', module).add('Sidebar', () => (
+	<Sidebar
+		addFragment={action('addFragment')}
+		queryFragments={queryFragments}
+	/>
+));
 
 storiesOf('Components|Builder', module)
 	.addDecorator(withContainer)
-	.add('Builder', () => <Builder />);
+	.add('Builder', () => (
+		<Builder
+			deleteFragment={action('buildFragment')}
+			selectedFragments={queryFragments}
+		/>
+	));
 
 storiesOf('Components|Fragment', module)
 	.addDecorator(withContainer)
 	.add('Fragment', () => (
 		<Fragment
-			deleteURL="/"
-			description="Sample description"
-			icon="time"
-			title="Sample Title"
+			deleteFragment={action('deleteFragment')}
+			description={queryFragments[0].description}
+			icon={queryFragments[0].icon}
+			json={queryFragments[0].json}
+			title={queryFragments[0].title}
 		/>
 	));

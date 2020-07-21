@@ -9,71 +9,44 @@
  * distribution rights of the Software.
  */
 
+import ClayButton from '@clayui/button';
 import ClayLayout from '@clayui/layout';
-import React from 'react';
+import {PropTypes} from 'prop-types';
+import React, {useState} from 'react';
 
 import Fragment from './Fragment';
 
-export default function Builder() {
-	const queryFragments = [
-		{
-			description:
-				'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
-			icon: 'vocabulary',
-			json: {
-				clauses: [
-					{
-						configuration: {
-							boost: 20,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.city_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-					{
-						configuration: {
-							boost: 10,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.country_name_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-				],
-				conditions: [],
-				description:
-					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-				enabled: true,
-			},
-			title: 'matches-any-keyword',
-		},
-		{
-			description: 'boost-content-last-modified-within-a-time-frame',
-			icon: 'time',
-			title: 'freshness',
-		},
-		{
-			description: "boost-content-created-closer-to-user's-location",
-			icon: 'geolocation',
-			title: "user's-geolocation",
-		},
-	];
+export default function Builder({deleteFragment, selectedFragments}) {
+	const [collapseAll, setCollapseAll] = useState(0);
 
 	return (
 		<ClayLayout.ContainerFluid className="builder" size="md">
-			<ClayLayout.SheetHeader className="bold configuration-header">
-				{Liferay.Language.get('builder')}
-			</ClayLayout.SheetHeader>
+			<ClayLayout.Row
+				className="bold configuration-header"
+				justify="between"
+			>
+				<ClayLayout.Col size={4}>
+					{Liferay.Language.get('builder')}
+				</ClayLayout.Col>
+				<ClayLayout.Col size={3}>
+					<ClayButton
+						aria-label={Liferay.Language.get('collapse-all')}
+						displayType="unstyled"
+						onClick={() => setCollapseAll(collapseAll + 1)}
+					>
+						{Liferay.Language.get('collapse-all')}
+					</ClayButton>
+				</ClayLayout.Col>
+			</ClayLayout.Row>
 
-			{queryFragments.map((item, index) => {
+			{selectedFragments.map((item, index) => {
 				return (
 					<Fragment
-						deleteURL={item.deleteURL}
+						collapse={collapseAll}
+						deleteFragment={deleteFragment}
 						description={item.description}
 						icon={item.icon}
+						json={item.json}
 						key={index}
 						title={item.title}
 					/>
@@ -82,3 +55,8 @@ export default function Builder() {
 		</ClayLayout.ContainerFluid>
 	);
 }
+
+Builder.propTypes = {
+	deleteFragment: PropTypes.func,
+	selectedFragments: PropTypes.arrayOf(PropTypes.object),
+};
