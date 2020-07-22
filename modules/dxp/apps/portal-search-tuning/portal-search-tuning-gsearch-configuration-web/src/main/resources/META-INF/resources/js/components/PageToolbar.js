@@ -18,6 +18,17 @@ import React, {useContext, useState} from 'react';
 
 import ThemeContext from '../ThemeContext';
 
+function getAvailableLocales() {
+	return Object.keys(Liferay.Language.available).map((key) => {
+		const translatedKey = key.replace('_', '-');
+
+		return {
+			label: translatedKey,
+			symbol: translatedKey.toLowerCase(),
+		};
+	});
+}
+
 export default function PageToolbar({
 	onCancel,
 	onPublish,
@@ -26,24 +37,7 @@ export default function PageToolbar({
 }) {
 	const {namespace} = useContext(ThemeContext);
 
-	const locales = [
-		{
-			label: 'en-US',
-			symbol: 'en-us',
-		},
-		{
-			label: 'es-ES',
-			symbol: 'es-es',
-		},
-		{
-			label: 'fr-FR',
-			symbol: 'fr-fr',
-		},
-		{
-			label: 'hr-HR',
-			symbol: 'hr-hr',
-		},
-	];
+	const locales = getAvailableLocales();
 
 	const [selectedLocale, setSelectedLocale] = useState(locales[0]);
 	const [translations, setTranslations] = useState(titleTranslations);
