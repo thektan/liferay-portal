@@ -19,7 +19,7 @@ import Sidebar from './Sidebar';
 export default function ConfigurationSetForm({
 	cancelURL = '',
 	formName = '',
-	titleTranslations = {},
+	initialTitleTranslations = {},
 }) {
 	const [showSidebar] = useState(true);
 
@@ -30,10 +30,9 @@ export default function ConfigurationSetForm({
 	return (
 		<>
 			<PageToolbar
+				initialTitleTranslations={initialTitleTranslations}
 				onCancel={cancelURL}
-				onPublish={handlePublish}
-				submitDisabled={false} //will depend on required values
-				titleTranslations={titleTranslations}
+				onPublish={handlePublish} //will depend on required values
 			/>
 
 			{showSidebar && <Sidebar />}
@@ -48,5 +47,5 @@ export default function ConfigurationSetForm({
 ConfigurationSetForm.propTypes = {
 	cancelURL: PropTypes.string,
 	formName: PropTypes.string,
-	titleTranslations: PropTypes.object,
+	initialTitleTranslations: PropTypes.object,
 };

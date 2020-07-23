@@ -74,7 +74,13 @@ String redirect = ParamUtil.getString(request, "redirect", currentURL);
 		"configurationType", searchConfigurationType
 	).build();
 
+	Map<String, Object> context = HashMapBuilder.<String, Object>put(
+		"namespace", liferayPortletResponse.getNamespace()
+	).build();
+
 	Map<String, Object> data = HashMapBuilder.<String, Object>put(
+		"context", context
+	).put(
 		"props", props
 	).build();
 	%>

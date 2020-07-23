@@ -13,5 +13,4 @@ import React from 'react';
 
 export default React.createContext({
 	namespace: '',
-	spritemap: '',
 });

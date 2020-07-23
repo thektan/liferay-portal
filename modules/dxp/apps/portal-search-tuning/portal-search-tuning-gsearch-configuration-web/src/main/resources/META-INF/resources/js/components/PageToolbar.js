@@ -30,17 +30,31 @@ function getAvailableLocales() {
 }
 
 export default function PageToolbar({
+	initialTitleTranslations,
 	onCancel,
 	onPublish,
-	submitDisabled,
-	titleTranslations,
 }) {
 	const {namespace} = useContext(ThemeContext);
 
 	const locales = getAvailableLocales();
 
 	const [selectedLocale, setSelectedLocale] = useState(locales[0]);
-	const [translations, setTranslations] = useState(titleTranslations);
+	const [titleTranslations, setTitleTranslations] = useState(
+		initialTitleTranslations
+	);
+
+	const _renderLocalizedInputs = (inputId, translations) => {
+		return Object.keys(translations).map((key) => (
+			<input
+				key={key}
+				name={`${inputId}_${key.replace('-', '_')}`}
+				type="hidden"
+				value={translations[key]}
+			/>
+		));
+	};
+
+	const titleInputId = `${namespace}title`;
 
 	return (
 		<ClayManagementToolbar
@@ -52,15 +66,17 @@ export default function PageToolbar({
 					<ClayLocalizedInput
 						aria-label={Liferay.Language.get('title')}
 						className="form-control form-control-inline input-group-inset"
-						id={`${namespace}title`}
+						id={titleInputId}
 						label=""
 						locales={locales}
 						onSelectedLocaleChange={setSelectedLocale}
-						onTranslationsChange={setTranslations}
+						onTranslationsChange={setTitleTranslations}
 						placeholder={Liferay.Language.get('untitled')}
 						selectedLocale={selectedLocale}
-						translations={translations}
+						translations={titleTranslations}
 					/>
+
+					{_renderLocalizedInputs(titleInputId, titleTranslations)}
 				</ClayManagementToolbar.Item>
 			</ClayManagementToolbar.ItemList>
 
@@ -76,15 +92,7 @@ export default function PageToolbar({
 				</ClayManagementToolbar.Item>
 
 				<ClayManagementToolbar.Item>
-					<ClayButton
-						disabled={
-							submitDisabled ||
-							!translations[selectedLocale.label]
-						}
-						onClick={onPublish}
-						small
-						type="submit"
-					>
+					<ClayButton onClick={onPublish} small type="submit">
 						{Liferay.Language.get('save')}
 					</ClayButton>
 				</ClayManagementToolbar.Item>
@@ -96,6 +104,5 @@ export default function PageToolbar({
 PageToolbar.propTypes = {
 	onCancel: PropTypes.string.isRequired,
 	onPublish: PropTypes.func.isRequired,
-	submitDisabled: PropTypes.bool,
 	titleTranslations: PropTypes.object,
 };

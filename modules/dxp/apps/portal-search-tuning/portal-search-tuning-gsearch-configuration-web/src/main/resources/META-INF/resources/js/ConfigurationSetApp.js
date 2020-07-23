@@ -11,12 +11,15 @@
 
 import React from 'react';
 
+import ThemeContext from './ThemeContext';
 import ConfigurationSetForm from './components/ConfigurationSetForm';
 
-export default function ({props}) {
+export default function ({context, props}) {
 	return (
-		<div className="configuration-set-root">
-			<ConfigurationSetForm {...props} />
-		</div>
+		<ThemeContext.Provider value={context}>
+			<div className="configuration-set-root">
+				<ConfigurationSetForm {...props} />
+			</div>
+		</ThemeContext.Provider>
 	);
 }
