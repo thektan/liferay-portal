@@ -23,14 +23,12 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
-page import="com.liferay.portal.kernel.util.HashMapBuilder" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.search.tuning.gsearch.configuration.constants.SearchConfigurationTypes" %><%@
 page import="com.liferay.portal.search.tuning.gsearch.configuration.model.SearchConfiguration" %><%@
 page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationMVCCommandNames" %><%@
-page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys" %>
-
-<%@ page import="java.util.Map" %>
+page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys" %><%@
+page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal.display.context.EditSearchConfigurationDisplayContext" %>
 
 <liferay-frontend:defineObjects />
 
@@ -40,6 +38,8 @@ page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal
 
 <%
 SearchConfiguration searchConfiguration = (SearchConfiguration)request.getAttribute(SearchConfigurationWebKeys.SEARCH_CONFIGURATION);
+
+EditSearchConfigurationDisplayContext editSearchConfigurationDisplayContext = (EditSearchConfigurationDisplayContext)request.getAttribute(SearchConfigurationWebKeys.EDIT_SEARCH_CONFIGURATION_DISPLAY_CONTEXT);
 
 int searchConfigurationType = ParamUtil.getInteger(request, SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE, SearchConfigurationTypes.CONFIGURATION);
 
@@ -51,42 +51,21 @@ String pageTitleKey = (String)request.getAttribute(SearchConfigurationWebKeys.PA
 
 renderResponse.setTitle(LanguageUtil.get(request, pageTitleKey));
 
-Long configurationId = (searchConfiguration != null) ? searchConfiguration.getSearchConfigurationId() : null;
 String cmd = (searchConfiguration != null) ? Constants.EDIT : Constants.ADD;
-
-String redirect = ParamUtil.getString(request, "redirect", currentURL);
 %>
 
 <portlet:actionURL name="<%= SearchConfigurationMVCCommandNames.EDIT_SEARCH_CONFIGURATION %>" var="editConfigurationActionURL">
-	<portlet:param name="redirect" value="<%= redirect %>" />
+	<portlet:param name="redirect" value="<%= editSearchConfigurationDisplayContext.getRedirect() %>" />
 	<portlet:param name="<%= Constants.CMD %>" value="<%= cmd %>" />
 </portlet:actionURL>
 
 <aui:form action="<%= editConfigurationActionURL %>">
 	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value='<%= (searchConfiguration != null) ? searchConfiguration.getSearchConfigurationId() : "" %>' />
 	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE %>" type="hidden" value="<%= searchConfigurationType %>" />
-	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-
-	<%
-	Map<String, Object> props = HashMapBuilder.<String, Object>put(
-		"configurationId", configurationId
-	).put(
-		"configurationType", searchConfigurationType
-	).build();
-
-	Map<String, Object> context = HashMapBuilder.<String, Object>put(
-		"namespace", liferayPortletResponse.getNamespace()
-	).build();
-
-	Map<String, Object> data = HashMapBuilder.<String, Object>put(
-		"context", context
-	).put(
-		"props", props
-	).build();
-	%>
+	<aui:input name="redirect" type="hidden" value="<%= editSearchConfigurationDisplayContext.getRedirect() %>" />
 
 	<react:component
-		data="<%= data %>"
+		data="<%= editSearchConfigurationDisplayContext.getData() %>"
 		module="js/ConfigurationSetApp"
 	/>
 </aui:form>
