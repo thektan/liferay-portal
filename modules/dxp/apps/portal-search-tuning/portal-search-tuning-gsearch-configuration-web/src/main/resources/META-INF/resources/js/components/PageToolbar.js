@@ -18,27 +18,15 @@ import React, {useContext, useState} from 'react';
 
 import ThemeContext from '../ThemeContext';
 
-function getAvailableLocales() {
-	return Object.keys(Liferay.Language.available).map((key) => {
-		const translatedKey = key.replace('_', '-');
-
-		return {
-			label: translatedKey,
-			symbol: translatedKey.toLowerCase(),
-		};
-	});
-}
-
 export default function PageToolbar({
+	availableLocales,
 	initialTitleTranslations,
 	onCancel,
 	onPublish,
 }) {
 	const {namespace} = useContext(ThemeContext);
 
-	const locales = getAvailableLocales();
-
-	const [selectedLocale, setSelectedLocale] = useState(locales[0]);
+	const [selectedLocale, setSelectedLocale] = useState(availableLocales[0]);
 	const [titleTranslations, setTitleTranslations] = useState(
 		initialTitleTranslations
 	);
@@ -68,7 +56,7 @@ export default function PageToolbar({
 						className="form-control form-control-inline input-group-inset"
 						id={titleInputId}
 						label=""
-						locales={locales}
+						locales={availableLocales}
 						onSelectedLocaleChange={setSelectedLocale}
 						onTranslationsChange={setTitleTranslations}
 						placeholder={Liferay.Language.get('untitled')}
@@ -102,6 +90,7 @@ export default function PageToolbar({
 }
 
 PageToolbar.propTypes = {
+	availableLocales: PropTypes.arrayOf(PropTypes.string),
 	initialTitleTranslations: PropTypes.object,
 	onCancel: PropTypes.string.isRequired,
 	onPublish: PropTypes.func.isRequired,

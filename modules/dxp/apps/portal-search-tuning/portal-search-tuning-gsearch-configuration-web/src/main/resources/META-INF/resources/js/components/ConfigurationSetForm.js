@@ -17,6 +17,7 @@ import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
 
 export default function ConfigurationSetForm({
+	availableLocales = [],
 	cancelURL = '',
 	formName = '',
 	initialTitleTranslations = {},
@@ -148,6 +149,7 @@ export default function ConfigurationSetForm({
 	return (
 		<>
 			<PageToolbar
+				availableLocales={availableLocales}
 				initialTitleTranslations={initialTitleTranslations}
 				onCancel={cancelURL}
 				onPublish={handlePublish} //will depend on required values
@@ -173,6 +175,7 @@ export default function ConfigurationSetForm({
 }
 
 ConfigurationSetForm.propTypes = {
+	availableLocales: PropTypes.arrayOf(PropTypes.object),
 	cancelURL: PropTypes.string,
 	formName: PropTypes.string,
 	initialTitleTranslations: PropTypes.object,
