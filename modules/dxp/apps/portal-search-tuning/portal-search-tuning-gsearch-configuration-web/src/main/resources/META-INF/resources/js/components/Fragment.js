@@ -67,17 +67,39 @@ export default function Fragment({
 }) {
 	const [active, setActive] = useState(false);
 	const [expand, setExpand] = useState(true);
-
 	const [value, setValue] = useState(JSON.stringify(json, null, '\t'));
 
 	const editorElementRef = useRef();
 	const editorTextInputRef = useRef();
+	const valueRef = useRef(value);
+
+	useOutsideClick(editorTextInputRef);
 
 	useEffect(() => {
 		if (collapse) {
 			setExpand(false);
 		}
 	}, [collapse]);
+
+	function handleChange(newValue) {
+		valueRef.current = newValue;
+	}
+
+	function useOutsideClick(ref) {
+		useEffect(() => {
+			function handleClickOutside(event) {
+				if (ref.current && !ref.current.contains(event.target)) {
+					setValue(valueRef.current);
+				}
+			}
+
+			document.addEventListener('mousedown', handleClickOutside);
+
+			return () => {
+				document.removeEventListener('mousedown', handleClickOutside);
+			};
+		}, [ref]);
+	}
 
 	return (
 		<div className="configuration-fragment sheet" key={title}>
@@ -141,7 +163,7 @@ export default function Fragment({
 			{expand && (
 				<div className="configuration-editor">
 					<AceEditor
-						onChange={(val) => setValue(val)}
+						onChange={handleChange}
 						onRender={({editorElement, editorTextInput}) => {
 							editorElementRef.current = editorElement;
 							editorTextInputRef.current = editorTextInput;
