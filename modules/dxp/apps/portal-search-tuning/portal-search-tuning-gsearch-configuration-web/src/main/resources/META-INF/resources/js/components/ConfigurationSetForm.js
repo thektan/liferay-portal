@@ -16,6 +16,8 @@ import Builder from './Builder';
 import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
 
+const DEFAULT_FRAGMENT = 'matches-any-keyword';
+
 export default function ConfigurationSetForm({
 	availableLocales = [],
 	cancelURL = '',
@@ -23,7 +25,9 @@ export default function ConfigurationSetForm({
 	initialTitleTranslations = {},
 }) {
 	const [showSidebar] = useState(true);
-	const [selectedFragments, setSelectedFragments] = useState([]);
+	const [selectedFragments, setSelectedFragments] = useState([
+		DEFAULT_FRAGMENT,
+	]);
 
 	const queryFragments = [
 		{
