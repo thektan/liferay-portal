@@ -17,47 +17,44 @@ import ClaySticker from '@clayui/sticker';
 import {PropTypes} from 'prop-types';
 import React, {useEffect, useRef, useState} from 'react';
 
-class AceEditor extends React.Component {
-	constructor(props) {
-		super(props);
+const DEFAULT_FRAGMENT = 'matches-any-keyword';
 
-		this.container = React.createRef();
-	}
+function AceEditor({onChange, onRender, value}) {
+	const container = useRef();
 
-	componentDidMount() {
+	useEffect(() => {
 		AUI().use('aui-ace-editor', (A) => {
 			const editor = new A.AceEditor({
-				boundingBox: this.container.current,
+				boundingBox: container.current,
 				mode: 'json',
 				readOnly: false,
 				tabSize: 4,
-				value: JSON.stringify(this.props.value, null, '\t'),
+				value,
 				width: '100%',
 			}).render();
 
 			editor.on('render', () => {
-				this.props.onRender({
+				onRender({
 					editorElement: document.querySelector('.ace_editor'),
 					editorTextInput: document.querySelector('.ace_text-input'),
 				});
 			});
+
+			const session = editor.getSession();
+
+			session.on('change', () => {
+				onChange(editor.get('value'));
+			});
 		});
-	}
+	}, [onChange, onRender, value]);
 
-	shouldComponentUpdate() {
-		return false;
-	}
-
-	render() {
-		return (
-			<div className="lfr-source-editor-code" ref={this.container}></div>
-		);
-	}
+	return <div className="lfr-source-editor-code" ref={container}></div>;
 }
 
 AceEditor.propTypes = {
+	onChange: PropTypes.func,
 	onRender: PropTypes.func,
-	value: PropTypes.object,
+	value: PropTypes.string,
 };
 
 export default function Fragment({
@@ -70,6 +67,8 @@ export default function Fragment({
 }) {
 	const [active, setActive] = useState(false);
 	const [expand, setExpand] = useState(true);
+
+	const [value, setValue] = useState(JSON.stringify(json, null, '\t'));
 
 	const editorElementRef = useRef();
 	const editorTextInputRef = useRef();
@@ -117,6 +116,7 @@ export default function Fragment({
 					>
 						<ClayDropDown.ItemList>
 							<ClayDropDown.Item
+								disabled={title === DEFAULT_FRAGMENT}
 								onClick={() => deleteFragment(title)}
 							>
 								{Liferay.Language.get('delete')}
@@ -141,11 +141,12 @@ export default function Fragment({
 			{expand && (
 				<div className="configuration-editor">
 					<AceEditor
+						onChange={(val) => setValue(val)}
 						onRender={({editorElement, editorTextInput}) => {
 							editorElementRef.current = editorElement;
 							editorTextInputRef.current = editorTextInput;
 						}}
-						value={json}
+						value={value}
 					/>
 				</div>
 			)}
