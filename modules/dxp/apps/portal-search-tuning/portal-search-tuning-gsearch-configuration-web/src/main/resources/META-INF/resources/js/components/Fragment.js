@@ -19,8 +19,9 @@ import React, {useEffect, useRef, useState} from 'react';
 
 const DEFAULT_FRAGMENT = 'matches-any-keyword';
 
-function AceEditor({onChange, onRender, value}) {
+function AceEditor({onBlur, onRender, value}) {
 	const container = useRef();
+	const valueRef = useRef(value);
 
 	useEffect(() => {
 		AUI().use('aui-ace-editor', (A) => {
@@ -29,7 +30,7 @@ function AceEditor({onChange, onRender, value}) {
 				mode: 'json',
 				readOnly: false,
 				tabSize: 4,
-				value,
+				value: valueRef.current,
 				width: '100%',
 			}).render();
 
@@ -43,16 +44,23 @@ function AceEditor({onChange, onRender, value}) {
 			const session = editor.getSession();
 
 			session.on('change', () => {
-				onChange(editor.get('value'));
+				valueRef.current = editor.get('value');
 			});
 		});
-	}, [onChange, onRender, value]);
+	}, [onRender]);
 
-	return <div className="lfr-source-editor-code" ref={container}></div>;
+	return (
+		<div
+			className="configuration-editor"
+			onBlur={() => onBlur(valueRef.current)}
+		>
+			<div className="lfr-source-editor-code" ref={container}></div>
+		</div>
+	);
 }
 
 AceEditor.propTypes = {
-	onChange: PropTypes.func,
+	onBlur: PropTypes.func,
 	onRender: PropTypes.func,
 	value: PropTypes.string,
 };
@@ -71,35 +79,12 @@ export default function Fragment({
 
 	const editorElementRef = useRef();
 	const editorTextInputRef = useRef();
-	const valueRef = useRef(value);
-
-	useOutsideClick(editorTextInputRef);
 
 	useEffect(() => {
 		if (collapse) {
 			setExpand(false);
 		}
 	}, [collapse]);
-
-	function handleChange(newValue) {
-		valueRef.current = newValue;
-	}
-
-	function useOutsideClick(ref) {
-		useEffect(() => {
-			function handleClickOutside(event) {
-				if (ref.current && !ref.current.contains(event.target)) {
-					setValue(valueRef.current);
-				}
-			}
-
-			document.addEventListener('mousedown', handleClickOutside);
-
-			return () => {
-				document.removeEventListener('mousedown', handleClickOutside);
-			};
-		}, [ref]);
-	}
 
 	return (
 		<div className="configuration-fragment sheet" key={title}>
@@ -161,16 +146,14 @@ export default function Fragment({
 			</ClayList>
 
 			{expand && (
-				<div className="configuration-editor">
-					<AceEditor
-						onChange={handleChange}
-						onRender={({editorElement, editorTextInput}) => {
-							editorElementRef.current = editorElement;
-							editorTextInputRef.current = editorTextInput;
-						}}
-						value={value}
-					/>
-				</div>
+				<AceEditor
+					onBlur={(value) => setValue(value)}
+					onRender={({editorElement, editorTextInput}) => {
+						editorElementRef.current = editorElement;
+						editorTextInputRef.current = editorTextInput;
+					}}
+					value={value}
+				/>
 			)}
 		</div>
 	);
