@@ -33,6 +33,10 @@ public class EditSearchConfigurationDisplayContext {
 		return _data;
 	}
 
+	public String getPageTitle() {
+		return _pageTitle;
+	}
+
 	public String getRedirect() {
 		return _redirect;
 	}
@@ -49,6 +53,10 @@ public class EditSearchConfigurationDisplayContext {
 		_data = data;
 	}
 
+	public void setPageTitle(String pageTitle) {
+		_pageTitle = pageTitle;
+	}
+
 	public void setRedirect(String redirect) {
 		_redirect = redirect;
 	}
@@ -56,6 +64,7 @@ public class EditSearchConfigurationDisplayContext {
 	private long _configurationId;
 	private int _configurationType;
 	private Map<String, Object> _data;
+	private String _pageTitle;
 	private String _redirect;
 
 }

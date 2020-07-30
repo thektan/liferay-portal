@@ -60,28 +60,7 @@ public class SearchConfigurationAdminPortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-		EditSearchConfigurationDisplayContext
-			editSearchConfigurationDisplayContext =
-				new EditSearchConfigurationDisplayBuilder(
-					portal.getHttpServletRequest(renderRequest), language,
-					jsonFactory, renderRequest, renderResponse
-				).build();
-
-		renderRequest.setAttribute(
-			SearchConfigurationWebKeys.
-				EDIT_SEARCH_CONFIGURATION_DISPLAY_CONTEXT,
-			editSearchConfigurationDisplayContext);
-
 		super.render(renderRequest, renderResponse);
 	}
-
-	@Reference
-	protected JSONFactory jsonFactory;
-
-	@Reference
-	protected Language language;
-
-	@Reference
-	protected Portal portal;
 
 }

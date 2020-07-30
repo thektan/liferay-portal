@@ -41,17 +41,9 @@ SearchConfiguration searchConfiguration = (SearchConfiguration)request.getAttrib
 
 EditSearchConfigurationDisplayContext editSearchConfigurationDisplayContext = (EditSearchConfigurationDisplayContext)request.getAttribute(SearchConfigurationWebKeys.EDIT_SEARCH_CONFIGURATION_DISPLAY_CONTEXT);
 
-int searchConfigurationType = ParamUtil.getInteger(request, SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE, SearchConfigurationTypes.CONFIGURATION);
-
-if (searchConfiguration != null) {
-	searchConfigurationType = searchConfiguration.getType();
-}
-
-String pageTitleKey = (String)request.getAttribute(SearchConfigurationWebKeys.PAGE_TITLE_KEY);
-
-renderResponse.setTitle(LanguageUtil.get(request, pageTitleKey));
-
 String cmd = (searchConfiguration != null) ? Constants.EDIT : Constants.ADD;
+
+renderResponse.setTitle(editSearchConfigurationDisplayContext.getPageTitle());
 %>
 
 <portlet:actionURL name="<%= SearchConfigurationMVCCommandNames.EDIT_SEARCH_CONFIGURATION %>" var="editConfigurationActionURL">
@@ -60,8 +52,8 @@ String cmd = (searchConfiguration != null) ? Constants.EDIT : Constants.ADD;
 </portlet:actionURL>
 
 <aui:form action="<%= editConfigurationActionURL %>">
-	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value='<%= (searchConfiguration != null) ? searchConfiguration.getSearchConfigurationId() : "" %>' />
-	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE %>" type="hidden" value="<%= searchConfigurationType %>" />
+	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value='<%= editSearchConfigurationDisplayContext.getConfigurationId() %>' />
+	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE %>" type="hidden" value="<%= editSearchConfigurationDisplayContext.getConfigurationType() %>" />
 	<aui:input name="redirect" type="hidden" value="<%= editSearchConfigurationDisplayContext.getRedirect() %>" />
 
 	<react:component
