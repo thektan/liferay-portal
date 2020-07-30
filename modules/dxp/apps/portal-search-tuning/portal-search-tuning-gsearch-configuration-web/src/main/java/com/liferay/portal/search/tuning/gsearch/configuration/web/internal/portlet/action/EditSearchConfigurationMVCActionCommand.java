@@ -84,8 +84,9 @@ public class EditSearchConfigurationMVCActionCommand
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		try {
-			com.liferay.portal.kernel.service.ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				SearchConfiguration.class.getName(), actionRequest);
+			com.liferay.portal.kernel.service.ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(
+					SearchConfiguration.class.getName(), actionRequest);
 
 			if (Constants.ADD.equals(cmd)) {
 				_searchConfigurationService.addCompanySearchConfiguration(
@@ -141,7 +142,8 @@ public class EditSearchConfigurationMVCActionCommand
 			SearchConfigurationWebKeys.CLAUSE_CONFIGURATION_INDEXES);
 
 		JSONObject configuration = JSONUtil.put(
-			SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey(), clauseConfiguration);
+			SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey(),
+			clauseConfiguration);
 
 		return configuration.toString();
 	}

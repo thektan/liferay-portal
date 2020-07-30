@@ -21,10 +21,7 @@ taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
 taglib uri="http://liferay.com/tld/react" prefix="react" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
-<%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
-page import="com.liferay.portal.kernel.util.Constants" %><%@
-page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
-page import="com.liferay.portal.search.tuning.gsearch.configuration.constants.SearchConfigurationTypes" %><%@
+<%@ page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.search.tuning.gsearch.configuration.model.SearchConfiguration" %><%@
 page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationMVCCommandNames" %><%@
 page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys" %><%@
@@ -52,7 +49,7 @@ renderResponse.setTitle(editSearchConfigurationDisplayContext.getPageTitle());
 </portlet:actionURL>
 
 <aui:form action="<%= editConfigurationActionURL %>">
-	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value='<%= editSearchConfigurationDisplayContext.getConfigurationId() %>' />
+	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value="<%= editSearchConfigurationDisplayContext.getConfigurationId() %>" />
 	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE %>" type="hidden" value="<%= editSearchConfigurationDisplayContext.getConfigurationType() %>" />
 	<aui:input name="redirect" type="hidden" value="<%= editSearchConfigurationDisplayContext.getRedirect() %>" />
 

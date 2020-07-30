@@ -14,33 +14,25 @@
 
 package com.liferay.portal.search.tuning.gsearch.configuration.web.internal.portlet.action;
 
-import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.tuning.gsearch.configuration.constants.SearchConfigurationPortletKeys;
-import com.liferay.portal.search.tuning.gsearch.configuration.constants.SearchConfigurationTypes;
-import com.liferay.portal.search.tuning.gsearch.configuration.exception.NoSuchConfigurationException;
-import com.liferay.portal.search.tuning.gsearch.configuration.model.SearchConfiguration;
 import com.liferay.portal.search.tuning.gsearch.configuration.service.SearchConfigurationService;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationMVCCommandNames;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys;
+import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.display.context.EditSearchConfigurationDisplayBuilder;
+import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.display.context.EditSearchConfigurationDisplayContext;
 
-import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.display.context.EditSearchConfigurationDisplayBuilder;
-import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.display.context.EditSearchConfigurationDisplayContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -60,14 +52,15 @@ public class EditSearchConfigurationMVCRenderCommand
 
 	@Override
 	public String render(
-			RenderRequest renderRequest, RenderResponse renderResponse) {
+		RenderRequest renderRequest, RenderResponse renderResponse) {
 
 		EditSearchConfigurationDisplayContext
 			editSearchConfigurationDisplayContext =
-			new EditSearchConfigurationDisplayBuilder(
-				portal.getHttpServletRequest(renderRequest), language, _log,
-				jsonFactory, renderRequest, renderResponse, _searchConfigurationService
-			).build();
+				new EditSearchConfigurationDisplayBuilder(
+					portal.getHttpServletRequest(renderRequest), language, _log,
+					jsonFactory, renderRequest, renderResponse,
+					_searchConfigurationService
+				).build();
 
 		renderRequest.setAttribute(
 			SearchConfigurationWebKeys.
@@ -80,34 +73,11 @@ public class EditSearchConfigurationMVCRenderCommand
 		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 
 		portletDisplay.setShowBackIcon(true);
-		portletDisplay.setURLBack(editSearchConfigurationDisplayContext.getRedirect());
+		portletDisplay.setURLBack(
+			editSearchConfigurationDisplayContext.getRedirect());
 
 		return "/edit_search_configuration.jsp";
 	}
-
-	private String _getPageTitleKey(boolean edit, int type) {
-		StringBundler sb = new StringBundler(2);
-
-		sb.append(edit ? "edit-" : "add-");
-
-		if (type == SearchConfigurationTypes.CONFIGURATION) {
-			sb.append("search-configuration");
-		}
-		else if (type == SearchConfigurationTypes.SNIPPET) {
-			sb.append("configuration-snippet");
-		}
-		else if (type == SearchConfigurationTypes.TEMPLATE) {
-			sb.append("configuration-template");
-		}
-
-		return sb.toString();
-	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		EditSearchConfigurationMVCRenderCommand.class);
-
-	@Reference
-	private SearchConfigurationService _searchConfigurationService;
 
 	@Reference
 	protected JSONFactory jsonFactory;
@@ -117,5 +87,11 @@ public class EditSearchConfigurationMVCRenderCommand
 
 	@Reference
 	protected Portal portal;
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		EditSearchConfigurationMVCRenderCommand.class);
+
+	@Reference
+	private SearchConfigurationService _searchConfigurationService;
 
 }

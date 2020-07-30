@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -49,7 +48,6 @@ import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import javax.portlet.ResourceURL;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -60,7 +58,8 @@ public class EditSearchConfigurationDisplayBuilder {
 	public EditSearchConfigurationDisplayBuilder(
 		HttpServletRequest httpServletRequest, Language language, Log log,
 		JSONFactory jsonFactory, RenderRequest renderRequest,
-		RenderResponse renderResponse, SearchConfigurationService searchConfigurationService) {
+		RenderResponse renderResponse,
+		SearchConfigurationService searchConfigurationService) {
 
 		_httpServletRequest = httpServletRequest;
 		_language = language;
@@ -175,7 +174,7 @@ public class EditSearchConfigurationDisplayBuilder {
 			catch (NoSuchConfigurationException noSuchConfigurationException) {
 				_log.error(
 					"Search configuration " + _searchConfigurationId +
-					" not found.",
+						" not found.",
 					noSuchConfigurationException);
 
 				SessionErrors.add(
@@ -200,7 +199,9 @@ public class EditSearchConfigurationDisplayBuilder {
 		actionURL.setParameter(
 			ActionRequest.ACTION_NAME,
 			SearchConfigurationMVCCommandNames.EDIT_SEARCH_CONFIGURATION);
-		actionURL.setParameter(Constants.CMD, (_searchConfiguration != null) ? Constants.EDIT : Constants.ADD);
+		actionURL.setParameter(
+			Constants.CMD,
+			(_searchConfiguration != null) ? Constants.EDIT : Constants.ADD);
 		actionURL.setParameter("redirect", _getRedirect());
 
 		return actionURL.toString();
@@ -234,22 +235,30 @@ public class EditSearchConfigurationDisplayBuilder {
 			).build());
 	}
 
-	private void _setPageTitle(EditSearchConfigurationDisplayContext editSearchConfigurationDisplayContext) {
+	private void _setPageTitle(
+		EditSearchConfigurationDisplayContext
+			editSearchConfigurationDisplayContext) {
+
 		StringBundler sb = new StringBundler(2);
 
 		sb.append(_searchConfiguration != null ? "edit-" : "add-");
 
-		if (_searchConfigurationType == SearchConfigurationTypes.CONFIGURATION) {
+		if (_searchConfigurationType ==
+				SearchConfigurationTypes.CONFIGURATION) {
+
 			sb.append("search-configuration");
 		}
 		else if (_searchConfigurationType == SearchConfigurationTypes.SNIPPET) {
 			sb.append("configuration-snippet");
 		}
-		else if (_searchConfigurationType == SearchConfigurationTypes.TEMPLATE) {
+		else if (_searchConfigurationType ==
+					SearchConfigurationTypes.TEMPLATE) {
+
 			sb.append("configuration-template");
 		}
 
-		editSearchConfigurationDisplayContext.setPageTitle(_language.get(_httpServletRequest, sb.toString()));
+		editSearchConfigurationDisplayContext.setPageTitle(
+			_language.get(_httpServletRequest, sb.toString()));
 	}
 
 	private void _setRedirect(
@@ -267,8 +276,8 @@ public class EditSearchConfigurationDisplayBuilder {
 	private final RenderResponse _renderResponse;
 	private final SearchConfiguration _searchConfiguration;
 	private final long _searchConfigurationId;
+	private final SearchConfigurationService _searchConfigurationService;
 	private int _searchConfigurationType;
 	private final ThemeDisplay _themeDisplay;
-	private final SearchConfigurationService _searchConfigurationService;
 
 }
