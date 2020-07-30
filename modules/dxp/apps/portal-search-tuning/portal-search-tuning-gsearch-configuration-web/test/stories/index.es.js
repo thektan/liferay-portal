@@ -55,7 +55,7 @@ const withContainer = (storyFn) => (
 const queryFragments = [
 	{
 		description:
-			'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
+			'Broadest query catching documents matching any keyword. Title is given more boost among the fields. Query has the neutral boost of 1.0.',
 		icon: 'vocabulary',
 		json: {
 			clauses: [
@@ -83,10 +83,10 @@ const queryFragments = [
 				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
 			enabled: true,
 		},
-		title: 'matches-any-keyword',
+		title: {en_US: 'Matches any keyword'},
 	},
 	{
-		description: 'boost-content-last-modified-within-a-time-frame',
+		description: 'Boost content last modified within a time frame.',
 		icon: 'time',
 		json: {
 			clauses: [
@@ -114,10 +114,10 @@ const queryFragments = [
 				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
 			enabled: true,
 		},
-		title: 'freshness',
+		title: {en_US: 'Freshness'},
 	},
 	{
-		description: "boost-content-created-closer-to-user's-location",
+		description: "Boost content created closer to user's location.",
 		icon: 'geolocation',
 		json: {
 			clauses: [
@@ -145,7 +145,7 @@ const queryFragments = [
 				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
 			enabled: true,
 		},
-		title: "user's-geolocation",
+		title: {en_US: "User's Geolocation"},
 	},
 ];
 
@@ -183,6 +183,7 @@ storiesOf('Components|Fragment', module)
 		<Fragment
 			deleteFragment={action('deleteFragment')}
 			description={queryFragments[0].description}
+			disabled={false}
 			icon={queryFragments[0].icon}
 			json={queryFragments[0].json}
 			title={queryFragments[0].title}

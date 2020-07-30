@@ -17,7 +17,7 @@ import Builder from './Builder';
 import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
 
-const DEFAULT_FRAGMENT = 'matches-any-keyword';
+const DEFAULT_FRAGMENT_INDEX = 0;
 
 export default function ConfigurationSetForm({
 	availableLocales = [],
@@ -26,14 +26,11 @@ export default function ConfigurationSetForm({
 	submitFormURL = '',
 }) {
 	const [showSidebar] = useState(true);
-	const [selectedFragments, setSelectedFragments] = useState([
-		DEFAULT_FRAGMENT,
-	]);
 
 	const queryFragments = [
 		{
 			description:
-				'broadest-query-catching-documents-matching-any-keyword-title-is-given-more-boost-among-the-fields-query-has-the-neutral-boost-of-1.0',
+				'Broadest query catching documents matching any keyword. Title is given more boost among the fields. Query has the neutral boost of 1.0.',
 			icon: 'vocabulary',
 			json: {
 				clauses: [
@@ -63,10 +60,10 @@ export default function ConfigurationSetForm({
 					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
 				enabled: true,
 			},
-			title: 'matches-any-keyword',
+			title: {en_US: 'Matches any keyword'},
 		},
 		{
-			description: 'boost-content-last-modified-within-a-time-frame',
+			description: 'Boost content last modified within a time frame.',
 			icon: 'time',
 			json: {
 				clauses: [
@@ -96,10 +93,10 @@ export default function ConfigurationSetForm({
 					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
 				enabled: true,
 			},
-			title: 'freshness',
+			title: {en_US: 'Freshness'},
 		},
 		{
-			description: "boost-content-created-closer-to-user's-location",
+			description: "Boost content created closer to user's location.",
 			icon: 'geolocation',
 			json: {
 				clauses: [
@@ -129,22 +126,35 @@ export default function ConfigurationSetForm({
 					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
 				enabled: true,
 			},
-			title: "user's-geolocation",
+			title: {en_US: "User's Geolocation"},
 		},
 	];
 
-	const fragmentMap = queryFragments.reduce((acc, cur) => {
-		return acc[cur.title] ? acc : {...acc, [cur.title]: cur};
-	}, {});
+	const [selectedFragments, setSelectedFragments] = useState([
+		{
+			...queryFragments[DEFAULT_FRAGMENT_INDEX],
+			jsonString: JSON.stringify(
+				queryFragments[DEFAULT_FRAGMENT_INDEX].json,
+				null,
+				'\t'
+			),
+		},
+	]);
 
-	function addFragment(id) {
-		if (!selectedFragments.includes(id)) {
-			setSelectedFragments([...selectedFragments, id]);
-		}
+	function addFragment(fragment) {
+		setSelectedFragments([
+			{
+				...fragment,
+				jsonString: JSON.stringify(fragment.json, null, '\t'),
+			},
+			...selectedFragments,
+		]);
 	}
 
-	function deleteFragment(id) {
-		setSelectedFragments(selectedFragments.filter((item) => item !== id));
+	function deleteFragment(index) {
+		setSelectedFragments(
+			selectedFragments.filter((item, idx) => idx !== index)
+		);
 	}
 
 	const handleSubmit = useCallback(
@@ -166,6 +176,14 @@ export default function ConfigurationSetForm({
 		[submitFormURL]
 	);
 
+	function updateFragment(index, fragment) {
+		setSelectedFragments([
+			...selectedFragments.slice(0, index),
+			fragment,
+			...selectedFragments.slice(index + 1),
+		]);
+	}
+
 	return (
 		<>
 			<PageToolbar
@@ -185,9 +203,8 @@ export default function ConfigurationSetForm({
 			<div className={`${showSidebar ? 'shifted' : ''}`}>
 				<Builder
 					deleteFragment={deleteFragment}
-					selectedFragments={selectedFragments.map(
-						(id) => fragmentMap[id]
-					)}
+					selectedFragments={selectedFragments}
+					updateFragment={updateFragment}
 				/>
 			</div>
 		</>

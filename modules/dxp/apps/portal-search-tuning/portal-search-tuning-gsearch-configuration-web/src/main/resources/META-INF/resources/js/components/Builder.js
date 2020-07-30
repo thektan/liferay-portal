@@ -16,7 +16,11 @@ import React, {useState} from 'react';
 
 import Fragment from './Fragment';
 
-export default function Builder({deleteFragment, selectedFragments}) {
+export default function Builder({
+	deleteFragment,
+	selectedFragments,
+	updateFragment,
+}) {
 	const [collapseAll, setCollapseAll] = useState(0);
 
 	return (
@@ -43,12 +47,16 @@ export default function Builder({deleteFragment, selectedFragments}) {
 				return (
 					<Fragment
 						collapse={collapseAll}
-						deleteFragment={deleteFragment}
+						deleteFragment={() => deleteFragment(index)}
 						description={item.description}
+						disabled={index === selectedFragments.length - 1}
 						icon={item.icon}
-						json={item.json}
+						json={item.jsonString}
 						key={index}
 						title={item.title}
+						updateJson={(jsonString) =>
+							updateFragment(index, {...item, jsonString})
+						}
 					/>
 				);
 			})}
