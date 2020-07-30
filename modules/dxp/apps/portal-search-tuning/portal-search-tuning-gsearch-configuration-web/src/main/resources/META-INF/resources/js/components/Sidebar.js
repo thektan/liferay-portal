@@ -16,6 +16,8 @@ import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
 import React, {useState} from 'react';
 
+const DEFAULT_LANGUAGE = 'en_US';
+
 export default function Sidebar({addFragment, queryFragments}) {
 	const [showAdd, setShowAdd] = useState(-1);
 
@@ -61,7 +63,7 @@ export default function Sidebar({addFragment, queryFragments}) {
 
 							<ClayList.ItemField expand>
 								<ClayList.ItemTitle>
-									{item.title}
+									{item.title[DEFAULT_LANGUAGE]}
 								</ClayList.ItemTitle>
 
 								<ClayList.ItemText subtext={true}>
@@ -79,7 +81,7 @@ export default function Sidebar({addFragment, queryFragments}) {
 												)}
 												displayType="secondary"
 												onClick={() =>
-													addFragment(item.title)
+													addFragment(item)
 												}
 												small
 											>

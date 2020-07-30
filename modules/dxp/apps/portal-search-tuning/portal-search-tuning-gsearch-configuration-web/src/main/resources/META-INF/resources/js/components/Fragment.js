@@ -17,11 +17,10 @@ import ClaySticker from '@clayui/sticker';
 import {PropTypes} from 'prop-types';
 import React, {useEffect, useRef, useState} from 'react';
 
-const DEFAULT_FRAGMENT = 'matches-any-keyword';
+const DEFAULT_LANGUAGE = 'en_US';
 
-function AceEditor({onBlur, onRender, value}) {
+function AceEditor({onChange, value}) {
 	const container = useRef();
-	const valueRef = useRef(value);
 
 	useEffect(() => {
 		AUI().use('aui-ace-editor', (A) => {
@@ -30,38 +29,23 @@ function AceEditor({onBlur, onRender, value}) {
 				mode: 'json',
 				readOnly: false,
 				tabSize: 4,
-				value: valueRef.current,
+				value,
 				width: '100%',
 			}).render();
-
-			editor.on('render', () => {
-				onRender({
-					editorElement: document.querySelector('.ace_editor'),
-					editorTextInput: document.querySelector('.ace_text-input'),
-				});
-			});
 
 			const session = editor.getSession();
 
 			session.on('change', () => {
-				valueRef.current = editor.get('value');
+				onChange(editor.get('value'));
 			});
 		});
-	}, [onRender]);
+	}, [onChange, value]);
 
-	return (
-		<div
-			className="configuration-editor"
-			onBlur={() => onBlur(valueRef.current)}
-		>
-			<div className="lfr-source-editor-code" ref={container}></div>
-		</div>
-	);
+	return <div className="lfr-source-editor-code" ref={container}></div>;
 }
 
 AceEditor.propTypes = {
-	onBlur: PropTypes.func,
-	onRender: PropTypes.func,
+	onChange: PropTypes.func,
 	value: PropTypes.string,
 };
 
@@ -69,16 +53,16 @@ export default function Fragment({
 	collapse,
 	deleteFragment,
 	description,
+	disabled = false,
 	icon,
 	json,
 	title,
+	updateJson,
 }) {
 	const [active, setActive] = useState(false);
 	const [expand, setExpand] = useState(true);
-	const [value, setValue] = useState(JSON.stringify(json, null, '\t'));
 
-	const editorElementRef = useRef();
-	const editorTextInputRef = useRef();
+	const valueRef = useRef(json);
 
 	useEffect(() => {
 		if (collapse) {
@@ -86,8 +70,16 @@ export default function Fragment({
 		}
 	}, [collapse]);
 
+	function handleBlur() {
+		updateJson(valueRef.current);
+	}
+
+	function handleChange(value) {
+		valueRef.current = value;
+	}
+
 	return (
-		<div className="configuration-fragment sheet" key={title}>
+		<div className="configuration-fragment sheet">
 			<ClayList>
 				<ClayList.Item flex>
 					<ClayList.ItemField>
@@ -97,7 +89,9 @@ export default function Fragment({
 					</ClayList.ItemField>
 
 					<ClayList.ItemField expand>
-						<ClayList.ItemTitle>{title}</ClayList.ItemTitle>
+						<ClayList.ItemTitle>
+							{title[DEFAULT_LANGUAGE]}
+						</ClayList.ItemTitle>
 						<ClayList.ItemText subtext={true}>
 							{description}
 						</ClayList.ItemText>
@@ -123,8 +117,8 @@ export default function Fragment({
 					>
 						<ClayDropDown.ItemList>
 							<ClayDropDown.Item
-								disabled={title === DEFAULT_FRAGMENT}
-								onClick={() => deleteFragment(title)}
+								disabled={disabled}
+								onClick={deleteFragment}
 							>
 								{Liferay.Language.get('delete')}
 							</ClayDropDown.Item>
@@ -146,14 +140,12 @@ export default function Fragment({
 			</ClayList>
 
 			{expand && (
-				<AceEditor
-					onBlur={(value) => setValue(value)}
-					onRender={({editorElement, editorTextInput}) => {
-						editorElementRef.current = editorElement;
-						editorTextInputRef.current = editorTextInput;
-					}}
-					value={value}
-				/>
+				<div className="configuration-editor" onBlur={handleBlur}>
+					<AceEditor
+						onChange={handleChange}
+						value={valueRef.current}
+					/>
+				</div>
 			)}
 		</div>
 	);
@@ -163,7 +155,8 @@ Fragment.propTypes = {
 	collapse: PropTypes.number,
 	deleteFragment: PropTypes.func,
 	description: PropTypes.string,
+	disabled: PropTypes.bool,
 	icon: PropTypes.string,
-	json: PropTypes.object,
-	title: PropTypes.string,
+	json: PropTypes.string,
+	title: PropTypes.object,
 };
