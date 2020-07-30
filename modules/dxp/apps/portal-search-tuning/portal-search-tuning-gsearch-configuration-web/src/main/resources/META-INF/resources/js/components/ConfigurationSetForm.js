@@ -9,8 +9,9 @@
  * distribution rights of the Software.
  */
 
+import {fetch} from 'frontend-js-web';
 import {PropTypes} from 'prop-types';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import Builder from './Builder';
 import PageToolbar from './PageToolbar';
@@ -20,9 +21,9 @@ const DEFAULT_FRAGMENT = 'matches-any-keyword';
 
 export default function ConfigurationSetForm({
 	availableLocales = [],
-	cancelURL = '',
-	formName = '',
 	initialTitleTranslations = {},
+	redirectURL = '',
+	submitFormURL = '',
 }) {
 	const [showSidebar] = useState(true);
 	const [selectedFragments, setSelectedFragments] = useState([
@@ -146,17 +147,32 @@ export default function ConfigurationSetForm({
 		setSelectedFragments(selectedFragments.filter((item) => item !== id));
 	}
 
-	function handlePublish() {
-		submitForm(document[formName]);
-	}
+	const handleSubmit = useCallback(
+		(event) => {
+			event.preventDefault();
+
+			fetch(submitFormURL, {
+				body: new FormData(form.current),
+				method: 'POST',
+			})
+				.then((response) => response.json())
+				.then((responseContent) => {
+					// Do stuff
+				})
+				.catch(() => {
+					// Show errors
+				});
+		},
+		[submitFormURL]
+	);
 
 	return (
 		<>
 			<PageToolbar
 				availableLocales={availableLocales}
 				initialTitleTranslations={initialTitleTranslations}
-				onCancel={cancelURL}
-				onPublish={handlePublish} //will depend on required values
+				onCancel={redirectURL}
+				onSubmit={handleSubmit}
 			/>
 
 			{showSidebar && (
@@ -180,7 +196,7 @@ export default function ConfigurationSetForm({
 
 ConfigurationSetForm.propTypes = {
 	availableLocales: PropTypes.arrayOf(PropTypes.object),
-	cancelURL: PropTypes.string,
-	formName: PropTypes.string,
 	initialTitleTranslations: PropTypes.object,
+	redirectURL: PropTypes.string,
+	submitFormURL: PropTypes.string,
 };

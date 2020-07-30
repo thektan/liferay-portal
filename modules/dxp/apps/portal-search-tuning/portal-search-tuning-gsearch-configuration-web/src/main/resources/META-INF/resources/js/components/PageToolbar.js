@@ -22,7 +22,7 @@ export default function PageToolbar({
 	availableLocales,
 	initialTitleTranslations,
 	onCancel,
-	onPublish,
+	onSubmit,
 }) {
 	const {namespace} = useContext(ThemeContext);
 
@@ -80,7 +80,7 @@ export default function PageToolbar({
 				</ClayManagementToolbar.Item>
 
 				<ClayManagementToolbar.Item>
-					<ClayButton onClick={onPublish} small type="submit">
+					<ClayButton onClick={onSubmit} small type="submit">
 						{Liferay.Language.get('save')}
 					</ClayButton>
 				</ClayManagementToolbar.Item>
@@ -93,5 +93,5 @@ PageToolbar.propTypes = {
 	availableLocales: PropTypes.arrayOf(PropTypes.string),
 	initialTitleTranslations: PropTypes.object,
 	onCancel: PropTypes.string.isRequired,
-	onPublish: PropTypes.func.isRequired,
+	onSubmit: PropTypes.func.isRequired,
 };
