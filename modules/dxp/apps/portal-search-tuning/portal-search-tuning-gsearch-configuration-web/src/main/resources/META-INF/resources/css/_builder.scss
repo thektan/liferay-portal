@@ -2,6 +2,24 @@
 	max-width: 624px;
 	padding-top: 6rem;
 
+	.configuration-editor {
+		textarea {
+			&:focus {
+				outline: none;
+			}
+
+			background-color: $secondaryHover;
+			border-color: $mainLighten74;
+			font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro,
+				monospace;
+			font-size: 0.75rem;
+			height: 392px;
+			resize: vertical;
+			tab-size: 4;
+			width: 100%;
+		}
+	}
+
 	.configuration-fragment {
 		margin-bottom: 1rem;
 		padding: 0;

@@ -62,20 +62,20 @@ export default function Fragment({
 	const [active, setActive] = useState(false);
 	const [expand, setExpand] = useState(true);
 
-	const valueRef = useRef(json);
-
 	useEffect(() => {
 		if (collapse) {
 			setExpand(false);
 		}
 	}, [collapse]);
 
-	function handleBlur() {
-		updateJson(valueRef.current);
+	function handleChange(event) {
+		updateJson(event.target.value);
 	}
 
-	function handleChange(value) {
-		valueRef.current = value;
+	function handleKeyDown(event) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+		}
 	}
 
 	return (
@@ -140,10 +140,12 @@ export default function Fragment({
 			</ClayList>
 
 			{expand && (
-				<div className="configuration-editor" onBlur={handleBlur}>
-					<AceEditor
+				<div className="configuration-editor">
+					<textarea
+						aria-label={Liferay.Language.get('texr-area')}
 						onChange={handleChange}
-						value={valueRef.current}
+						onKeyDown={handleKeyDown}
+						value={json}
 					/>
 				</div>
 			)}
