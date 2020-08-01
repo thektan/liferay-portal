@@ -85,7 +85,7 @@ public class SearchConfigurationValidatorImpl
 
 		boolean result = true;
 
-		result &= _isDescriptionValid(descriptionMap, errors);
+//		result &= _isDescriptionValid(descriptionMap, errors);
 		result &= _isConfigurationValid(configuration, errors);
 		result &= _isTitleValid(titleMap, errors);
 
