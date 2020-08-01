@@ -9,10 +9,11 @@
  * distribution rights of the Software.
  */
 
-import {fetch} from 'frontend-js-web';
+import {fetch, navigate} from 'frontend-js-web';
 import {PropTypes} from 'prop-types';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useContext, useRef, useState} from 'react';
 
+import ThemeContext from '../ThemeContext';
 import Builder from './Builder';
 import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
@@ -21,11 +22,17 @@ const DEFAULT_FRAGMENT_INDEX = 0;
 
 export default function ConfigurationSetForm({
 	availableLocales = [],
+	configurationId,
+	configurationType,
 	initialTitleTranslations = {},
 	redirectURL = '',
 	submitFormURL = '',
 }) {
+	const {namespace} = useContext(ThemeContext);
+
 	const [showSidebar] = useState(true);
+
+	const form = useRef();
 
 	const queryFragments = [
 		{
@@ -161,19 +168,41 @@ export default function ConfigurationSetForm({
 		(event) => {
 			event.preventDefault();
 
+			const formData = new FormData(form.current);
+
+			formData.append(
+				`${namespace}clauseConfiguration`,
+				JSON.stringify(queryFragments)
+			);
+			formData.append(`${namespace}type`, configurationType);
+			formData.append(
+				`${namespace}searchConfigurationId`,
+				configurationId
+			);
+			formData.append(`${namespace}redirect`, redirectURL);
+
 			fetch(submitFormURL, {
-				body: new FormData(form.current),
+				body: formData,
 				method: 'POST',
 			})
 				.then((response) => response.json())
 				.then((responseContent) => {
-					// Do stuff
+					console.log(responseContent);
+
+					navigate(redirectURL);
 				})
 				.catch(() => {
 					// Show errors
 				});
 		},
-		[submitFormURL]
+		[
+			configurationId,
+			configurationType,
+			namespace,
+			queryFragments,
+			redirectURL,
+			submitFormURL,
+		]
 	);
 
 	function updateFragment(index, fragment) {
@@ -185,7 +214,7 @@ export default function ConfigurationSetForm({
 	}
 
 	return (
-		<>
+		<form ref={form}>
 			<PageToolbar
 				availableLocales={availableLocales}
 				initialTitleTranslations={initialTitleTranslations}
@@ -207,7 +236,7 @@ export default function ConfigurationSetForm({
 					updateFragment={updateFragment}
 				/>
 			</div>
-		</>
+		</form>
 	);
 }
 

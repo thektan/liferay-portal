@@ -90,7 +90,7 @@ export default function PageToolbar({
 }
 
 PageToolbar.propTypes = {
-	availableLocales: PropTypes.arrayOf(PropTypes.string),
+	availableLocales: PropTypes.arrayOf(PropTypes.object),
 	initialTitleTranslations: PropTypes.object,
 	onCancel: PropTypes.string.isRequired,
 	onSubmit: PropTypes.func.isRequired,

@@ -137,37 +137,16 @@ public class EditSearchConfigurationMVCActionCommand
 	private String _buildConfigurationFromRequest(ActionRequest actionRequest)
 		throws JSONException {
 
-		JSONArray clauseConfiguration = _getAutoFieldValues(
-			actionRequest, SearchConfigurationWebKeys.CLAUSE_CONFIGURATION,
-			SearchConfigurationWebKeys.CLAUSE_CONFIGURATION_INDEXES);
+		String clauseConfigurationString = ParamUtil.getString(actionRequest,
+			"clauseConfiguration");
+
+		JSONArray clauseConfigurationJSONArray = JSONFactoryUtil.createJSONArray(clauseConfigurationString);
 
 		JSONObject configuration = JSONUtil.put(
 			SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey(),
-			clauseConfiguration);
+			clauseConfigurationJSONArray);
 
 		return configuration.toString();
-	}
-
-	private JSONArray _getAutoFieldValues(
-			ActionRequest actionRequest, String valueParameterKey,
-			String indexParameterKey)
-		throws JSONException {
-
-		JSONArray values = JSONFactoryUtil.createJSONArray();
-
-		int[] rowIndexes = ParamUtil.getIntegerValues(
-			actionRequest, indexParameterKey, new int[0]);
-
-		for (int i : rowIndexes) {
-			String value = ParamUtil.getString(
-				actionRequest, valueParameterKey + i);
-
-			JSONObject item = JSONFactoryUtil.createJSONObject(value);
-
-			values.put(item);
-		}
-
-		return values;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

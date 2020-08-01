@@ -34,27 +34,14 @@ page import="com.liferay.portal.search.tuning.gsearch.configuration.web.internal
 <portlet:defineObjects />
 
 <%
-SearchConfiguration searchConfiguration = (SearchConfiguration)request.getAttribute(SearchConfigurationWebKeys.SEARCH_CONFIGURATION);
-
 EditSearchConfigurationDisplayContext editSearchConfigurationDisplayContext = (EditSearchConfigurationDisplayContext)request.getAttribute(SearchConfigurationWebKeys.EDIT_SEARCH_CONFIGURATION_DISPLAY_CONTEXT);
-
-String cmd = (searchConfiguration != null) ? Constants.EDIT : Constants.ADD;
 
 renderResponse.setTitle(editSearchConfigurationDisplayContext.getPageTitle());
 %>
 
-<portlet:actionURL name="<%= SearchConfigurationMVCCommandNames.EDIT_SEARCH_CONFIGURATION %>" var="editConfigurationActionURL">
-	<portlet:param name="redirect" value="<%= editSearchConfigurationDisplayContext.getRedirect() %>" />
-	<portlet:param name="<%= Constants.CMD %>" value="<%= cmd %>" />
-</portlet:actionURL>
-
-<aui:form action="<%= editConfigurationActionURL %>">
-	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_ID %>" type="hidden" value="<%= editSearchConfigurationDisplayContext.getConfigurationId() %>" />
-	<aui:input name="<%= SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE %>" type="hidden" value="<%= editSearchConfigurationDisplayContext.getConfigurationType() %>" />
-	<aui:input name="redirect" type="hidden" value="<%= editSearchConfigurationDisplayContext.getRedirect() %>" />
-
+<div>
 	<react:component
 		data="<%= editSearchConfigurationDisplayContext.getData() %>"
 		module="js/ConfigurationSetApp"
 	/>
-</aui:form>
+</div>
