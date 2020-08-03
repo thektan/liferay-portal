@@ -24,7 +24,7 @@ export default function ConfigurationSetForm({
 	availableLocales = [],
 	configurationId,
 	configurationType,
-	initialTitleTranslations = {},
+	initialTitle = {},
 	redirectURL = '',
 	submitFormURL = '',
 }) {
@@ -217,7 +217,7 @@ export default function ConfigurationSetForm({
 		<form ref={form}>
 			<PageToolbar
 				availableLocales={availableLocales}
-				initialTitleTranslations={initialTitleTranslations}
+				initialTitle={initialTitle}
 				onCancel={redirectURL}
 				onSubmit={handleSubmit}
 			/>
@@ -242,7 +242,7 @@ export default function ConfigurationSetForm({
 
 ConfigurationSetForm.propTypes = {
 	availableLocales: PropTypes.arrayOf(PropTypes.object),
-	initialTitleTranslations: PropTypes.object,
+	initialTitle: PropTypes.object,
 	redirectURL: PropTypes.string,
 	submitFormURL: PropTypes.string,
 };

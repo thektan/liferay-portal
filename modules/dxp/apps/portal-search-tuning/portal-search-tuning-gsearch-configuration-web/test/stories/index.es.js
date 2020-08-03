@@ -155,7 +155,7 @@ storiesOf('Pages|ConfigurationSetForm', module).add('default', () => (
 
 storiesOf('Components|PageToolbar', module).add('PageToolbar', () => (
 	<PageToolbar
-		initialTitleTranslations={{}}
+		initialTitle={{}}
 		onCancel=""
 		onPublish={action('onPublish')}
 	/>

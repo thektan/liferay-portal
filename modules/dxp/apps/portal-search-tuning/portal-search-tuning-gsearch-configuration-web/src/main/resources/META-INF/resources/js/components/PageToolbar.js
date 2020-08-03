@@ -20,16 +20,14 @@ import ThemeContext from '../ThemeContext';
 
 export default function PageToolbar({
 	availableLocales,
-	initialTitleTranslations,
+	initialTitle,
 	onCancel,
 	onSubmit,
 }) {
 	const {namespace} = useContext(ThemeContext);
 
 	const [selectedLocale, setSelectedLocale] = useState(availableLocales[0]);
-	const [titleTranslations, setTitleTranslations] = useState(
-		initialTitleTranslations
-	);
+	const [title, setTitle] = useState(initialTitle);
 
 	const _renderLocalizedInputs = (inputId, translations) => {
 		return Object.keys(translations).map((key) => (
@@ -58,13 +56,13 @@ export default function PageToolbar({
 						label=""
 						locales={availableLocales}
 						onSelectedLocaleChange={setSelectedLocale}
-						onTranslationsChange={setTitleTranslations}
+						onTranslationsChange={setTitle}
 						placeholder={Liferay.Language.get('untitled')}
 						selectedLocale={selectedLocale}
-						translations={titleTranslations}
+						translations={title}
 					/>
 
-					{_renderLocalizedInputs(titleInputId, titleTranslations)}
+					{_renderLocalizedInputs(titleInputId, title)}
 				</ClayManagementToolbar.Item>
 			</ClayManagementToolbar.ItemList>
 
@@ -91,7 +89,7 @@ export default function PageToolbar({
 
 PageToolbar.propTypes = {
 	availableLocales: PropTypes.arrayOf(PropTypes.object),
-	initialTitleTranslations: PropTypes.object,
+	initialTitle: PropTypes.object,
 	onCancel: PropTypes.string.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 };
