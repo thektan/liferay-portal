@@ -50,23 +50,21 @@ AceEditor.propTypes = {
 };
 
 export default function Fragment({
-	collapse,
+	collapseAll,
 	deleteFragment,
 	description,
 	disabled = false,
 	icon,
-	json,
+	jsonString,
 	title,
 	updateJson,
 }) {
 	const [active, setActive] = useState(false);
-	const [expand, setExpand] = useState(true);
+	const [collapse, setCollapse] = useState(collapseAll);
 
 	useEffect(() => {
-		if (collapse) {
-			setExpand(false);
-		}
-	}, [collapse]);
+		setCollapse(collapseAll);
+	}, [collapseAll]);
 
 	function handleChange(event) {
 		updateJson(event.target.value);
@@ -129,23 +127,27 @@ export default function Fragment({
 							aria-label={Liferay.Language.get('expand')}
 							className="component-action"
 							displayType="unstyled"
-							onClick={() => setExpand(!expand)}
+							onClick={() => {
+								setCollapse(!collapse);
+							}}
 						>
 							<ClayIcon
-								symbol={expand ? 'angle-down' : 'angle-right'}
+								symbol={
+									!collapse ? 'angle-down' : 'angle-right'
+								}
 							/>
 						</ClayButton>
 					</ClayList.ItemField>
 				</ClayList.Item>
 			</ClayList>
 
-			{expand && (
+			{!collapse && (
 				<div className="configuration-editor">
 					<textarea
-						aria-label={Liferay.Language.get('texr-area')}
+						aria-label={Liferay.Language.get('text-area')}
 						onChange={handleChange}
 						onKeyDown={handleKeyDown}
-						value={json}
+						value={jsonString}
 					/>
 				</div>
 			)}
@@ -154,11 +156,12 @@ export default function Fragment({
 }
 
 Fragment.propTypes = {
-	collapse: PropTypes.number,
+	collapseAll: PropTypes.bool,
 	deleteFragment: PropTypes.func,
 	description: PropTypes.string,
 	disabled: PropTypes.bool,
 	icon: PropTypes.string,
-	json: PropTypes.string,
+	jsonString: PropTypes.string,
 	title: PropTypes.object,
+	updateJson: PropTypes.func,
 };

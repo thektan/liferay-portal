@@ -48,6 +48,10 @@ addDecorator((storyFn) => {
 	);
 });
 
+const withBuilderClass = (storyFn) => (
+	<div className="builder">{storyFn()}</div>
+);
+
 const withContainer = (storyFn) => (
 	<ClayLayout.ContainerFluid size="md">{storyFn()}</ClayLayout.ContainerFluid>
 );
@@ -174,10 +178,12 @@ storiesOf('Components|Builder', module)
 		<Builder
 			deleteFragment={action('buildFragment')}
 			selectedFragments={queryFragments}
+			updateFragments={action('updateFragments')}
 		/>
 	));
 
 storiesOf('Components|Fragment', module)
+	.addDecorator(withBuilderClass)
 	.addDecorator(withContainer)
 	.add('Fragment', () => (
 		<Fragment
@@ -185,7 +191,7 @@ storiesOf('Components|Fragment', module)
 			description={queryFragments[0].description}
 			disabled={false}
 			icon={queryFragments[0].icon}
-			json={queryFragments[0].json}
+			jsonString={JSON.stringify(queryFragments[0].json, null, '\t')}
 			title={queryFragments[0].title}
 		/>
 	));

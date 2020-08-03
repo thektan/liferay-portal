@@ -21,7 +21,7 @@ export default function Builder({
 	selectedFragments,
 	updateFragment,
 }) {
-	const [collapseAll, setCollapseAll] = useState(0);
+	const [collapseAll, setCollapseAll] = useState(false);
 
 	return (
 		<ClayLayout.ContainerFluid className="builder" size="md">
@@ -36,9 +36,11 @@ export default function Builder({
 					<ClayButton
 						aria-label={Liferay.Language.get('collapse-all')}
 						displayType="unstyled"
-						onClick={() => setCollapseAll(collapseAll + 1)}
+						onClick={() => setCollapseAll(!collapseAll)}
 					>
-						{Liferay.Language.get('collapse-all')}
+						{collapseAll
+							? Liferay.Language.get('expand-all')
+							: Liferay.Language.get('collapse-all')}
 					</ClayButton>
 				</ClayLayout.Col>
 			</ClayLayout.Row>
@@ -46,12 +48,12 @@ export default function Builder({
 			{selectedFragments.map((item, index) => {
 				return (
 					<Fragment
-						collapse={collapseAll}
+						collapseAll={collapseAll}
 						deleteFragment={() => deleteFragment(index)}
 						description={item.description}
 						disabled={index === selectedFragments.length - 1}
 						icon={item.icon}
-						json={item.jsonString}
+						jsonString={item.jsonString}
 						key={index}
 						title={item.title}
 						updateJson={(jsonString) =>
