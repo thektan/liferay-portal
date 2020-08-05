@@ -21,6 +21,7 @@ import ThemeContext from '../ThemeContext';
 export default function PageToolbar({
 	availableLocales,
 	initialTitle,
+	isSubmitting,
 	onCancel,
 	onSubmit,
 }) {
@@ -78,7 +79,12 @@ export default function PageToolbar({
 				</ClayManagementToolbar.Item>
 
 				<ClayManagementToolbar.Item>
-					<ClayButton onClick={onSubmit} small type="submit">
+					<ClayButton
+						disabled={isSubmitting}
+						onClick={onSubmit}
+						small
+						type="submit"
+					>
 						{Liferay.Language.get('save')}
 					</ClayButton>
 				</ClayManagementToolbar.Item>
@@ -90,6 +96,7 @@ export default function PageToolbar({
 PageToolbar.propTypes = {
 	availableLocales: PropTypes.arrayOf(PropTypes.object),
 	initialTitle: PropTypes.object,
+	isSubmitting: PropTypes.bool,
 	onCancel: PropTypes.string.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 };

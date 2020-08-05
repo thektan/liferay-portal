@@ -101,7 +101,7 @@ public class EditSearchConfigurationMVCActionCommand
 			}
 
 			JSONObject jsonObject = JSONUtil.put(
-				"success", configuration);
+				"success", titleMap);
 
 			JSONPortletResponseUtil.writeJSON(
 				actionRequest, actionResponse, jsonObject);
@@ -145,11 +145,11 @@ public class EditSearchConfigurationMVCActionCommand
 		String clauseConfigurationString = ParamUtil.getString(actionRequest,
 			"clauseConfiguration");
 
-		JSONArray clauseConfigurationJSONArray = JSONFactoryUtil.createJSONArray(clauseConfigurationString);
+		JSONArray clauseConfigurationStringJSONArray = JSONFactoryUtil.createJSONArray(clauseConfigurationString);
 
 		JSONObject configuration = JSONUtil.put(
 			SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey(),
-			clauseConfigurationJSONArray);
+			clauseConfigurationStringJSONArray);
 
 		return configuration.toString();
 	}

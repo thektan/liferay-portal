@@ -110,7 +110,7 @@ const DEFAULT_SELECTED_FRAGMENTS = [
 	},
 ];
 
-export default function ConfigurationSetForm({
+function ConfigurationSetForm({
 	availableLocales = [],
 	configurationId,
 	configurationType,
@@ -124,6 +124,8 @@ export default function ConfigurationSetForm({
 	const [showSidebar] = useState(true);
 
 	const form = useRef();
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const [selectedFragments, setSelectedFragments] = useState(
 		configurationId !== '0'
@@ -154,11 +156,20 @@ export default function ConfigurationSetForm({
 		(event) => {
 			event.preventDefault();
 
+			setIsSubmitting(true);
+
 			const formData = new FormData(form.current);
+
+			// JSON needs to be stringified as an array. We have to parse the
+			// jsonString first to avoid performing stringify twice.
 
 			formData.append(
 				`${namespace}clauseConfiguration`,
-				selectedFragments.map((fragment) => fragment.jsonString)
+				JSON.stringify(
+					selectedFragments.map((fragment) =>
+						JSON.parse(fragment.jsonString)
+					)
+				)
 			);
 			formData.append(`${namespace}type`, configurationType);
 			formData.append(
@@ -167,22 +178,20 @@ export default function ConfigurationSetForm({
 			);
 			formData.append(`${namespace}redirect`, redirectURL);
 
-			fetch(submitFormURL, {
+			return fetch(submitFormURL, {
 				body: formData,
 				method: 'POST',
 			})
-				.then((response) => {
-					console.log('response', response);
-
-					return response.json();
-				})
-				.then((responseContent) => {
-					console.log('responseContent', responseContent);
-
+				.then((response) => response.json())
+				.then(() => {
 					navigate(redirectURL);
 				})
-				.catch(() => {
+				.catch((errors) => {
 					// Show errors
+
+					console.log({errors});
+
+					setIsSubmitting(false);
 				});
 		},
 		[
@@ -208,6 +217,7 @@ export default function ConfigurationSetForm({
 			<PageToolbar
 				availableLocales={availableLocales}
 				initialTitle={initialTitle}
+				isSubmitting={isSubmitting}
 				onCancel={redirectURL}
 				onSubmit={handleSubmit}
 			/>
@@ -239,3 +249,5 @@ ConfigurationSetForm.propTypes = {
 	redirectURL: PropTypes.string,
 	submitFormURL: PropTypes.string,
 };
+
+export default React.memo(ConfigurationSetForm);
