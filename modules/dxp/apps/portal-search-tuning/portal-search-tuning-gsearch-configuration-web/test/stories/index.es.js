@@ -27,6 +27,7 @@ import ConfigurationSetForm from '../../src/main/resources/META-INF/resources/js
 import Fragment from '../../src/main/resources/META-INF/resources/js/components/Fragment';
 import PageToolbar from '../../src/main/resources/META-INF/resources/js/components/PageToolbar';
 import Sidebar from '../../src/main/resources/META-INF/resources/js/components/Sidebar';
+import {AVAILABLE_LOCALES, QUERY_FRAGMENTS} from './../js/mocks/data';
 
 const {addDecorator, storiesOf} = StorybookReact;
 const {action} = StorybookAddonActions;
@@ -56,110 +57,26 @@ const withContainer = (storyFn) => (
 	<ClayLayout.ContainerFluid size="md">{storyFn()}</ClayLayout.ContainerFluid>
 );
 
-const queryFragments = [
-	{
-		description:
-			'Broadest query catching documents matching any keyword. Title is given more boost among the fields. Query has the neutral boost of 1.0.',
-		icon: 'vocabulary',
-		json: {
-			clauses: [
-				{
-					configuration: {
-						boost: 20,
-						field_name: 'gsearch_locations_$_context.language_id_$',
-						query: '$_geolocation.city_$',
-					},
-					occur: 'should',
-					query_type: 'match',
-				},
-				{
-					configuration: {
-						boost: 10,
-						field_name: 'gsearch_locations_$_context.language_id_$',
-						query: '$_geolocation.country_name_$',
-					},
-					occur: 'should',
-					query_type: 'match',
-				},
-			],
-			conditions: [],
-			description:
-				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-			enabled: true,
-		},
-		title: {en_US: 'Matches any keyword'},
-	},
-	{
-		description: 'Boost content last modified within a time frame.',
-		icon: 'time',
-		json: {
-			clauses: [
-				{
-					configuration: {
-						boost: 20,
-						field_name: 'gsearch_locations_$_context.language_id_$',
-						query: '$_geolocation.city_$',
-					},
-					occur: 'should',
-					query_type: 'match',
-				},
-				{
-					configuration: {
-						boost: 10,
-						field_name: 'gsearch_locations_$_context.language_id_$',
-						query: '$_geolocation.country_name_$',
-					},
-					occur: 'should',
-					query_type: 'match',
-				},
-			],
-			conditions: [],
-			description:
-				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-			enabled: true,
-		},
-		title: {en_US: 'Freshness'},
-	},
-	{
-		description: "Boost content created closer to user's location.",
-		icon: 'geolocation',
-		json: {
-			clauses: [
-				{
-					configuration: {
-						boost: 20,
-						field_name: 'gsearch_locations_$_context.language_id_$',
-						query: '$_geolocation.city_$',
-					},
-					occur: 'should',
-					query_type: 'match',
-				},
-				{
-					configuration: {
-						boost: 10,
-						field_name: 'gsearch_locations_$_context.language_id_$',
-						query: '$_geolocation.country_name_$',
-					},
-					occur: 'should',
-					query_type: 'match',
-				},
-			],
-			conditions: [],
-			description:
-				'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-			enabled: true,
-		},
-		title: {en_US: "User's Geolocation"},
-	},
-];
-
 storiesOf('Pages|ConfigurationSetForm', module).add('default', () => (
-	<ConfigurationSetForm cancelUrl="" formName="testFm" title="" />
+	<ConfigurationSetForm
+		availableLocales={AVAILABLE_LOCALES}
+		configurationId=""
+		configurationType={0}
+		initialClauseConfiguration={[QUERY_FRAGMENTS[0].jsonString]}
+		initialTitle={{
+			'en-US': 'Test Title',
+		}}
+		redirectURL=""
+		submitFormURL=""
+	/>
 ));
 
 storiesOf('Components|PageToolbar', module).add('PageToolbar', () => (
 	<PageToolbar
-		initialTitle={{}}
+		availableLocales={AVAILABLE_LOCALES}
+		initialTitle={{
+			'en-US': 'Test Title',
+		}}
 		onCancel=""
 		onPublish={action('onPublish')}
 	/>
@@ -168,7 +85,7 @@ storiesOf('Components|PageToolbar', module).add('PageToolbar', () => (
 storiesOf('Components|Sidebar', module).add('Sidebar', () => (
 	<Sidebar
 		addFragment={action('addFragment')}
-		queryFragments={queryFragments}
+		queryFragments={QUERY_FRAGMENTS}
 	/>
 ));
 
@@ -177,7 +94,7 @@ storiesOf('Components|Builder', module)
 	.add('Builder', () => (
 		<Builder
 			deleteFragment={action('buildFragment')}
-			selectedFragments={queryFragments}
+			selectedFragments={QUERY_FRAGMENTS}
 			updateFragments={action('updateFragments')}
 		/>
 	));
@@ -188,10 +105,10 @@ storiesOf('Components|Fragment', module)
 	.add('Fragment', () => (
 		<Fragment
 			deleteFragment={action('deleteFragment')}
-			description={queryFragments[0].description}
+			description={QUERY_FRAGMENTS[0].description}
 			disabled={false}
-			icon={queryFragments[0].icon}
-			jsonString={JSON.stringify(queryFragments[0].json, null, '\t')}
-			title={queryFragments[0].title}
+			icon={QUERY_FRAGMENTS[0].icon}
+			jsonString={QUERY_FRAGMENTS[0].jsonString}
+			title={QUERY_FRAGMENTS[0].title}
 		/>
 	));

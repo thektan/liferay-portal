@@ -69,4 +69,5 @@ export default function Builder({
 Builder.propTypes = {
 	deleteFragment: PropTypes.func,
 	selectedFragments: PropTypes.arrayOf(PropTypes.object),
+	updateFragment: PropTypes.func,
 };

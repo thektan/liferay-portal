@@ -14,6 +14,7 @@ import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
+import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 
 const DEFAULT_LANGUAGE = 'en_US';
@@ -98,3 +99,8 @@ export default function Sidebar({addFragment, queryFragments}) {
 		</div>
 	);
 }
+
+Sidebar.propTypes = {
+	addFragment: PropTypes.func,
+	queryFragments: PropTypes.arrayOf(PropTypes.object),
+};
