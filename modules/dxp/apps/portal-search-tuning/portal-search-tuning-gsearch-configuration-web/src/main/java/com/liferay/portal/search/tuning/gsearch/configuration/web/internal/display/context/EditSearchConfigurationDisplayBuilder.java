@@ -17,6 +17,7 @@ package com.liferay.portal.search.tuning.gsearch.configuration.web.internal.disp
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
@@ -31,12 +32,15 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.tuning.gsearch.configuration.constants.SearchConfigurationTypes;
+import com.liferay.portal.search.tuning.gsearch.configuration.constants.json.keys.SearchConfigurationKeys;
 import com.liferay.portal.search.tuning.gsearch.configuration.exception.NoSuchConfigurationException;
 import com.liferay.portal.search.tuning.gsearch.configuration.model.SearchConfiguration;
 import com.liferay.portal.search.tuning.gsearch.configuration.service.SearchConfigurationService;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationMVCCommandNames;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys;
+import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.util.JSONHelperUtil;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -135,7 +139,7 @@ public class EditSearchConfigurationDisplayBuilder {
 	}
 
 	private Map<String, Object> _getProps() {
-		return HashMapBuilder.<String, Object>put(
+		Map<String, Object> props = HashMapBuilder.<String, Object>put(
 			"availableLocales", _getAvailableLocales()
 		).put(
 			"configurationId", _searchConfigurationId
@@ -146,6 +150,21 @@ public class EditSearchConfigurationDisplayBuilder {
 		).put(
 			"submitFormURL", _getSubmitFormURL()
 		).build();
+
+		if (_searchConfiguration != null) {
+			try {
+				props.put("initialClauseConfiguration",
+					JSONHelperUtil.getConfigurationSection(_searchConfiguration,
+						SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey()));
+			}
+			catch (JSONException jsonException) {
+				_log.error("Unable to parse search configuration JSON", jsonException);
+			}
+
+			props.put("initialTitle", _getTitle());
+		}
+
+		return props;
 	}
 
 	private String _getRedirect() {
@@ -207,6 +226,17 @@ public class EditSearchConfigurationDisplayBuilder {
 		return actionURL.toString();
 	}
 
+	private JSONObject _getTitle() {
+		Map<Locale, String> titleMap = _searchConfiguration.getTitleMap();
+
+		JSONObject titleJSONObject = _jsonFactory.createJSONObject();
+
+		titleMap.forEach((key, value) -> titleJSONObject.put(
+			StringUtil.replace(key.toString(), '_', "-"), value));
+
+		return titleJSONObject;
+	}
+
 	private void _setConfigurationId(
 		EditSearchConfigurationDisplayContext
 			editSearchConfigurationDisplayContext) {
@@ -225,7 +255,7 @@ public class EditSearchConfigurationDisplayBuilder {
 
 	private void _setData(
 		EditSearchConfigurationDisplayContext
-			editSearchConfigurationDisplayContext) {
+			editSearchConfigurationDisplayContext){
 
 		editSearchConfigurationDisplayContext.setData(
 			HashMapBuilder.<String, Object>put(

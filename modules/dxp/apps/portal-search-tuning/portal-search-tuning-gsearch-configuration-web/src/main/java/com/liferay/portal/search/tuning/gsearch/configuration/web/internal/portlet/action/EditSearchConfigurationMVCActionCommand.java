@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -99,7 +100,11 @@ public class EditSearchConfigurationMVCActionCommand
 					configuration, serviceContext);
 			}
 
-			sendRedirect(actionRequest, actionResponse);
+			JSONObject jsonObject = JSONUtil.put(
+				"success", configuration);
+
+			JSONPortletResponseUtil.writeJSON(
+				actionRequest, actionResponse, jsonObject);
 		}
 		catch (SearchConfigurationValidationException
 					searchConfigurationValidationException) {

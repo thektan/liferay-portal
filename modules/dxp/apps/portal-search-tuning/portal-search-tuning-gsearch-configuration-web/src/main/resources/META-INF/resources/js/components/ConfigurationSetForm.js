@@ -18,12 +18,103 @@ import Builder from './Builder';
 import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
 
-const DEFAULT_FRAGMENT_INDEX = 0;
+const QUERY_FRAGMENTS = [
+	{
+		clauses: [
+			{
+				configuration: {
+					boost: 20,
+					field_name: 'gsearch_locations_$_context.language_id_$',
+					query: '$_geolocation.city_$',
+				},
+				occur: 'should',
+				query_type: 'match',
+			},
+			{
+				configuration: {
+					boost: 10,
+					field_name: 'gsearch_locations_$_context.language_id_$',
+					query: '$_geolocation.country_name_$',
+				},
+				occur: 'should',
+				query_type: 'match',
+			},
+		],
+		conditions: [],
+		description:
+			'Broadest query catching documents matching any keyword. Title is given more boost among the fields. Query has the neutral boost of 1.0.',
+		enabled: true,
+		icon: 'vocabulary',
+		title: {en_US: 'Matches any keyword'},
+	},
+	{
+		clauses: [
+			{
+				configuration: {
+					boost: 20,
+					field_name: 'gsearch_locations_$_context.language_id_$',
+					query: '$_geolocation.city_$',
+				},
+				occur: 'should',
+				query_type: 'match',
+			},
+			{
+				configuration: {
+					boost: 10,
+					field_name: 'gsearch_locations_$_context.language_id_$',
+					query: '$_geolocation.country_name_$',
+				},
+				occur: 'should',
+				query_type: 'match',
+			},
+		],
+		conditions: [],
+		description: 'Boost content last modified within a time frame.',
+		enabled: true,
+		icon: 'time',
+		title: {en_US: 'Freshness'},
+	},
+	{
+		clauses: [
+			{
+				configuration: {
+					boost: 20,
+					field_name: 'gsearch_locations_$_context.language_id_$',
+					query: '$_geolocation.city_$',
+				},
+				occur: 'should',
+				query_type: 'match',
+			},
+			{
+				configuration: {
+					boost: 10,
+					field_name: 'gsearch_locations_$_context.language_id_$',
+					query: '$_geolocation.country_name_$',
+				},
+				occur: 'should',
+				query_type: 'match',
+			},
+		],
+		conditions: [],
+		description: "Boost content created closer to user's location.",
+		enabled: true,
+		icon: 'geolocation',
+		title: {en_US: "User's Geolocation"},
+	},
+];
+
+const DEFAULT_SELECTED_FRAGMENTS = [
+	{
+		...QUERY_FRAGMENTS[0],
+		jsonString: JSON.stringify(QUERY_FRAGMENTS[0], null, '\t'),
+	},
+];
 
 export default function ConfigurationSetForm({
 	availableLocales = [],
 	configurationId,
 	configurationType,
+	initialClauseConfiguration,
 	initialTitle = {},
 	redirectURL = '',
 	submitFormURL = '',
@@ -34,125 +125,20 @@ export default function ConfigurationSetForm({
 
 	const form = useRef();
 
-	const queryFragments = [
-		{
-			description:
-				'Broadest query catching documents matching any keyword. Title is given more boost among the fields. Query has the neutral boost of 1.0.',
-			icon: 'vocabulary',
-			json: {
-				clauses: [
-					{
-						configuration: {
-							boost: 20,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.city_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-					{
-						configuration: {
-							boost: 10,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.country_name_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-				],
-				conditions: [],
-				description:
-					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-				enabled: true,
-			},
-			title: {en_US: 'Matches any keyword'},
-		},
-		{
-			description: 'Boost content last modified within a time frame.',
-			icon: 'time',
-			json: {
-				clauses: [
-					{
-						configuration: {
-							boost: 20,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.city_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-					{
-						configuration: {
-							boost: 10,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.country_name_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-				],
-				conditions: [],
-				description:
-					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-				enabled: true,
-			},
-			title: {en_US: 'Freshness'},
-		},
-		{
-			description: "Boost content created closer to user's location.",
-			icon: 'geolocation',
-			json: {
-				clauses: [
-					{
-						configuration: {
-							boost: 20,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.city_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-					{
-						configuration: {
-							boost: 10,
-							field_name:
-								'gsearch_locations_$_context.language_id_$',
-							query: '$_geolocation.country_name_$',
-						},
-						occur: 'should',
-						query_type: 'match',
-					},
-				],
-				conditions: [],
-				description:
-					'Example of using geolocation clause condition and configuration variables. Requires the gsearch-geolocation module.',
-				enabled: true,
-			},
-			title: {en_US: "User's Geolocation"},
-		},
-	];
-
-	const [selectedFragments, setSelectedFragments] = useState([
-		{
-			...queryFragments[DEFAULT_FRAGMENT_INDEX],
-			jsonString: JSON.stringify(
-				queryFragments[DEFAULT_FRAGMENT_INDEX].json,
-				null,
-				'\t'
-			),
-		},
-	]);
+	const [selectedFragments, setSelectedFragments] = useState(
+		configurationId !== '0'
+			? initialClauseConfiguration.map((configString) => ({
+					...JSON.parse(configString),
+					jsonString: configString,
+			  }))
+			: DEFAULT_SELECTED_FRAGMENTS
+	);
 
 	function addFragment(fragment) {
 		setSelectedFragments([
 			{
 				...fragment,
-				jsonString: JSON.stringify(fragment.json, null, '\t'),
+				jsonString: JSON.stringify(fragment, null, '\t'),
 			},
 			...selectedFragments,
 		]);
@@ -172,7 +158,7 @@ export default function ConfigurationSetForm({
 
 			formData.append(
 				`${namespace}clauseConfiguration`,
-				JSON.stringify(queryFragments)
+				selectedFragments.map((fragment) => fragment.jsonString)
 			);
 			formData.append(`${namespace}type`, configurationType);
 			formData.append(
@@ -185,9 +171,13 @@ export default function ConfigurationSetForm({
 				body: formData,
 				method: 'POST',
 			})
-				.then((response) => response.json())
+				.then((response) => {
+					console.log('response', response);
+
+					return response.json();
+				})
 				.then((responseContent) => {
-					console.log(responseContent);
+					console.log('responseContent', responseContent);
 
 					navigate(redirectURL);
 				})
@@ -199,8 +189,8 @@ export default function ConfigurationSetForm({
 			configurationId,
 			configurationType,
 			namespace,
-			queryFragments,
 			redirectURL,
+			selectedFragments,
 			submitFormURL,
 		]
 	);
@@ -225,7 +215,7 @@ export default function ConfigurationSetForm({
 			{showSidebar && (
 				<Sidebar
 					addFragment={addFragment}
-					queryFragments={queryFragments}
+					queryFragments={QUERY_FRAGMENTS}
 				/>
 			)}
 
@@ -242,6 +232,9 @@ export default function ConfigurationSetForm({
 
 ConfigurationSetForm.propTypes = {
 	availableLocales: PropTypes.arrayOf(PropTypes.object),
+	configurationId: PropTypes.string,
+	configurationType: PropTypes.number,
+	initialClauseConfiguration: PropTypes.arrayOf(PropTypes.string),
 	initialTitle: PropTypes.object,
 	redirectURL: PropTypes.string,
 	submitFormURL: PropTypes.string,
