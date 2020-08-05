@@ -124,7 +124,11 @@ export default function Fragment({
 					</ClayDropDown>
 					<ClayList.ItemField>
 						<ClayButton
-							aria-label={Liferay.Language.get('expand')}
+							aria-label={
+								!collapse
+									? Liferay.Language.get('collapse')
+									: Liferay.Language.get('expand')
+							}
 							className="component-action"
 							displayType="unstyled"
 							onClick={() => {
