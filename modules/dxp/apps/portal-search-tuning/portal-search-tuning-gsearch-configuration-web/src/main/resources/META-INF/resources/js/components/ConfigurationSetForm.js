@@ -14,94 +14,11 @@ import {PropTypes} from 'prop-types';
 import React, {useCallback, useContext, useRef, useState} from 'react';
 
 import ThemeContext from '../ThemeContext';
+import {QUERY_FRAGMENTS} from '../utils/data';
+import {openErrorToast} from '../utils/utils';
 import Builder from './Builder';
 import PageToolbar from './PageToolbar';
 import Sidebar from './Sidebar';
-
-const QUERY_FRAGMENTS = [
-	{
-		clauses: [
-			{
-				configuration: {
-					boost: 20,
-					field_name: 'gsearch_locations_$_context.language_id_$',
-					query: '$_geolocation.city_$',
-				},
-				occur: 'should',
-				query_type: 'match',
-			},
-			{
-				configuration: {
-					boost: 10,
-					field_name: 'gsearch_locations_$_context.language_id_$',
-					query: '$_geolocation.country_name_$',
-				},
-				occur: 'should',
-				query_type: 'match',
-			},
-		],
-		conditions: [],
-		description:
-			'Broadest query catching documents matching any keyword. Title is given more boost among the fields. Query has the neutral boost of 1.0.',
-		enabled: true,
-		icon: 'vocabulary',
-		title: {en_US: 'Matches any keyword'},
-	},
-	{
-		clauses: [
-			{
-				configuration: {
-					boost: 20,
-					field_name: 'gsearch_locations_$_context.language_id_$',
-					query: '$_geolocation.city_$',
-				},
-				occur: 'should',
-				query_type: 'match',
-			},
-			{
-				configuration: {
-					boost: 10,
-					field_name: 'gsearch_locations_$_context.language_id_$',
-					query: '$_geolocation.country_name_$',
-				},
-				occur: 'should',
-				query_type: 'match',
-			},
-		],
-		conditions: [],
-		description: 'Boost content last modified within a time frame.',
-		enabled: true,
-		icon: 'time',
-		title: {en_US: 'Freshness'},
-	},
-	{
-		clauses: [
-			{
-				configuration: {
-					boost: 20,
-					field_name: 'gsearch_locations_$_context.language_id_$',
-					query: '$_geolocation.city_$',
-				},
-				occur: 'should',
-				query_type: 'match',
-			},
-			{
-				configuration: {
-					boost: 10,
-					field_name: 'gsearch_locations_$_context.language_id_$',
-					query: '$_geolocation.country_name_$',
-				},
-				occur: 'should',
-				query_type: 'match',
-			},
-		],
-		conditions: [],
-		description: "Boost content created closer to user's location.",
-		enabled: true,
-		icon: 'geolocation',
-		title: {en_US: "User's Geolocation"},
-	},
-];
 
 const DEFAULT_SELECTED_FRAGMENTS = [
 	{
@@ -163,14 +80,27 @@ function ConfigurationSetForm({
 			// JSON needs to be stringified as an array. We have to parse the
 			// jsonString first to avoid performing stringify twice.
 
-			formData.append(
-				`${namespace}clauseConfiguration`,
-				JSON.stringify(
-					selectedFragments.map((fragment) =>
-						JSON.parse(fragment.jsonString)
+			try {
+				formData.append(
+					`${namespace}clauseConfiguration`,
+					JSON.stringify(
+						selectedFragments.map((fragment) =>
+							JSON.parse(fragment.jsonString)
+						)
 					)
-				)
-			);
+				);
+			} catch {
+				openErrorToast({
+					message: Liferay.Language.get(
+						'you-have-entered-invalid-json'
+					),
+				});
+
+				setIsSubmitting(false);
+
+				return;
+			}
+
 			formData.append(`${namespace}type`, configurationType);
 			formData.append(
 				`${namespace}searchConfigurationId`,
@@ -187,9 +117,9 @@ function ConfigurationSetForm({
 					navigate(redirectURL);
 				})
 				.catch((errors) => {
-					// Show errors
+					console.log(errors);
 
-					console.log({errors});
+					openErrorToast();
 
 					setIsSubmitting(false);
 				});
