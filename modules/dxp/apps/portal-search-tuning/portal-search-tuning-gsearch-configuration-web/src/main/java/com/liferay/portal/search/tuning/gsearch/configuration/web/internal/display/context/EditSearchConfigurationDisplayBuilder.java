@@ -40,7 +40,6 @@ import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.const
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.util.JSONHelperUtil;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -153,12 +152,16 @@ public class EditSearchConfigurationDisplayBuilder {
 
 		if (_searchConfiguration != null) {
 			try {
-				props.put("initialClauseConfiguration",
-					JSONHelperUtil.getConfigurationSection(_searchConfiguration,
-						SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey()));
+				props.put(
+					"initialClauseConfiguration",
+					JSONHelperUtil.getConfigurationSection(
+						_searchConfiguration,
+						SearchConfigurationKeys.CLAUSE_CONFIGURATION.
+							getJsonKey()));
 			}
 			catch (JSONException jsonException) {
-				_log.error("Unable to parse search configuration JSON", jsonException);
+				_log.error(
+					"Unable to parse search configuration JSON", jsonException);
 			}
 
 			props.put("initialTitle", _getTitle());
@@ -231,8 +234,9 @@ public class EditSearchConfigurationDisplayBuilder {
 
 		JSONObject titleJSONObject = _jsonFactory.createJSONObject();
 
-		titleMap.forEach((key, value) -> titleJSONObject.put(
-			StringUtil.replace(key.toString(), '_', "-"), value));
+		titleMap.forEach(
+			(key, value) -> titleJSONObject.put(
+				StringUtil.replace(key.toString(), '_', "-"), value));
 
 		return titleJSONObject;
 	}
@@ -255,7 +259,7 @@ public class EditSearchConfigurationDisplayBuilder {
 
 	private void _setData(
 		EditSearchConfigurationDisplayContext
-			editSearchConfigurationDisplayContext){
+			editSearchConfigurationDisplayContext) {
 
 		editSearchConfigurationDisplayContext.setData(
 			HashMapBuilder.<String, Object>put(

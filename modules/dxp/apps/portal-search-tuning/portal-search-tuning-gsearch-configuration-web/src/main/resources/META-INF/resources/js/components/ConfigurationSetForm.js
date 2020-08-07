@@ -96,9 +96,7 @@ function ConfigurationSetForm({
 				);
 			} catch {
 				openErrorToast({
-					message: Liferay.Language.get(
-						'you-have-entered-invalid-json'
-					),
+					message: Liferay.Language.get('the-json-is-invalid'),
 				});
 
 				setIsSubmitting(false);
@@ -118,12 +116,23 @@ function ConfigurationSetForm({
 				method: 'POST',
 			})
 				.then((response) => response.json())
-				.then(() => {
-					navigate(redirectURL);
-				})
-				.catch((errors) => {
-					console.log(errors);
+				.then((responseContent) => {
+					if (
+						Object.prototype.hasOwnProperty.call(
+							responseContent,
+							'errors'
+						)
+					) {
+						responseContent.errors.forEach((message) =>
+							openErrorToast({message})
+						);
 
+						setIsSubmitting(false);
+					} else {
+						navigate(redirectURL);
+					}
+				})
+				.catch(() => {
 					openErrorToast();
 
 					setIsSubmitting(false);

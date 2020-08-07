@@ -37,6 +37,7 @@ import com.liferay.portal.search.tuning.gsearch.configuration.model.SearchConfig
 import com.liferay.portal.search.tuning.gsearch.configuration.service.SearchConfigurationService;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationMVCCommandNames;
 import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.constants.SearchConfigurationWebKeys;
+import com.liferay.portal.search.tuning.gsearch.configuration.web.internal.handler.SearchConfigurationExceptionRequestHandler;
 
 import java.util.Locale;
 import java.util.Map;
@@ -100,52 +101,27 @@ public class EditSearchConfigurationMVCActionCommand
 					configuration, serviceContext);
 			}
 
-			JSONObject jsonObject = JSONUtil.put(
-				"success", titleMap);
+			JSONObject jsonObject = JSONUtil.put("success", titleMap);
 
 			JSONPortletResponseUtil.writeJSON(
 				actionRequest, actionResponse, jsonObject);
 		}
-		catch (SearchConfigurationValidationException
-					searchConfigurationValidationException) {
-
-			_log.error(
-				searchConfigurationValidationException.getMessage(),
-				searchConfigurationValidationException);
-
-			searchConfigurationValidationException.getErrors(
-			).forEach(
-				key -> SessionErrors.add(actionRequest, key)
-			);
-
-			actionResponse.getRenderParameters(
-			).setValue(
-				"mvcRenderCommandName",
-				SearchConfigurationMVCCommandNames.EDIT_SEARCH_CONFIGURATION
-			);
-		}
 		catch (PortalException portalException) {
-			_log.error(portalException.getMessage(), portalException);
+			hideDefaultErrorMessage(actionRequest);
 
-			SessionErrors.add(
-				actionRequest, SearchConfigurationWebKeys.ERROR_DETAILS,
-				portalException);
-
-			actionResponse.getRenderParameters(
-			).setValue(
-				"mvcRenderCommandName",
-				SearchConfigurationMVCCommandNames.EDIT_SEARCH_CONFIGURATION
-			);
+			_searchConfigurationExceptionRequestHandler.handlePortalException(
+				actionRequest, actionResponse, portalException);
 		}
 	}
 
 	private String _buildConfigurationFromRequest(ActionRequest actionRequest)
 		throws JSONException {
 
-		String clauseConfigurationString = ParamUtil.getString(actionRequest,
-			"clauseConfiguration");
+		String clauseConfigurationString = ParamUtil.getString(
+			actionRequest, "clauseConfiguration");
 
-		JSONArray clauseConfigurationStringJSONArray = JSONFactoryUtil.createJSONArray(clauseConfigurationString);
+		JSONArray clauseConfigurationStringJSONArray =
+			JSONFactoryUtil.createJSONArray(clauseConfigurationString);
 
 		JSONObject configuration = JSONUtil.put(
 			SearchConfigurationKeys.CLAUSE_CONFIGURATION.getJsonKey(),
@@ -154,8 +130,9 @@ public class EditSearchConfigurationMVCActionCommand
 		return configuration.toString();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		EditSearchConfigurationMVCActionCommand.class);
+	@Reference
+	private SearchConfigurationExceptionRequestHandler
+		_searchConfigurationExceptionRequestHandler;
 
 	@Reference
 	private SearchConfigurationService _searchConfigurationService;
