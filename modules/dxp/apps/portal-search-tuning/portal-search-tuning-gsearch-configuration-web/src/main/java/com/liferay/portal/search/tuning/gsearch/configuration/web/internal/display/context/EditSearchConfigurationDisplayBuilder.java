@@ -116,6 +116,8 @@ public class EditSearchConfigurationDisplayBuilder {
 
 	private Map<String, Object> _getContext() {
 		return HashMapBuilder.<String, Object>put(
+			"locale", _themeDisplay.getLanguageId()
+		).put(
 			"namespace", _renderResponse.getNamespace()
 		).build();
 	}

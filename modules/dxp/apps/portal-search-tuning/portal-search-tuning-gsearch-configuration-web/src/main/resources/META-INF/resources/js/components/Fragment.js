@@ -15,9 +15,9 @@ import ClayIcon from '@clayui/icon';
 import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
 import {PropTypes} from 'prop-types';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
-const DEFAULT_LANGUAGE = 'en_US';
+import ThemeContext from '../ThemeContext';
 
 function AceEditor({onChange, value}) {
 	const container = useRef();
@@ -59,6 +59,8 @@ export default function Fragment({
 	title,
 	updateJson,
 }) {
+	const {locale} = useContext(ThemeContext);
+
 	const [active, setActive] = useState(false);
 	const [collapse, setCollapse] = useState(collapseAll);
 
@@ -87,9 +89,7 @@ export default function Fragment({
 					</ClayList.ItemField>
 
 					<ClayList.ItemField expand>
-						<ClayList.ItemTitle>
-							{title[DEFAULT_LANGUAGE]}
-						</ClayList.ItemTitle>
+						<ClayList.ItemTitle>{title[locale]}</ClayList.ItemTitle>
 						<ClayList.ItemText subtext={true}>
 							{description}
 						</ClayList.ItemText>

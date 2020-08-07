@@ -57,7 +57,7 @@ function ConfigurationSetForm({
 			: DEFAULT_SELECTED_FRAGMENTS
 	);
 
-	function addFragment(fragment) {
+	function onAddFragment(fragment) {
 		setSelectedFragments([
 			{
 				...fragment,
@@ -166,12 +166,7 @@ function ConfigurationSetForm({
 				onSubmit={handleSubmit}
 			/>
 
-			{showSidebar && (
-				<Sidebar
-					addFragment={addFragment}
-					queryFragments={QUERY_FRAGMENTS}
-				/>
-			)}
+			{showSidebar && <Sidebar onAddFragment={onAddFragment} />}
 
 			<div className={`${showSidebar ? 'shifted' : ''}`}>
 				<Builder
