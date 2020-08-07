@@ -51,10 +51,10 @@ export default function Builder({
 						collapseAll={collapseAll}
 						deleteFragment={() => deleteFragment(index)}
 						description={item.description}
-						disabled={index === selectedFragments.length - 1}
+						disabled={item.id === 0}
 						icon={item.icon}
 						jsonString={item.jsonString}
-						key={index}
+						key={item.id}
 						title={item.title}
 						updateJson={(jsonString) =>
 							updateFragment(index, {...item, jsonString})

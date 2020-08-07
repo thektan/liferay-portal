@@ -23,6 +23,7 @@ import Sidebar from './Sidebar';
 const DEFAULT_SELECTED_FRAGMENTS = [
 	{
 		...QUERY_FRAGMENTS[0],
+		id: 0,
 		jsonString: JSON.stringify(QUERY_FRAGMENTS[0], null, '\t'),
 	},
 ];
@@ -42,12 +43,15 @@ function ConfigurationSetForm({
 
 	const form = useRef();
 
+	const fragmentIdCounter = useRef(1); // 0 reserved for default fragment
+
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const [selectedFragments, setSelectedFragments] = useState(
 		configurationId !== '0'
 			? initialClauseConfiguration.map((configString) => ({
 					...JSON.parse(configString),
+					id: fragmentIdCounter.current++,
 					jsonString: configString,
 			  }))
 			: DEFAULT_SELECTED_FRAGMENTS
@@ -57,6 +61,7 @@ function ConfigurationSetForm({
 		setSelectedFragments([
 			{
 				...fragment,
+				id: fragmentIdCounter.current++,
 				jsonString: JSON.stringify(fragment, null, '\t'),
 			},
 			...selectedFragments,
