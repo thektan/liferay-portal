@@ -28,6 +28,7 @@ function renderFragment(props) {
 			description={QUERY_FRAGMENTS[0].description}
 			disabled={false}
 			icon={QUERY_FRAGMENTS[0].icon}
+			id={QUERY_FRAGMENTS[0].id}
 			jsonString={QUERY_FRAGMENTS[0].jsonString}
 			title={QUERY_FRAGMENTS[0].title}
 			updateJson={updateJson}

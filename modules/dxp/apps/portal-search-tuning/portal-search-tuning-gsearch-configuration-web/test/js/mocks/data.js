@@ -113,7 +113,8 @@ export const INITIAL_QUERY_FRAGMENTS = [
 	},
 ];
 
-export const QUERY_FRAGMENTS = INITIAL_QUERY_FRAGMENTS.map((item) => ({
+export const QUERY_FRAGMENTS = INITIAL_QUERY_FRAGMENTS.map((item, index) => ({
 	...item,
+	id: index,
 	jsonString: JSON.stringify(item, null, '\t'),
 }));

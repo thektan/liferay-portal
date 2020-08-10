@@ -57,8 +57,8 @@ function ConfigurationSetForm({
 			: DEFAULT_SELECTED_FRAGMENTS
 	);
 
-	function onAddFragment(fragment) {
-		setSelectedFragments([
+	const onAddFragment = useCallback((fragment) => {
+		setSelectedFragments((selectedFragments) => [
 			{
 				...fragment,
 				id: fragmentIdCounter.current++,
@@ -66,13 +66,13 @@ function ConfigurationSetForm({
 			},
 			...selectedFragments,
 		]);
-	}
+	}, []);
 
-	function deleteFragment(index) {
-		setSelectedFragments(
-			selectedFragments.filter((item, idx) => idx !== index)
+	const deleteFragment = useCallback((id) => {
+		setSelectedFragments((selectedFragments) =>
+			selectedFragments.filter((item) => item.id !== id)
 		);
-	}
+	}, []);
 
 	const handleSubmit = useCallback(
 		(event) => {
@@ -148,13 +148,13 @@ function ConfigurationSetForm({
 		]
 	);
 
-	function updateFragment(index, fragment) {
-		setSelectedFragments([
+	const updateFragment = useCallback((index, fragment) => {
+		setSelectedFragments((selectedFragments) => [
 			...selectedFragments.slice(0, index),
 			fragment,
 			...selectedFragments.slice(index + 1),
 		]);
-	}
+	}, []);
 
 	return (
 		<form ref={form}>

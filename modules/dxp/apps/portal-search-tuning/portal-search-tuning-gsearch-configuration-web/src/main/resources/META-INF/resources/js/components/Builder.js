@@ -16,11 +16,7 @@ import React, {useState} from 'react';
 
 import Fragment from './Fragment';
 
-export default function Builder({
-	deleteFragment,
-	selectedFragments,
-	updateFragment,
-}) {
+function Builder({deleteFragment, selectedFragments, updateFragment}) {
 	const [collapseAll, setCollapseAll] = useState(false);
 
 	return (
@@ -49,10 +45,11 @@ export default function Builder({
 				return (
 					<Fragment
 						collapseAll={collapseAll}
-						deleteFragment={() => deleteFragment(index)}
+						deleteFragment={deleteFragment}
 						description={item.description}
 						disabled={item.id === 0}
 						icon={item.icon}
+						id={item.id}
 						jsonString={item.jsonString}
 						key={item.id}
 						title={item.title}
@@ -71,3 +68,5 @@ Builder.propTypes = {
 	selectedFragments: PropTypes.arrayOf(PropTypes.object),
 	updateFragment: PropTypes.func,
 };
+
+export default React.memo(Builder);

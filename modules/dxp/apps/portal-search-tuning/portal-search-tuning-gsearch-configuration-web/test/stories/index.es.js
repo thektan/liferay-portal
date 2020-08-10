@@ -60,9 +60,8 @@ const withContainer = (storyFn) => (
 storiesOf('Pages|ConfigurationSetForm', module).add('default', () => (
 	<ConfigurationSetForm
 		availableLocales={AVAILABLE_LOCALES}
-		configurationId=""
+		configurationId="0"
 		configurationType={0}
-		initialClauseConfiguration={[QUERY_FRAGMENTS[0].jsonString]}
 		initialTitle={{
 			'en-US': 'Test Title',
 		}}

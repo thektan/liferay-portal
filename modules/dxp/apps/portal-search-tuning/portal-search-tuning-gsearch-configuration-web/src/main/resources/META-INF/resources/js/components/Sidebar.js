@@ -90,7 +90,7 @@ const QueryFragmentList = ({onAddFragment, queryFragments}) => {
 	);
 };
 
-export default function Sidebar({onAddFragment}) {
+function Sidebar({onAddFragment}) {
 	const {locale} = useContext(ThemeContext);
 
 	const [loading, setLoading] = useState(true);
@@ -169,3 +169,5 @@ Sidebar.propTypes = {
 	onAddFragment: PropTypes.func,
 	queryFragments: PropTypes.arrayOf(PropTypes.object),
 };
+
+export default React.memo(Sidebar);

@@ -15,7 +15,7 @@ import ClayIcon from '@clayui/icon';
 import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
 import {PropTypes} from 'prop-types';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
 
 import ThemeContext from '../ThemeContext';
 
@@ -49,12 +49,13 @@ AceEditor.propTypes = {
 	value: PropTypes.string,
 };
 
-export default function Fragment({
+function Fragment({
 	collapseAll,
 	deleteFragment,
 	description,
 	disabled = false,
 	icon,
+	id,
 	jsonString,
 	title,
 	updateJson,
@@ -80,70 +81,91 @@ export default function Fragment({
 
 	return (
 		<div className="configuration-fragment sheet">
-			<ClayList>
-				<ClayList.Item flex>
-					<ClayList.ItemField>
-						<ClaySticker className="icon" displayType="secondary">
-							<ClayIcon symbol={icon} />
-						</ClaySticker>
-					</ClayList.ItemField>
+			{useMemo(() => {
+				return (
+					<ClayList>
+						<ClayList.Item flex>
+							<ClayList.ItemField>
+								<ClaySticker
+									className="icon"
+									displayType="secondary"
+								>
+									<ClayIcon symbol={icon} />
+								</ClaySticker>
+							</ClayList.ItemField>
 
-					<ClayList.ItemField expand>
-						<ClayList.ItemTitle>{title[locale]}</ClayList.ItemTitle>
-						<ClayList.ItemText subtext={true}>
-							{description}
-						</ClayList.ItemText>
-					</ClayList.ItemField>
+							<ClayList.ItemField expand>
+								<ClayList.ItemTitle>
+									{title[locale]}
+								</ClayList.ItemTitle>
+								<ClayList.ItemText subtext={true}>
+									{description}
+								</ClayList.ItemText>
+							</ClayList.ItemField>
 
-					<ClayDropDown
-						active={active}
-						alignmentPosition={3}
-						onActiveChange={setActive}
-						trigger={
+							<ClayDropDown
+								active={active}
+								alignmentPosition={3}
+								onActiveChange={setActive}
+								trigger={
+									<ClayList.ItemField>
+										<ClayButton
+											aria-label={Liferay.Language.get(
+												'dropdown'
+											)}
+											className="component-action"
+											displayType="unstyled"
+										>
+											<ClayIcon symbol="ellipsis-v" />
+										</ClayButton>
+									</ClayList.ItemField>
+								}
+							>
+								<ClayDropDown.ItemList>
+									<ClayDropDown.Item
+										disabled={disabled}
+										onClick={() => deleteFragment(id)}
+									>
+										{Liferay.Language.get('delete')}
+									</ClayDropDown.Item>
+								</ClayDropDown.ItemList>
+							</ClayDropDown>
 							<ClayList.ItemField>
 								<ClayButton
-									aria-label={Liferay.Language.get(
-										'dropdown'
-									)}
+									aria-label={
+										!collapse
+											? Liferay.Language.get('collapse')
+											: Liferay.Language.get('expand')
+									}
 									className="component-action"
 									displayType="unstyled"
+									onClick={() => {
+										setCollapse(!collapse);
+									}}
 								>
-									<ClayIcon symbol="ellipsis-v" />
+									<ClayIcon
+										symbol={
+											!collapse
+												? 'angle-down'
+												: 'angle-right'
+										}
+									/>
 								</ClayButton>
 							</ClayList.ItemField>
-						}
-					>
-						<ClayDropDown.ItemList>
-							<ClayDropDown.Item
-								disabled={disabled}
-								onClick={deleteFragment}
-							>
-								{Liferay.Language.get('delete')}
-							</ClayDropDown.Item>
-						</ClayDropDown.ItemList>
-					</ClayDropDown>
-					<ClayList.ItemField>
-						<ClayButton
-							aria-label={
-								!collapse
-									? Liferay.Language.get('collapse')
-									: Liferay.Language.get('expand')
-							}
-							className="component-action"
-							displayType="unstyled"
-							onClick={() => {
-								setCollapse(!collapse);
-							}}
-						>
-							<ClayIcon
-								symbol={
-									!collapse ? 'angle-down' : 'angle-right'
-								}
-							/>
-						</ClayButton>
-					</ClayList.ItemField>
-				</ClayList.Item>
-			</ClayList>
+						</ClayList.Item>
+					</ClayList>
+				);
+			}, [
+				active,
+				collapse,
+				deleteFragment,
+				description,
+				disabled,
+				icon,
+				id,
+				locale,
+				title,
+			])}
 
 			{!collapse && (
 				<div className="configuration-editor">
@@ -165,7 +187,10 @@ Fragment.propTypes = {
 	description: PropTypes.string,
 	disabled: PropTypes.bool,
 	icon: PropTypes.string,
+	id: PropTypes.number,
 	jsonString: PropTypes.string,
 	title: PropTypes.object,
 	updateJson: PropTypes.func,
 };
+
+export default React.memo(Fragment);

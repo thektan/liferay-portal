@@ -21,9 +21,8 @@ function renderConfigurationSetForm(props) {
 	return render(
 		<ConfigurationSetForm
 			availableLocales={AVAILABLE_LOCALES}
-			configurationId=""
+			configurationId="0"
 			configurationType={0}
-			initialClauseConfiguration={[QUERY_FRAGMENTS[0].jsonString]}
 			initialTitle={{
 				'en-US': 'Test Title',
 			}}
@@ -83,7 +82,7 @@ describe('ConfigurationSetForm', () => {
 
 		fireEvent.click(getAllByLabelText('dropdown')[0]);
 
-		fireEvent.click(getAllByText('delete')[0]);
+		fireEvent.click(getAllByText('delete')[1]);
 
 		const {queryByText} = within(container.querySelector('.builder'));
 
