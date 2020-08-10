@@ -34,7 +34,7 @@ snippetsURL.setParameter(SearchConfigurationWebKeys.SEARCH_CONFIGURATION_TYPE, S
 %>
 
 <clay:navigation-bar
-	inverted="<%= true %>"
+	inverted="<%= false %>"
 	navigationItems='<%=
 		new JSPNavigationItemList(pageContext) {
 			{
