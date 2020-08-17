@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -8,23 +7,16 @@
  * contacting Liferay, Inc. See the License for the specific language governing
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
- *
- *
- *
  */
---%>
 
-<%@ include file="/init.jsp" %>
+import React from 'react';
 
-<liferay-ui:error key="error.search-configuration-not-defined" message="Please set search configuration ID." />
+import ConfigurationSearch from './components/ConfigurationSearch';
 
-<%
-if (suggestionsURL == null) {
-	return;
+export default function ConfigurationSearchApp(props) {
+	return (
+		<div className="configuration-set-search">
+			<ConfigurationSearch {...props} />
+		</div>
+	);
 }
-
-Map<String, Object> data = HashMapBuilder.<String, Object>put(
-	"suggestionsURL", suggestionsURL).build();
-%>
-
-<react:component data="<%= data %>" module="js/ConfigurationSearchApp" />

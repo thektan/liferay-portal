@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -8,23 +7,28 @@
  * contacting Liferay, Inc. See the License for the specific language governing
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
- *
- *
- *
  */
---%>
 
-<%@ include file="/init.jsp" %>
+import {PropTypes} from 'prop-types';
+import React, {useState} from 'react';
 
-<liferay-ui:error key="error.search-configuration-not-defined" message="Please set search configuration ID." />
+import Results from './Results';
+import SearchBar from './SearchBar';
 
-<%
-if (suggestionsURL == null) {
-	return;
+export default function ConfigurationSearch({suggestionsURL}) {
+	const [query, setQuery] = useState('');
+
+	return (
+		<>
+			<SearchBar handleSubmit={(value) => setQuery(value)} />
+
+			{query && (
+				<Results fetchResultsURL={suggestionsURL} query={query} />
+			)}
+		</>
+	);
 }
 
-Map<String, Object> data = HashMapBuilder.<String, Object>put(
-	"suggestionsURL", suggestionsURL).build();
-%>
-
-<react:component data="<%= data %>" module="js/ConfigurationSearchApp" />
+ConfigurationSearch.propTypes = {
+	suggestionsURL: PropTypes.string,
+};
