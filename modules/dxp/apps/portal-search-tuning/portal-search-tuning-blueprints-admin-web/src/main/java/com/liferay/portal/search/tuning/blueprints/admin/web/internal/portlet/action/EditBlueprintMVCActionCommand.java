@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
+import com.liferay.portal.kernel.portlet.LiferayActionResponse;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -40,6 +41,7 @@ import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -75,27 +77,45 @@ public class EditBlueprintMVCActionCommand extends BaseMVCActionCommand {
 			LocalizationUtil.getLocalizationMap(
 				actionRequest, BlueprintsAdminWebKeys.DESCRIPTION);
 
-		String configuration = _buildConfigurationFromRequest(actionRequest);
-
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		try {
+			String configuration = _buildConfigurationFromRequest(actionRequest);
+
 			com.liferay.portal.kernel.service.ServiceContext serviceContext =
 				ServiceContextFactory.getInstance(
 					Blueprint.class.getName(), actionRequest);
 
+			JSONObject jsonObject = JSONUtil.put("title", titleMap);
+
 			if (Constants.ADD.equals(cmd)) {
-				_blueprintService.addCompanyBlueprint(
+				Blueprint blueprint = _blueprintService.addCompanyBlueprint(
 					titleMap, descriptionMap, configuration, type,
 					serviceContext);
+
+				LiferayActionResponse liferayActionResponse =
+					(LiferayActionResponse)actionResponse;
+
+				PortletURL editBlueprintURL = liferayActionResponse.createRenderURL();
+
+				editBlueprintURL.setParameter(
+					"mvcRenderCommandName",
+					BlueprintsAdminMVCCommandNames.EDIT_BLUEPRINT);
+				editBlueprintURL.setParameter(
+					"redirect",
+					ParamUtil.getString(actionRequest, "redirect"));
+				editBlueprintURL.setParameter(
+					BlueprintsAdminWebKeys.BLUEPRINT_ID,
+					String.valueOf(blueprint.getBlueprintId()));
+
+				jsonObject = JSONUtil.put(
+					"redirectURL", editBlueprintURL.toString());
 			}
-			else if (blueprintId > 0) {
+			else {
 				_blueprintService.updateBlueprint(
 					blueprintId, titleMap, descriptionMap, configuration,
 					serviceContext);
 			}
-
-			JSONObject jsonObject = JSONUtil.put("success", titleMap);
 
 			JSONPortletResponseUtil.writeJSON(
 				actionRequest, actionResponse, jsonObject);
