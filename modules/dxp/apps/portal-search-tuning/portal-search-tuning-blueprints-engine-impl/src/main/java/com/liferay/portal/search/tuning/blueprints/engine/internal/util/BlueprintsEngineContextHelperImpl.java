@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.tuning.blueprints.engine.internal.util;
 
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.search.tuning.blueprints.engine.internal.aggregation.AggregationTranslatorFactory;
 import com.liferay.portal.search.tuning.blueprints.engine.internal.clause.ClauseTranslatorFactory;
 import com.liferay.portal.search.tuning.blueprints.engine.internal.condition.ConditionHandlerFactory;
@@ -21,6 +22,8 @@ import com.liferay.portal.search.tuning.blueprints.engine.internal.suggester.Sug
 import com.liferay.portal.search.tuning.blueprints.engine.parameter.ParameterDataCreator;
 import com.liferay.portal.search.tuning.blueprints.engine.parameter.ParameterDefinition;
 import com.liferay.portal.search.tuning.blueprints.engine.util.BlueprintsEngineContextHelper;
+
+import java.util.Locale;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -55,6 +58,14 @@ public class BlueprintsEngineContextHelperImpl
 	@Override
 	public ParameterDefinition[] getContributedParameterDefinitions() {
 		return _parameterDataCreator.getContributedParameterDefinitions();
+	}
+
+	@Override
+	public JSONArray getContributedParameterDefinitionsJSONArray(
+		Locale locale) {
+
+		return _parameterDataCreator.
+			getContributedParameterDefinitionsJSONArray(locale);
 	}
 
 	@Reference

@@ -16,10 +16,13 @@ package com.liferay.portal.search.tuning.blueprints.engine.internal.parameter;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.tuning.blueprints.attributes.BlueprintsAttributes;
 import com.liferay.portal.search.tuning.blueprints.constants.json.keys.parameter.CustomParameterConfigurationKeys;
@@ -45,8 +48,10 @@ import com.liferay.portal.search.tuning.blueprints.util.BlueprintHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -121,6 +126,64 @@ public class ParameterDataCreatorImpl implements ParameterDataCreator {
 		}
 
 		return parameterDefinitionList.toArray(new ParameterDefinition[0]);
+	}
+
+	@Override
+	public JSONArray getContributedParameterDefinitionsJSONArray(
+		Locale locale) {
+
+		JSONArray contributedParameterDefinitionsJSONArray =
+			_jsonFactory.createJSONArray();
+
+		ResourceBundle resourceBundle =
+			ResourceBundleUtil.getModuleAndPortalResourceBundle(
+				locale, getClass());
+
+		for (Map.Entry<String, ServiceComponentReference<ParameterContributor>>
+				entry : _parameterContributors.entrySet()) {
+
+			JSONObject parameterDefinitionCategoryJSONObject =
+				_jsonFactory.createJSONObject();
+
+			ServiceComponentReference<ParameterContributor> value =
+				entry.getValue();
+
+			ParameterContributor parameterContributor =
+				value.getServiceComponent();
+
+			JSONArray parameterDefinitionsJSONArray =
+				_jsonFactory.createJSONArray();
+
+			for (ParameterDefinition parameterDefinition :
+					parameterContributor.getParameterDefinitions()) {
+
+				JSONObject parameterDefinitionJSONObject =
+					_jsonFactory.createJSONObject();
+
+				parameterDefinitionJSONObject.put(
+					"description",
+					_language.get(
+						resourceBundle, parameterDefinition.getDescriptionKey())
+				).put(
+					"variable", parameterDefinition.getVariable()
+				);
+
+				parameterDefinitionsJSONArray.put(
+					parameterDefinitionJSONObject);
+			}
+
+			parameterDefinitionCategoryJSONObject.put(
+				"categoryName",
+				_language.get(locale, parameterContributor.getCategoryNameKey())
+			).put(
+				"parameterDefinitions", parameterDefinitionsJSONArray
+			);
+
+			contributedParameterDefinitionsJSONArray.put(
+				parameterDefinitionCategoryJSONObject);
+		}
+
+		return contributedParameterDefinitionsJSONArray;
 	}
 
 	@Reference(
@@ -554,8 +617,14 @@ public class ParameterDataCreatorImpl implements ParameterDataCreator {
 	@Reference
 	private BlueprintHelper _blueprintHelper;
 
+	@Reference
+	private JSONFactory _jsonFactory;
+
 	private volatile Map<String, ServiceComponentReference<KeywordsProcessor>>
 		_keywordsProcessors = new ConcurrentHashMap<>();
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private ParameterBuilderFactory _parameterBuilderFactory;

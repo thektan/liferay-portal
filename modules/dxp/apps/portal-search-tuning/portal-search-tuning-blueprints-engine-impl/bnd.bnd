@@ -1,3 +1,4 @@
 Bundle-Name: Liferay Portal Search Tuning Blueprints Engine Implementation
 Bundle-SymbolicName: com.liferay.portal.search.tuning.blueprints.engine.impl
 Bundle-Version: 1.0.0
+-liferay-aggregate-resource-bundles: com.liferay.portal.search.tuning.blueprints.lang
