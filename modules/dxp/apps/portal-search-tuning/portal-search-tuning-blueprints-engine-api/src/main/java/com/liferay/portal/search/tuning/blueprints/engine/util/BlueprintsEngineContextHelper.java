@@ -14,7 +14,10 @@
 
 package com.liferay.portal.search.tuning.blueprints.engine.util;
 
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.search.tuning.blueprints.engine.parameter.ParameterDefinition;
+
+import java.util.Locale;
 
 /**
  * @author Petteri Karttunen
@@ -30,5 +33,7 @@ public interface BlueprintsEngineContextHelper {
 	public String[] getAvailableSuggesterTranslatorTypes();
 
 	public ParameterDefinition[] getContributedParameterDefinitions();
+
+	public JSONArray getContributedParameterDefinitionsJSONArray(Locale locale);
 
 }
