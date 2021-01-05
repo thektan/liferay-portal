@@ -194,6 +194,34 @@ storiesOf('Pages|FragmentForm', module).add('default', () => (
 			initialTitle: {
 				'en-US': 'Test Title',
 			},
+			predefinedVariables: [
+				{
+					categoryName: 'User',
+					parameterDefinitions: [
+						{
+							description: "User's ID",
+							variable: '${user.user_id}',
+						},
+						{
+							description: "User's First Name",
+							variable: '${user.user_first_name}',
+						},
+					],
+				},
+				{
+					categoryName: 'Context',
+					parameterDefinitions: [
+						{
+							description: 'Company ID',
+							variable: '${context.company_id}',
+						},
+						{
+							description: 'Scope Group ID',
+							variable: '${context.scope_group_id}',
+						},
+					],
+				},
+			],
 			redirectURL: '',
 			submitFormURL: '',
 		}}

@@ -17,6 +17,7 @@ package com.liferay.portal.search.tuning.blueprints.admin.web.internal.display.c
 import com.liferay.exportimport.kernel.exception.NoSuchConfigurationException;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
@@ -25,19 +26,25 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.search.tuning.blueprints.admin.web.internal.constants.BlueprintsAdminMVCCommandNames;
 import com.liferay.portal.search.tuning.blueprints.admin.web.internal.constants.BlueprintsAdminWebKeys;
 import com.liferay.portal.search.tuning.blueprints.constants.BlueprintTypes;
+import com.liferay.portal.search.tuning.blueprints.engine.parameter.ParameterDefinition;
+import com.liferay.portal.search.tuning.blueprints.engine.util.BlueprintsEngineContextHelper;
 import com.liferay.portal.search.tuning.blueprints.model.Blueprint;
 import com.liferay.portal.search.tuning.blueprints.service.BlueprintService;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionURL;
@@ -54,7 +61,7 @@ public class EditFragmentDisplayBuilder {
 	public EditFragmentDisplayBuilder(
 		HttpServletRequest httpServletRequest, Language language, Log log,
 		JSONFactory jsonFactory, RenderRequest renderRequest,
-		RenderResponse renderResponse, BlueprintService blueprintService) {
+		RenderResponse renderResponse, BlueprintsEngineContextHelper blueprintsEngineContextHelper, BlueprintService blueprintService) {
 
 		_httpServletRequest = httpServletRequest;
 		_language = language;
@@ -62,6 +69,7 @@ public class EditFragmentDisplayBuilder {
 		_jsonFactory = jsonFactory;
 		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
+		_blueprintsEngineContextHelper = blueprintsEngineContextHelper;
 		_blueprintService = blueprintService;
 
 		_blueprintId = ParamUtil.getLong(
@@ -141,15 +149,6 @@ public class EditFragmentDisplayBuilder {
 		return descriptionJSONObject;
 	}
 
-	/* TODO This is a placeholder for LPS-123115 to get predefinedVariables
-	private List<JSONObject> _getPredefinedVariables() {
-		JSONObject parameterJSONObject = _jsonFactory.createJSONObject();
-
-		return ListUtil.fromArray(parameterJSONObject);
-	}
-
-	*/
-
 	private Map<String, Object> _getProps() {
 		Map<String, Object> props = HashMapBuilder.<String, Object>put(
 			"blueprintId", _blueprintId
@@ -161,16 +160,19 @@ public class EditFragmentDisplayBuilder {
 			"submitFormURL", _getSubmitFormURL()
 		).build();
 
+		ResourceBundle resourceBundle =
+			ResourceBundleUtil.getModuleAndPortalResourceBundle(
+				_themeDisplay.getLocale(), getClass());
+
 		if (_blueprint != null) {
 			props.put(
 				"initialConfigurationString", _blueprint.getConfiguration());
 			props.put("initialDescription", _getDescriptionJSONObject());
 			props.put("initialTitle", _getTitleJSONObject());
-
-			/*
-			TODO This is a placeholder for LPS-123115 to get predefinedVariables
-			props.put("predefinedVariables", _getPredefinedVariables());
- 			*/
+			props.put(
+				"predefinedVariables",
+				_blueprintsEngineContextHelper
+					.getContributedParameterDefinitionsJSONArray(_themeDisplay.getLocale()));
 		}
 
 		return props;
@@ -256,6 +258,7 @@ public class EditFragmentDisplayBuilder {
 
 	private final Blueprint _blueprint;
 	private final long _blueprintId;
+	private final BlueprintsEngineContextHelper _blueprintsEngineContextHelper;
 	private final BlueprintService _blueprintService;
 	private int _blueprintType;
 	private final HttpServletRequest _httpServletRequest;

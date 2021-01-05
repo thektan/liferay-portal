@@ -26,7 +26,6 @@ import ErrorBoundary from '../shared/ErrorBoundary';
 import PageToolbar from '../shared/PageToolbar';
 import PreviewModal from '../shared/PreviewModal';
 import ThemeContext from '../shared/ThemeContext';
-import {PREDEFINED_VARIABLES} from '../utils/data';
 import {
 	getUIConfigurationValues,
 	openErrorToast,
@@ -39,7 +38,7 @@ function EditFragmentForm({
 	initialConfigurationString,
 	initialDescription,
 	initialTitle,
-	predefinedVariables = PREDEFINED_VARIABLES,
+	predefinedVariables,
 	redirectURL,
 	submitFormURL,
 }) {
@@ -61,8 +60,8 @@ function EditFragmentForm({
 	);
 
 	function addFragmentTemplateJSONVariable(variable) {
-		var doc = fragmentTemplateJSONRef.current.getDoc();
-		var cursor = doc.getCursor();
+		const doc = fragmentTemplateJSONRef.current.getDoc();
+		const cursor = doc.getCursor();
 
 		doc.replaceRange(variable, cursor);
 	}
@@ -272,8 +271,14 @@ function EditFragmentForm({
 
 											<div className="container-fluid">
 												<dl className="sidebar-dl">
-													{predefinedVariables.map(
-														(item) => (
+													{predefinedVariables
+														.filter(
+															(item) =>
+																item
+																	.parameterDefinitions
+																	.length
+														)
+														.map((item) => (
 															<SidebarPanel
 																categoryName={
 																	item.categoryName
@@ -285,12 +290,11 @@ function EditFragmentForm({
 																key={
 																	item.categoryName
 																}
-																variables={
-																	item.variables
+																parameterDefinitions={
+																	item.parameterDefinitions
 																}
 															/>
-														)
-													)}
+														))}
 												</dl>
 											</div>
 										</div>
@@ -360,12 +364,12 @@ EditFragmentForm.propTypes = {
 	initialConfigurationString: PropTypes.string,
 	initialDescription: PropTypes.object,
 	initialTitle: PropTypes.object,
-	predefinedVariables: PropTypes.object,
+	predefinedVariables: PropTypes.arrayOf(PropTypes.object),
 	redirectURL: PropTypes.string,
 	submitFormURL: PropTypes.string,
 };
 
-function SidebarPanel({categoryName, handleClick, variables}) {
+function SidebarPanel({categoryName, handleClick, parameterDefinitions}) {
 	const [expand, setExpand] = useState(false);
 
 	return (
@@ -383,15 +387,13 @@ function SidebarPanel({categoryName, handleClick, variables}) {
 			</ClayButton>
 
 			{expand &&
-				variables.map((entry) => (
+				parameterDefinitions.map((entry) => (
 					<dd className="sidebar-dd" key={entry.variable}>
 						<ClayButton
 							displayType="unstyled"
-							onClick={() =>
-								handleClick(`"$\{${entry.variable}}"`)
-							}
+							onClick={() => handleClick(entry.variable)}
 						>
-							{entry.name}
+							{entry.description}
 						</ClayButton>
 					</dd>
 				))}
