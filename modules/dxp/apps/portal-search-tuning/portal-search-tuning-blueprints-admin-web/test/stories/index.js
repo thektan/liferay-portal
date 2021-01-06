@@ -30,6 +30,7 @@ import ConfigFragment from '../../src/main/resources/META-INF/resources/js/share
 import ErrorBoundary from '../../src/main/resources/META-INF/resources/js/shared/ErrorBoundary';
 import JSONFragment from '../../src/main/resources/META-INF/resources/js/shared/JSONFragment';
 import PageToolbar from '../../src/main/resources/META-INF/resources/js/shared/PageToolbar';
+import SearchInput from '../../src/main/resources/META-INF/resources/js/shared/SearchInput';
 import {
 	DEFAULT_EDIT_FRAGMENT,
 	DEFAULT_FRAGMENT,
@@ -292,6 +293,15 @@ storiesOf('Components|QueryBuilder', module)
 			deleteFragment={action('buildFragment')}
 			selectedFragments={SELECTED_FRAGMENTS}
 			updateFragment={action('updateFragment')}
+		/>
+	));
+
+storiesOf('Components|SearchInput', module)
+	.addDecorator(withBlueprintsClass)
+	.add('SearchInput', () => (
+		<SearchInput
+			onChange={action('onChange')}
+			onSubmit={action('onSubmit')}
 		/>
 	));
 
