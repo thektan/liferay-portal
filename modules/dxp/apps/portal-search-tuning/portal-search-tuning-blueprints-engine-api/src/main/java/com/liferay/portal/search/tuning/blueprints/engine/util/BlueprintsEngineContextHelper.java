@@ -31,8 +31,6 @@ public interface BlueprintsEngineContextHelper {
 
 	public String[] getAvailableSuggesterTranslatorTypes();
 
-	public ParameterDefinition[] getContributedParameterDefinitions();
-
-	public Map<String, ParameterDefinition[]> getCategorizedContributedParameterDefinitions();
+	public Map<String, ParameterDefinition[]> getContributedParameterDefinitions();
 
 }
