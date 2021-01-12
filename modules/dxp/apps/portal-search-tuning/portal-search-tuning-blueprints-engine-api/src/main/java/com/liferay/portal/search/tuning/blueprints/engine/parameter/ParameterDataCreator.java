@@ -14,12 +14,11 @@
 
 package com.liferay.portal.search.tuning.blueprints.engine.parameter;
 
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.search.tuning.blueprints.attributes.BlueprintsAttributes;
 import com.liferay.portal.search.tuning.blueprints.message.Messages;
 import com.liferay.portal.search.tuning.blueprints.model.Blueprint;
 
-import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Petteri Karttunen
@@ -32,6 +31,6 @@ public interface ParameterDataCreator {
 
 	public ParameterDefinition[] getContributedParameterDefinitions();
 
-	public JSONArray getContributedParameterDefinitionsJSONArray(Locale locale);
+	public Map<String, ParameterDefinition[]> getCategorizedContributedParameterDefinitions();
 
 }
