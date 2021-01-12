@@ -143,6 +143,7 @@ function EditTitleModal({
 }
 
 export default function PageToolbar({
+	hideTitleAndDescription = false,
 	initialDescription = {},
 	initialTitle = {},
 	isSubmitting,
@@ -207,60 +208,67 @@ export default function PageToolbar({
 								/>
 							)}
 
-							<div>
-								<ClayButton
-									aria-label={Liferay.Language.get(
-										'edit-name'
-									)}
-									className="blueprint-heading-edit-button"
-									displayType="unstyled"
-									monospaced={false}
-									onClick={_handleClickEdit('name')}
-								>
-									<div className="blueprint-title text-truncate">
-										{title[DEFAULT_LOCALE]}
-
-										<ClayIcon
-											className="blueprint-heading-edit-icon"
-											symbol="pencil"
-										/>
-									</div>
-								</ClayButton>
-
-								{_renderLocalizedInputs(titleInputId, title)}
-
-								<ClayButton
-									aria-label={Liferay.Language.get(
-										'edit-description'
-									)}
-									className="blueprint-heading-edit-button"
-									displayType="unstyled"
-									monospaced={false}
-									onClick={_handleClickEdit('description')}
-								>
-									<div className="blueprint-description text-truncate">
-										{description[DEFAULT_LOCALE] ? (
-											description[DEFAULT_LOCALE]
-										) : (
-											<span className="blueprint-description-blank">
-												{Liferay.Language.get(
-													'no-description'
-												)}
-											</span>
+							{!hideTitleAndDescription && (
+								<div>
+									<ClayButton
+										aria-label={Liferay.Language.get(
+											'edit-name'
 										)}
+										className="blueprint-heading-edit-button"
+										displayType="unstyled"
+										monospaced={false}
+										onClick={_handleClickEdit('name')}
+									>
+										<div className="blueprint-title text-truncate">
+											{title[DEFAULT_LOCALE]}
 
-										<ClayIcon
-											className="blueprint-heading-edit-icon"
-											symbol="pencil"
-										/>
-									</div>
-								</ClayButton>
+											<ClayIcon
+												className="blueprint-heading-edit-icon"
+												symbol="pencil"
+											/>
+										</div>
+									</ClayButton>
 
-								{_renderLocalizedInputs(
-									descriptionInputId,
-									description
-								)}
-							</div>
+									{_renderLocalizedInputs(
+										titleInputId,
+										title
+									)}
+
+									<ClayButton
+										aria-label={Liferay.Language.get(
+											'edit-description'
+										)}
+										className="blueprint-heading-edit-button"
+										displayType="unstyled"
+										monospaced={false}
+										onClick={_handleClickEdit(
+											'description'
+										)}
+									>
+										<div className="blueprint-description text-truncate">
+											{description[DEFAULT_LOCALE] ? (
+												description[DEFAULT_LOCALE]
+											) : (
+												<span className="blueprint-description-blank">
+													{Liferay.Language.get(
+														'no-description'
+													)}
+												</span>
+											)}
+
+											<ClayIcon
+												className="blueprint-heading-edit-icon"
+												symbol="pencil"
+											/>
+										</div>
+									</ClayButton>
+
+									{_renderLocalizedInputs(
+										descriptionInputId,
+										description
+									)}
+								</div>
+							)}
 						</ClayToolbar.Item>
 
 						{toolbarItem && (

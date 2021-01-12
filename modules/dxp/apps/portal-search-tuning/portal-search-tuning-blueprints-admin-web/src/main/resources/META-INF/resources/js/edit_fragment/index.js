@@ -209,8 +209,7 @@ function EditFragmentForm({
 		<>
 			<form ref={form}>
 				<PageToolbar
-					initialDescription={initialDescription}
-					initialTitle={initialTitle}
+					hideTitleAndDescription
 					isSubmitting={isSubmitting}
 					onCancel={redirectURL}
 					onSubmit={handleSubmit}
