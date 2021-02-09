@@ -148,7 +148,6 @@ JSONFragment.propTypes = {
 	collapseAll: PropTypes.bool,
 	deleteFragment: PropTypes.func,
 	elementTemplateJSON: PropTypes.object,
-	icon: PropTypes.string,
 	id: PropTypes.number,
 	updateFragment: PropTypes.func,
 };
