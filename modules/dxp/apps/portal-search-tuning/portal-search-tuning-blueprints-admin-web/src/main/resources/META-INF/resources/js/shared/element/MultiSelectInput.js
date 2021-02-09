@@ -20,7 +20,6 @@ function MultiSelectInput({configKey, disabled, onChange, value}) {
 			disabled={disabled}
 			inputValue={inputValue}
 			items={value}
-			onChange={setInputValue}
 			onBlur={() => {
 				if (inputValue) {
 					onChange(configKey, [
@@ -31,6 +30,7 @@ function MultiSelectInput({configKey, disabled, onChange, value}) {
 					setInputValue('');
 				}
 			}}
+			onChange={setInputValue}
 			onItemsChange={(value) => onChange(configKey, value)}
 		/>
 	);

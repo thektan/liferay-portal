@@ -78,12 +78,12 @@ function Element({
 		const enabled = !elementTemplateJSON.enabled;
 
 		updateFragment(id, {
-			fragmentOutput: {
-				...fragmentOutput,
-				enabled,
-			},
 			elementTemplateJSON: {
 				...elementTemplateJSON,
+				enabled,
+			},
+			fragmentOutput: {
+				...fragmentOutput,
 				enabled,
 			},
 		});

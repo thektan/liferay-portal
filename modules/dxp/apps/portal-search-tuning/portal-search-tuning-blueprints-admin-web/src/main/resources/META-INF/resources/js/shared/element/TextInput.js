@@ -10,14 +10,14 @@
  */
 
 import {ClayInput} from '@clayui/form';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {replaceStr} from '../../utils/utils';
 
-function TextInput({configKey, disabled, id, label, onChange, initialValue}) {
+function TextInput({configKey, disabled, id, initialValue, label, onChange}) {
 	const [value, setValue] = useState(initialValue);
 
-	const _handleBlur = (event) => {
+	const _handleBlur = () => {
 		onChange(configKey, replaceStr(value, '"', ''));
 	};
 
