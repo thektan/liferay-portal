@@ -16,12 +16,7 @@ import React, {useCallback, useContext, useRef, useState} from 'react';
 import ErrorBoundary from '../shared/ErrorBoundary';
 import PageToolbar from '../shared/PageToolbar';
 import ThemeContext from '../shared/ThemeContext';
-import {
-	CUSTOM_JSON_FRAGMENT,
-	DEFAULT_BASELINE_FRAGMENTS,
-	DEFAULT_FRAMEWORK_CONFIGURATION,
-	QUERY_FRAGMENTS,
-} from '../utils/data';
+import {CUSTOM_JSON_FRAGMENT, QUERY_FRAGMENTS} from '../utils/data';
 import {
 	convertToSelectedFragment,
 	openErrorToast,
@@ -86,8 +81,7 @@ function EditBlueprintForm({
 		JSON.stringify(initialConfiguration['facet_configuration'], null, '\t')
 	);
 	const [frameworkConfig, setFrameworkConfig] = useState(
-		initialConfiguration['framework_configuration'] ||
-			DEFAULT_FRAMEWORK_CONFIGURATION
+		initialConfiguration['framework_configuration']
 	);
 	const [parameterConfig, setParameterConfig] = useState(
 		JSON.stringify(
@@ -100,18 +94,12 @@ function EditBlueprintForm({
 		JSON.stringify(initialConfiguration['sort_configuration'], null, '\t')
 	);
 	const [selectedQueryFragments, setSelectedQueryFragments] = useState(
-		blueprintId !== '0'
-			? initialSelectedFragments['query_configuration'].map(
-					(selectedFragment) => ({
-						...selectedFragment,
-						id: fragmentIdCounter.current++,
-					})
-			  )
-			: DEFAULT_BASELINE_FRAGMENTS.map((fragment, idx) => {
-					fragmentIdCounter.current++;
-
-					return convertToSelectedFragment(fragment, idx);
-			  })
+		initialSelectedFragments['query_configuration'].map(
+			(selectedFragment) => ({
+				...selectedFragment,
+				id: fragmentIdCounter.current++,
+			})
+		)
 	);
 
 	const onAddFragment = useCallback((fragment) => {

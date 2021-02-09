@@ -87,12 +87,6 @@ export const DEFAULT_BASELINE_FRAGMENTS = [
 	HIDE_DEFAULT_USER,
 ];
 
-export const DEFAULT_FRAMEWORK_CONFIGURATION = {
-	apply_indexer_clauses: true,
-};
-
-export const DEFAULT_EDIT_FRAGMENT = TEXT_MATCH_OVER_MULTIPLE_FIELDS;
-
 export const DEFAULT_PARAMETER_CONFIGURATION = {};
 
 export const DEFAULT_SORT_CONFIGURATION = {};

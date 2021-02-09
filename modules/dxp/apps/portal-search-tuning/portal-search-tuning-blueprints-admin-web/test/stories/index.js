@@ -32,10 +32,7 @@ import JSONFragment from '../../src/main/resources/META-INF/resources/js/shared/
 import PageToolbar from '../../src/main/resources/META-INF/resources/js/shared/PageToolbar';
 import SearchInput from '../../src/main/resources/META-INF/resources/js/shared/SearchInput';
 import Element from '../../src/main/resources/META-INF/resources/js/shared/element';
-import {
-	DEFAULT_EDIT_FRAGMENT,
-	DEFAULT_FRAMEWORK_CONFIGURATION,
-} from '../../src/main/resources/META-INF/resources/js/utils/data';
+import {DEFAULT_BASELINE_FRAGMENTS} from '../../src/main/resources/META-INF/resources/js/utils/data';
 import AddBlueprintModal from '../../src/main/resources/META-INF/resources/js/view_blueprints/AddBlueprintModal';
 import {
 	ENTITY_JSON,
@@ -130,22 +127,15 @@ storiesOf('Pages|BlueprintForm', module)
 				}),
 			}}
 		/>
-	))
-	.add('default fragment', () => (
-		<BlueprintForm
-			context={CONTEXT}
-			props={{
-				...BLUEPRINT_FORM_PROPS,
-				blueprintId: '0',
-			}}
-		/>
 	));
 
 storiesOf('Pages|FragmentForm', module).add('default', () => (
 	<FragmentForm
 		context={CONTEXT}
 		props={{
-			initialConfigurationString: JSON.stringify(DEFAULT_EDIT_FRAGMENT),
+			initialConfigurationString: JSON.stringify(
+				DEFAULT_BASELINE_FRAGMENTS[0]
+			),
 			initialDescription: {'en-US': 'Description'},
 			initialTitle: {
 				'en-US': 'Test Title',
@@ -252,7 +242,10 @@ storiesOf('Components|QueryBuilder', module)
 	.add('QueryBuilder', () => (
 		<QueryBuilder
 			deleteFragment={action('buildFragment')}
-			frameworkConfig={DEFAULT_FRAMEWORK_CONFIGURATION}
+			frameworkConfig={{
+				apply_indexer_clauses: true,
+				searchable_asset_types: SEARCHABLE_ASSET_TYPES,
+			}}
 			searchableAssetTypes={SEARCHABLE_ASSET_TYPES}
 			selectedFragments={SELECTED_FRAGMENTS}
 			updateFragment={action('updateFragment')}
