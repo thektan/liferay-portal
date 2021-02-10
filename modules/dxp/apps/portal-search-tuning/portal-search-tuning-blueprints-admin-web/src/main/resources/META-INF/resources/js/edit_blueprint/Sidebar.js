@@ -45,7 +45,7 @@ const QueryFragmentList = ({
 
 	useEffect(() => {
 		setShowList(expand);
-	}, [expand]); //eslint-disable-line
+	}, [expand]);
 
 	return (
 		<>
@@ -245,11 +245,8 @@ function Sidebar({fragments = [], onAddFragment, onClose, visible}) {
 							<QueryFragmentList
 								category={category}
 								expand={
-									expandAll
-										? true
-										: DEFAULT_EXPANDED_LIST.includes(
-												category
-										  )
+									expandAll ||
+									DEFAULT_EXPANDED_LIST.includes(category)
 								}
 								key={category}
 								onAddFragment={onAddFragment}
