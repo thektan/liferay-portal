@@ -51,10 +51,15 @@ function EditBlueprintForm({
 }) {
 	const {namespace} = useContext(ThemeContext);
 
-	const [showSidebar, setShowSidebar] = useState(false);
+	const [showSidebar, setShowSidebar] = useState(true);
 	const [tab, setTab] = useState('query-builder');
 
 	const form = useRef();
+	const sidebarQueryFragments = useRef([
+		...QUERY_FRAGMENTS,
+		CUSTOM_JSON_FRAGMENT,
+		...queryFragments,
+	]);
 
 	const fragmentIdCounter = useRef(1);
 
@@ -272,14 +277,10 @@ function EditBlueprintForm({
 				return (
 					<>
 						<Sidebar
-							fragments={[
-								...QUERY_FRAGMENTS,
-								CUSTOM_JSON_FRAGMENT,
-								...queryFragments,
-							]}
+							fragments={sidebarQueryFragments.current}
 							onAddFragment={onAddFragment}
-							onToggleSidebar={() => setShowSidebar(!showSidebar)}
-							showSidebar={showSidebar}
+							onClose={() => setShowSidebar(false)}
+							visible={showSidebar}
 						/>
 
 						<QueryBuilder

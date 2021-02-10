@@ -30,11 +30,22 @@ const EmptyListMessage = () => (
 	</div>
 );
 
-const QueryFragmentList = ({category, onAddFragment, queryFragments}) => {
+const DEFAULT_EXPANDED_LIST = ['match'];
+
+const QueryFragmentList = ({
+	category,
+	expand,
+	onAddFragment,
+	queryFragments,
+}) => {
 	const {locale} = useContext(ThemeContext);
 
 	const [showAdd, setShowAdd] = useState(-1);
-	const [showList, setShowList] = useState(true);
+	const [showList, setShowList] = useState(expand);
+
+	useEffect(() => {
+		setShowList(expand);
+	}, [expand]); //eslint-disable-line
 
 	return (
 		<>
@@ -134,12 +145,7 @@ const QueryFragmentList = ({category, onAddFragment, queryFragments}) => {
 	);
 };
 
-function Sidebar({
-	fragments = [],
-	onAddFragment,
-	onToggleSidebar,
-	showSidebar,
-}) {
+function Sidebar({fragments = [], onAddFragment, onClose, visible}) {
 	const {locale} = useContext(ThemeContext);
 
 	const [loading, setLoading] = useState(true);
@@ -148,6 +154,7 @@ function Sidebar({
 
 	const [categories, setCategories] = useState([]);
 	const [categorizedFragments, setCategorizedFragments] = useState({});
+	const [expandAll, setExpandAll] = useState(false);
 
 	const categorizeFragments = (fragments) => {
 		const newCategories = [];
@@ -199,12 +206,13 @@ function Sidebar({
 
 			categorizeFragments(newQueryFragments);
 			setQueryFragments(newQueryFragments);
+			setExpandAll(!!value);
 		},
 		[fragments, locale]
 	);
 
 	return (
-		<div className={getCN('sidebar', 'sidebar-light', {open: showSidebar})}>
+		<div className={getCN('sidebar', 'sidebar-light', {open: visible})}>
 			<div className="sidebar-header">
 				<h4 className="component-title">
 					<span className="text-truncate-inline">
@@ -217,7 +225,7 @@ function Sidebar({
 				<ClayButton
 					aria-label={Liferay.Language.get('close')}
 					displayType="unstyled"
-					onClick={onToggleSidebar}
+					onClick={onClose}
 					small
 				>
 					<ClayIcon symbol="times" />
@@ -236,6 +244,13 @@ function Sidebar({
 						{categories.map((category) => (
 							<QueryFragmentList
 								category={category}
+								expand={
+									expandAll
+										? true
+										: DEFAULT_EXPANDED_LIST.includes(
+												category
+										  )
+								}
 								key={category}
 								onAddFragment={onAddFragment}
 								queryFragments={categorizedFragments[category]}
@@ -255,8 +270,8 @@ function Sidebar({
 Sidebar.propTypes = {
 	fragments: PropTypes.arrayOf(PropTypes.object),
 	onAddFragment: PropTypes.func,
-	onToggleSidebar: PropTypes.func,
-	showSidebar: PropTypes.bool,
+	onClose: PropTypes.func,
+	visible: PropTypes.bool,
 };
 
 export default React.memo(Sidebar);

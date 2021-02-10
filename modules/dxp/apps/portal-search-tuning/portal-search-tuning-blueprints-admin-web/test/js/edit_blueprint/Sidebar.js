@@ -17,6 +17,8 @@ import {SELECTED_FRAGMENTS} from '../mocks/data';
 
 import '@testing-library/jest-dom/extend-expect';
 
+const DEFAULT_EXPANDED_LIST = ['match'];
+
 function renderSidebar(props) {
 	return render(
 		<Sidebar
@@ -37,17 +39,29 @@ describe('Sidebar', () => {
 	it('renders the titles for the possible query fragments', () => {
 		const {getByText} = renderSidebar();
 
-		SELECTED_FRAGMENTS.map((fragment) =>
-			getByText(fragment.elementTemplateJSON.title['en_US'])
-		);
+		SELECTED_FRAGMENTS.map((fragment) => {
+			if (
+				DEFAULT_EXPANDED_LIST.includes(
+					fragment.elementTemplateJSON.category
+				)
+			) {
+				getByText(fragment.elementTemplateJSON.title['en_US']);
+			}
+		});
 	});
 
 	it('renders the descriptions for the possible query fragments', () => {
 		const {getByText} = renderSidebar();
 
-		SELECTED_FRAGMENTS.map((fragment) =>
-			getByText(fragment.elementTemplateJSON.description['en_US'])
-		);
+		SELECTED_FRAGMENTS.map((fragment) => {
+			if (
+				DEFAULT_EXPANDED_LIST.includes(
+					fragment.elementTemplateJSON.category
+				)
+			) {
+				getByText(fragment.elementTemplateJSON.description['en_US']);
+			}
+		});
 	});
 
 	it('renders the add button when mouseOver item', () => {
