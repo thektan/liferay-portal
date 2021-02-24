@@ -12,10 +12,14 @@
 							<#if entry.isUserPortraitVisible()>
 								<@liferay_ui["user-portrait"] userId=entry.getAssetEntryUserId() />
 							</#if>
+						</div>
 
+						<div class="autofit-col">
 							<#if entry.isThumbnailVisible()>
 								<img alt="${languageUtil.get(locale, "thumbnail")}" class="rounded search-result-thumbnail-img" src="${entry.getThumbnailURLString()}" />
-							<#elseif entry.isIconVisible()>
+							</#if>
+
+							<#if entry.isIconVisible()>
 								<span class="search-asset-type-sticker sticker sticker-rounded sticker-secondary sticker-static">
 									<@clay.icon symbol="${entry.getIconId()}" />
 								</span>
