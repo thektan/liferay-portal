@@ -152,9 +152,9 @@ storiesOf('Pages|BlueprintForm', module)
 					query_configuration: [],
 				}),
 				searchResultsURL:
-					'https://run.mocky.io/v3/fb22dc3f-532b-489a-bf7a-741223a40e13',
+					'https://run.mocky.io/v3/39531684-fbcf-4542-b903-1c9e4b916008',
 
-				// https://designer.mocky.io/manage/delete/fb22dc3f-532b-489a-bf7a-741223a40e13/2Wox2XTXmh4lvpvTYVaV1oo4eRSmWgXCKOCK
+				//https://designer.mocky.io/manage/delete/39531684-fbcf-4542-b903-1c9e4b916008/7kFkNoZZywNzPhMDx4dBpQJfUst34n1xydho
 
 			}}
 		/>
@@ -330,10 +330,10 @@ storiesOf('Components|Preview', module)
 			results={{
 				data: {
 					errors: [
-						{
+						JSON.stringify({
 							msg: 'The JSON is invalid',
 							severity: 'ERROR',
-						},
+						}),
 					],
 				},
 				loading: false,

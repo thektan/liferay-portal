@@ -150,10 +150,10 @@ function EditBlueprintForm({
 			setPreviewInfo({
 				data: {
 					errors: [
-						{
+						JSON.stringify({
 							msg: Liferay.Language.get('the-json-is-invalid'),
 							severity: Liferay.Language.get('error'),
-						},
+						}),
 					],
 				},
 				loading: false,
@@ -182,12 +182,12 @@ function EditBlueprintForm({
 					setPreviewInfo({
 						data: {
 							errors: [
-								{
+								JSON.stringify({
 									msg: Liferay.Language.get(
 										'the-json-is-invalid'
 									),
 									severity: Liferay.Language.get('error'),
-								},
+								}),
 							],
 						},
 						loading: false,

@@ -36,6 +36,10 @@ function Preview({fetchResults, onClose, results, visible}) {
 	const [activePage, setActivePage] = useState(1);
 	const [activeDelta, setActiveDelta] = useState(10);
 
+	const errors = results.data.errors
+		? results.data.errors.map((error) => JSON.parse(error))
+		: [];
+
 	const _handleFetch = () => {
 		if (value) {
 			fetchResults(value, activeDelta, activePage);
@@ -48,7 +52,7 @@ function Preview({fetchResults, onClose, results, visible}) {
 
 	const _renderErrors = () => (
 		<ClayList className="preview-error-list text-danger">
-			{results.data.errors.map((error, idx) => (
+			{errors.map((error, idx) => (
 				<ErrorListItem item={error} key={idx} />
 			))}
 		</ClayList>
@@ -145,13 +149,10 @@ function Preview({fetchResults, onClose, results, visible}) {
 				</div>
 			</nav>
 
-			{results.data.meta &&
-				(!results.data.errors || !results.data.errors.length) && (
-					<ResultsManagementBar />
-				)}
+			{results.data.meta && !errors.length && <ResultsManagementBar />}
 
 			{!results.loading ? (
-				results.data.errors && results.data.errors.length ? (
+				errors.length ? (
 					_renderErrors()
 				) : results.data.hits && results.data.hits.length ? (
 					_renderHits()

@@ -108,7 +108,7 @@ describe('Preview', () => {
 		const {getByText} = renderPreview({
 			results: {
 				data: {
-					errors,
+					errors: errors.map((error) => JSON.stringify(error)),
 				},
 				loading: false,
 			},
