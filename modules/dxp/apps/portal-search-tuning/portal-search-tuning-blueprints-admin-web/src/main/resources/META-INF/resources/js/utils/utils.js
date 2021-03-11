@@ -53,15 +53,6 @@ export const isNotEmpty = (item) =>
 
 /**
  * Function to validate the UI configuration, used to identify whether
- * every item in array is not null, undefined, or simply an empty string
- *
- * @param {Array} item Item to check
- * @return {boolean}
- */
-const isNotAllEmpty = (item) => item.every(isNotEmpty);
-
-/**
- * Function to validate the UI configuration, used to identify whether
  * a required value is not null or undefined
  *
  * Examples:
@@ -446,65 +437,4 @@ export const getElementOutput = ({
 	}
 
 	return elementTemplateJSON;
-};
-
-const ENTITY_KEYS = [
-	'com.liferay.portal.kernel.model.Group',
-	'com.liferay.portal.kernel.model.Organization',
-	'com.liferay.portal.kernel.model.Role',
-	'com.liferay.portal.kernel.model.Team',
-	'com.liferay.portal.kernel.model.User',
-	'com.liferay.portal.kernel.model.UserGroup',
-];
-
-/**
- * Function to validate the UI configuration, used to identify whether
- * user is missing a required value.
- *
- * Examples:
- * validateUIConfigurationJSON({
- *  	defaultValue: 10,
- *  	label: 'Title Boost',
- *  	type: 'slider'
- *  })
- * => false
- *
- * validateUIConfigurationJSON({
- *  	defaultValue: 3,
- *  	key: 'context.timespan',
- *  	label: 'Time Span',
- *  	type: 'number',
- *  	unit: 'days'
- *  }
- * => true
- *
- * @param {object} uiConfigurationJSON Object with UI configuration
- * @return {boolean}
- */
-export const validateUIConfigurationJSON = (uiConfigurationJSON) => {
-	return uiConfigurationJSON.every((item) => {
-		if (item.type === INPUT_TYPES.JSON) {
-			return isNotEmpty(item.key);
-		}
-		else if (item.type === INPUT_TYPES.ENTITY) {
-			return (
-				isNotAllEmpty([item.key, item.label, item.className]) &&
-				ENTITY_KEYS.includes(item.className)
-			);
-		}
-		else if (item.type === INPUT_TYPES.SELECT) {
-			return (
-				isNotAllEmpty([item.key, item.label, item.typeOptions]) &&
-				item.typeOptions.length > 0 &&
-				item.typeOptions.every(
-					(option) =>
-						isNotNullOrUndefined(option.label) &&
-						isNotNullOrUndefined(option.value)
-				)
-			);
-		}
-		else {
-			return isNotAllEmpty([item.type, item.key, item.label]);
-		}
-	});
 };
