@@ -26,9 +26,9 @@ import CodeMirrorEditor from '../CodeMirrorEditor';
 import PreviewModal from '../PreviewModal';
 import ThemeContext from '../ThemeContext';
 import DateInput from './DateInput';
-import EntityInput from './EntityInput';
 import FieldInput from './FieldInput';
 import FieldListInput from './FieldListInput';
+import ItemSelectorInput from './ItemSelectorInput';
 import JSONInput from './JSONInput';
 import MultiSelectInput from './MultiSelectInput';
 import NumberInput from './NumberInput';
@@ -101,18 +101,6 @@ function Element({
 						value={uiConfigurationValues[config.key]}
 					/>
 				);
-			case INPUT_TYPES.ENTITY:
-				return (
-					<EntityInput
-						className={config.className}
-						configKey={config.key}
-						disabled={disabled}
-						entityJSON={entityJSON}
-						label={config.label}
-						onChange={_handleChange}
-						value={uiConfigurationValues[config.key]}
-					/>
-				);
 			case INPUT_TYPES.FIELD:
 				return (
 					<FieldInput
@@ -139,6 +127,20 @@ function Element({
 						onChange={_handleChange}
 						showBoost={config.boost}
 						typeOptions={config.typeOptions}
+					/>
+				);
+			case INPUT_TYPES.ITEM_SELECTOR:
+				return (
+					<ItemSelectorInput
+						configKey={config.key}
+						disabled={disabled}
+						entityJSON={entityJSON}
+						itemType={
+							config.typeOptions && config.typeOptions.itemType
+						}
+						label={config.label}
+						onChange={_handleChange}
+						value={uiConfigurationValues[config.key]}
 					/>
 				);
 			case INPUT_TYPES.JSON:

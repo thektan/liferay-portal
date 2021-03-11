@@ -218,7 +218,7 @@ export const getDefaultValue = (item) => {
 					? moment(itemValue).unix()
 					: ''
 				: '';
-		case INPUT_TYPES.ENTITY:
+		case INPUT_TYPES.ITEM_SELECTOR:
 			return isNotEmpty(itemValue) &&
 				itemValue.length > 0 &&
 				itemValue.every(
@@ -331,7 +331,7 @@ export const getElementOutput = ({
 					  )
 					: '';
 			}
-			else if (config.type === INPUT_TYPES.ENTITY) {
+			else if (config.type === INPUT_TYPES.ITEM_SELECTOR) {
 				configValue = JSON.stringify(
 					uiConfigurationValues[config.key].map((item) => item.id)
 				);
@@ -422,7 +422,7 @@ export const getElementOutput = ({
 			if (
 				typeof configValue === 'number' ||
 				typeof configValue === 'boolean' ||
-				config.type === INPUT_TYPES.ENTITY ||
+				config.type === INPUT_TYPES.ITEM_SELECTOR ||
 				config.type === INPUT_TYPES.FIELD_LIST ||
 				config.type === INPUT_TYPES.JSON ||
 				config.type === INPUT_TYPES.MULTISELECT
