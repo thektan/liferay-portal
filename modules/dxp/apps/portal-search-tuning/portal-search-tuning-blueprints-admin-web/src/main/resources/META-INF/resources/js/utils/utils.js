@@ -333,7 +333,7 @@ export const getElementOutput = ({
 			}
 			else if (config.type === INPUT_TYPES.ITEM_SELECTOR) {
 				configValue = JSON.stringify(
-					uiConfigurationValues[config.key].map((item) => item.id)
+					uiConfigurationValues[config.key].map((item) => item.value)
 				);
 			}
 			else if (config.type === INPUT_TYPES.FIELD) {
