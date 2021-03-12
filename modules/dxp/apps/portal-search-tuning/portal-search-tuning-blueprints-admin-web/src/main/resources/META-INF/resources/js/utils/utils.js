@@ -66,7 +66,7 @@ export const isNotEmpty = (item) =>
  * @param {String|object} item Item to check
  * @return {boolean}
  */
-const isNotNullOrUndefined = (item) =>
+export const isNotNullOrUndefined = (item) =>
 	item !== null && typeof item !== 'undefined';
 
 /**
@@ -214,8 +214,8 @@ export const getDefaultValue = (item) => {
 			return isNotEmpty(itemValue)
 				? typeof itemValue == 'number'
 					? itemValue
-					: moment(itemValue).isValid()
-					? moment(itemValue).unix()
+					: moment(itemValue, ['MM-DD-YYYY', 'YYYY-MM-DD']).isValid()
+					? moment(itemValue, ['MM-DD-YYYY', 'YYYY-MM-DD']).unix()
 					: ''
 				: '';
 		case INPUT_TYPES.ITEM_SELECTOR:
