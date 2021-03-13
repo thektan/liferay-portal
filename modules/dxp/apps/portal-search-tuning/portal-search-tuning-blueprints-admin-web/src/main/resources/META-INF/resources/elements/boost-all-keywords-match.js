@@ -42,7 +42,6 @@ export default {
 	},
 	uiConfigurationJSON: [
 		{
-			boost: true,
 			defaultValue: [
 				{
 					boost: 2,
@@ -58,56 +57,43 @@ export default {
 			key: 'fields',
 			label: 'Field',
 			type: 'field-list',
-			typeOptions: [
-				{
-					label: 'Title',
-					value: 'localized_title',
-				},
-				{
-					label: 'Description',
-					value: 'description',
-				},
-				{
-					label: 'Content',
-					value: 'content',
-				},
-				{
-					label: 'Name',
-					value: 'name',
-				},
-			],
+			typeOptions: {
+				boost: true,
+			},
 		},
 		{
 			defaultValue: 'best_fields',
 			key: 'type',
 			label: 'Match Type',
 			type: 'select',
-			typeOptions: [
-				{
-					label: 'Best Fields',
-					value: 'best_fields',
-				},
-				{
-					label: 'Most Fields',
-					value: 'most_fields',
-				},
-				{
-					label: 'Cross Fields',
-					value: 'cross_fields',
-				},
-				{
-					label: 'Phrase',
-					value: 'phrase',
-				},
-				{
-					label: 'Phrase Prefix',
-					value: 'phrase_prefix',
-				},
-				{
-					label: 'Boolean Prefix',
-					value: 'bool_prefix',
-				},
-			],
+			typeOptions: {
+				options: [
+					{
+						label: 'Best Fields',
+						value: 'best_fields',
+					},
+					{
+						label: 'Most Fields',
+						value: 'most_fields',
+					},
+					{
+						label: 'Cross Fields',
+						value: 'cross_fields',
+					},
+					{
+						label: 'Phrase',
+						value: 'phrase',
+					},
+					{
+						label: 'Phrase Prefix',
+						value: 'phrase_prefix',
+					},
+					{
+						label: 'Boolean Prefix',
+						value: 'bool_prefix',
+					},
+				],
+			},
 		},
 		{
 			defaultValue: 10,

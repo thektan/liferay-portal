@@ -181,20 +181,22 @@ export const toNumber = (str) => {
  * => 10
  *
  * getDefaultValue({
- *  	key: 'config.lfr.enabled',
- *  	label: 'Enabled',
- *  	type: 'select',
- *  	typeOptions: [
- *  		{
- *  			label: 'True',
- *  			value: true,
- *  		},
- *  		{
- *  			label: 'False',
- *  			value: false,
- *  		},
- *  	],
- *  })
+ * 		key: 'config.lfr.enabled',
+ * 		label: 'Enabled',
+ * 		type: 'select',
+ * 		typeOptions: {
+ * 			options: [
+ * 				{
+ * 					label: 'True',
+ * 					value: true,
+ * 				},
+ * 				{
+ * 					label: 'False',
+ * 					value: false,
+ * 				},
+ * 			],
+ * 		},
+ * 	})
  * => true
  *
  * @param {object} item Configuration with key, name, type, defaultValue
@@ -202,13 +204,14 @@ export const toNumber = (str) => {
  */
 export const getDefaultValue = (item) => {
 	const itemValue = item.defaultValue;
+	const itemTypeOptions = item.typeOptions || {};
 
 	switch (item.type) {
 		case INPUT_TYPES.SELECT:
 			return isNotEmpty(itemValue)
 				? itemValue
-				: item.typeOptions && item.typeOptions[0].value
-				? item.typeOptions[0].value
+				: itemTypeOptions.options && itemTypeOptions.options[0].value
+				? itemTypeOptions.options[0].value
 				: '';
 		case INPUT_TYPES.DATE:
 			return isNotEmpty(itemValue)
@@ -317,6 +320,7 @@ export const getElementOutput = ({
 
 		uiConfigurationJSON.map((config) => {
 			let configValue = uiConfigurationValues[config.key];
+			const configTypeOptions = config.typeOptions || {};
 
 			if (config.type === INPUT_TYPES.DATE) {
 				configValue = uiConfigurationValues[config.key]
@@ -324,9 +328,7 @@ export const getElementOutput = ({
 							moment
 								.unix(uiConfigurationValues[config.key])
 								.format(
-									config.format
-										? config.format
-										: 'YYYYMMDDHHMMSS'
+									configTypeOptions.format || 'YYYYMMDDHHMMSS'
 								)
 					  )
 					: '';
@@ -405,12 +407,15 @@ export const getElementOutput = ({
 			else if (config.type === INPUT_TYPES.NUMBER) {
 				const oldConfigValue = uiConfigurationValues[config.key];
 
-				configValue = isNotEmpty(config.unitSuffix)
+				configValue = isNotEmpty(configTypeOptions.unitSuffix)
 					? typeof oldConfigValue == 'string'
-						? oldConfigValue.concat('', config.unitSuffix)
+						? oldConfigValue.concat(
+								'',
+								configTypeOptions.unitSuffix
+						  )
 						: JSON.stringify(oldConfigValue).concat(
 								'',
-								config.unitSuffix
+								configTypeOptions.unitSuffix
 						  )
 					: oldConfigValue;
 			}

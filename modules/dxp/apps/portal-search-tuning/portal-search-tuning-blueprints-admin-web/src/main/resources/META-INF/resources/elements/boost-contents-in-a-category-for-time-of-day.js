@@ -58,24 +58,26 @@ export default {
 			key: 'time_of_day',
 			label: 'Time of Day',
 			type: 'select',
-			typeOptions: [
-				{
-					label: 'Morning (4am - 12am)',
-					value: 'morning',
-				},
-				{
-					label: 'Afternoon (12pm - 5pm)',
-					value: 'afternoon',
-				},
-				{
-					label: 'Evening (5pm - 8pm)',
-					value: 'evening',
-				},
-				{
-					label: 'Night (8pm - 4am)',
-					value: 'night',
-				},
-			],
+			typeOptions: {
+				options: [
+					{
+						label: 'Morning (4am - 12am)',
+						value: 'morning',
+					},
+					{
+						label: 'Afternoon (12pm - 5pm)',
+						value: 'afternoon',
+					},
+					{
+						label: 'Evening (5pm - 8pm)',
+						value: 'evening',
+					},
+					{
+						label: 'Night (8pm - 4am)',
+						value: 'night',
+					},
+				],
+			},
 		},
 		{
 			defaultValue: 20,

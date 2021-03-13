@@ -41,7 +41,6 @@ export default {
 	},
 	uiConfigurationJSON: [
 		{
-			boost: true,
 			defaultValue: [
 				{
 					boost: '2',
@@ -57,39 +56,26 @@ export default {
 			key: 'fields',
 			label: 'Fields',
 			type: 'field-list',
-			typeOptions: [
-				{
-					label: 'Title',
-					value: 'localized_title',
-				},
-				{
-					label: 'Description',
-					value: 'description',
-				},
-				{
-					label: 'Content',
-					value: 'content',
-				},
-				{
-					label: 'Name',
-					value: 'name',
-				},
-			],
+			typeOptions: {
+				boost: true,
+			},
 		},
 		{
 			key: 'operator',
 			label: 'Operator',
 			type: 'select',
-			typeOptions: [
-				{
-					label: 'OR',
-					value: 'or',
-				},
-				{
-					label: 'AND',
-					value: 'and',
-				},
-			],
+			typeOptions: {
+				options: [
+					{
+						label: 'OR',
+						value: 'or',
+					},
+					{
+						label: 'AND',
+						value: 'and',
+					},
+				],
+			},
 		},
 		{
 			defaultValue: 1,

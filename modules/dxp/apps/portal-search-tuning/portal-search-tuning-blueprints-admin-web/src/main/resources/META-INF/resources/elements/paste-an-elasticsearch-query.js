@@ -38,24 +38,26 @@ export default {
 			key: 'occur',
 			label: 'Occur',
 			type: 'select',
-			typeOptions: [
-				{
-					label: 'MUST',
-					value: 'must',
-				},
-				{
-					label: 'SHOULD',
-					value: 'should',
-				},
-				{
-					label: 'MUST NOT',
-					value: 'must_not',
-				},
-				{
-					label: 'FILTER',
-					value: 'filter',
-				},
-			],
+			typeOptions: {
+				options: [
+					{
+						label: 'MUST',
+						value: 'must',
+					},
+					{
+						label: 'SHOULD',
+						value: 'should',
+					},
+					{
+						label: 'MUST NOT',
+						value: 'must_not',
+					},
+					{
+						label: 'FILTER',
+						value: 'filter',
+					},
+				],
+			},
 		},
 		{
 			defaultValue: {},

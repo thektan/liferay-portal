@@ -90,6 +90,7 @@ function Element({
 	const _renderInput = (config) => {
 		const disabled = !elementTemplateJSON.enabled;
 		const inputId = _getInputId(id, config.key);
+		const typeOptions = config.typeOptions || {};
 
 		switch (config.type) {
 			case INPUT_TYPES.DATE:
@@ -111,7 +112,7 @@ function Element({
 						indexFields={indexFields}
 						initialValue={initialUIConfigurationValues[config.key]}
 						onChange={_handleChange}
-						showBoost={config.boost}
+						showBoost={typeOptions.boost}
 						value={uiConfigurationValues[config.key]}
 					/>
 				);
@@ -125,8 +126,7 @@ function Element({
 						indexFields={indexFields}
 						initialValue={initialUIConfigurationValues[config.key]}
 						onChange={_handleChange}
-						showBoost={config.boost}
-						typeOptions={config.typeOptions}
+						showBoost={typeOptions.boost}
 					/>
 				);
 			case INPUT_TYPES.ITEM_SELECTOR:
@@ -135,9 +135,7 @@ function Element({
 						configKey={config.key}
 						disabled={disabled}
 						entityJSON={entityJSON}
-						itemType={
-							config.typeOptions && config.typeOptions.itemType
-						}
+						itemType={typeOptions.itemType}
 						label={config.label}
 						onChange={_handleChange}
 						value={uiConfigurationValues[config.key]}
@@ -171,11 +169,11 @@ function Element({
 						id={inputId}
 						initialValue={initialUIConfigurationValues[config.key]}
 						label={config.label}
-						max={config.max}
-						min={config.min}
+						max={typeOptions.max}
+						min={typeOptions.min}
 						onChange={_handleChange}
-						step={config.step}
-						unit={config.unit}
+						step={typeOptions.step}
+						unit={typeOptions.unit}
 					/>
 				);
 			case INPUT_TYPES.SELECT:
@@ -186,7 +184,7 @@ function Element({
 						id={inputId}
 						label={config.label}
 						onChange={_handleChange}
-						typeOptions={config.typeOptions}
+						options={typeOptions.options}
 						value={uiConfigurationValues[config.key]}
 					/>
 				);
@@ -199,10 +197,10 @@ function Element({
 						id={inputId}
 						initialValue={initialUIConfigurationValues[config.key]}
 						label={config.label}
-						max={config.max}
-						min={config.min}
+						max={typeOptions.max}
+						min={typeOptions.min}
 						onChange={_handleChange}
-						step={config.step}
+						step={typeOptions.step}
 					/>
 				);
 			default:

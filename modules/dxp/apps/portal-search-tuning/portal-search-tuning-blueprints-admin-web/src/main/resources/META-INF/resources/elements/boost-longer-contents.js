@@ -55,56 +55,60 @@ export default {
 			defaultValue: 1.5,
 			key: 'factor',
 			label: 'Factor',
-			min: 0,
 			type: 'number',
+			typeOptions: {
+				min: 0,
+			},
 		},
 		{
 			defaultValue: 'ln',
 			key: 'modifier',
 			label: 'Modifier',
 			type: 'select',
-			typeOptions: [
-				{
-					label: 'None',
-					value: 'none',
-				},
-				{
-					label: 'log',
-					value: 'log',
-				},
-				{
-					label: 'log1p',
-					value: 'log1p',
-				},
-				{
-					label: 'log2p',
-					value: 'log2p',
-				},
-				{
-					label: 'ln',
-					value: 'ln',
-				},
-				{
-					label: 'ln1p',
-					value: 'ln1p',
-				},
-				{
-					label: 'ln2p',
-					value: 'ln2p',
-				},
-				{
-					label: 'Square',
-					value: 'square',
-				},
-				{
-					label: 'sqrt',
-					value: 'sqrt',
-				},
-				{
-					label: 'Reciprocal',
-					value: 'reciprocal',
-				},
-			],
+			typeOptions: {
+				options: [
+					{
+						label: 'None',
+						value: 'none',
+					},
+					{
+						label: 'log',
+						value: 'log',
+					},
+					{
+						label: 'log1p',
+						value: 'log1p',
+					},
+					{
+						label: 'log2p',
+						value: 'log2p',
+					},
+					{
+						label: 'ln',
+						value: 'ln',
+					},
+					{
+						label: 'ln1p',
+						value: 'ln1p',
+					},
+					{
+						label: 'ln2p',
+						value: 'ln2p',
+					},
+					{
+						label: 'Square',
+						value: 'square',
+					},
+					{
+						label: 'sqrt',
+						value: 'sqrt',
+					},
+					{
+						label: 'Reciprocal',
+						value: 'reciprocal',
+					},
+				],
+			},
 		},
 	],
 };

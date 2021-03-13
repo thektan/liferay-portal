@@ -64,8 +64,10 @@ export default {
 			key: 'time_range',
 			label: 'Time range',
 			type: 'number',
-			unit: 'days',
-			unitSuffix: 'd',
+			typeOptions: {
+				unit: 'days',
+				unitSuffix: 'd',
+			},
 		},
 		{
 			defaultValue: 20,

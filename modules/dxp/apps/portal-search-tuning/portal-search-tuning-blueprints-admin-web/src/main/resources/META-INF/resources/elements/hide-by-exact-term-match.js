@@ -53,28 +53,6 @@ export default {
 			key: 'field',
 			label: 'Field',
 			type: 'field',
-			typeOptions: [
-				{
-					label: 'Entry Class PK',
-					value: 'entryClassPK',
-				},
-				{
-					label: 'Folder ID',
-					value: 'folderId',
-				},
-				{
-					label: 'Group ID',
-					value: 'groupId',
-				},
-				{
-					label: 'User ID',
-					value: 'userId',
-				},
-				{
-					label: 'Web Content Article ID',
-					value: 'articleId_String_sortable',
-				},
-			],
 		},
 		{
 			key: 'value',
