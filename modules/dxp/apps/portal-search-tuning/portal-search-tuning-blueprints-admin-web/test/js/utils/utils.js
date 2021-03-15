@@ -12,6 +12,7 @@
 import {
 	getDefaultValue,
 	getElementOutput,
+	getUIConfigurationValues,
 	isNotEmpty,
 	isNotNullOrUndefined,
 	renameKeys,
@@ -67,8 +68,8 @@ describe('utils', () => {
 		it('replaces the string for locale', () => {
 			expect(
 				replaceStr(
-					'title_${config.language}',
-					'${config.language}',
+					'title_${configuration.language}',
+					'${configuration.language}',
 					'en_US'
 				)
 			).toEqual('title_en_US');
@@ -90,8 +91,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: '01-01-2021',
-					key: 'start_date',
 					label: 'Create Date: From',
+					name: 'start_date',
 					type: 'date',
 				})
 			).toEqual(1609488000); //unix time
@@ -101,8 +102,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: 1615509523,
-					key: 'start_date',
 					label: 'Create Date: From',
+					name: 'start_date',
 					type: 'date',
 				})
 			).toEqual(1615509523); //same number
@@ -111,8 +112,8 @@ describe('utils', () => {
 		it('gets default value for empty dates', () => {
 			expect(
 				getDefaultValue({
-					key: 'start_date',
 					label: 'Create Date: From',
+					name: 'start_date',
 					type: 'date',
 				})
 			).toEqual('');
@@ -122,8 +123,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: false,
-					key: 'config.lfr.enabled',
 					label: 'Enabled',
+					name: 'lfr.enabled',
 					type: 'select',
 					typeOptions: {
 						options: [
@@ -144,8 +145,8 @@ describe('utils', () => {
 		it('gets default value for empty select', () => {
 			expect(
 				getDefaultValue({
-					key: 'config.lfr.enabled',
 					label: 'Enabled',
+					name: 'enabled',
 					type: 'select',
 					typeOptions: {
 						options: [
@@ -166,8 +167,8 @@ describe('utils', () => {
 		it('gets default value for empty select', () => {
 			expect(
 				getDefaultValue({
-					key: 'config.value',
 					label: 'Value',
+					name: 'value',
 					type: 'select',
 					typeOptions: {
 						options: [
@@ -190,8 +191,8 @@ describe('utils', () => {
 				getDefaultValue({
 					defaultValue: [{label: 'correct', value: 'correct'}],
 					helpText: 'Select role',
-					key: 'role_id',
 					label: 'Role',
+					name: 'role_id',
 					type: 'itemSelector',
 					typeOptions: {
 						itemType: 'com.liferay.portal.kernel.model.Role',
@@ -205,8 +206,8 @@ describe('utils', () => {
 				getDefaultValue({
 					defaultValue: [{id: 'incorrect', value: 'incorrect'}],
 					helpText: 'Select role',
-					key: 'role_id',
 					label: 'Role',
+					name: 'role_id',
 					type: 'itemSelector',
 					typeOptions: {
 						itemType: 'com.liferay.portal.kernel.model.Role',
@@ -219,8 +220,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					helpText: 'Select role',
-					key: 'role_id',
 					label: 'Role',
+					name: 'role_id',
 					type: 'itemSelector',
 					typeOptions: {
 						itemType: 'com.liferay.portal.kernel.model.Role',
@@ -233,8 +234,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: [],
-					key: 'values',
 					label: 'Values',
+					name: 'values',
 					type: 'multiselect',
 				})
 			).toEqual([]);
@@ -243,8 +244,8 @@ describe('utils', () => {
 		it('gets default value for empty multiselect', () => {
 			expect(
 				getDefaultValue({
-					key: 'values',
 					label: 'Values',
+					name: 'values',
 					type: 'multiselect',
 				})
 			).toEqual([]);
@@ -254,8 +255,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: 30,
-					key: 'time_range',
 					label: 'Time range',
+					name: 'time_range',
 					type: 'number',
 					typeOptions: {
 						unit: 'days',
@@ -268,8 +269,8 @@ describe('utils', () => {
 		it('gets default value for empty number', () => {
 			expect(
 				getDefaultValue({
-					key: 'time_range',
 					label: 'Time range',
+					name: 'time_range',
 					type: 'number',
 					typeOptions: {
 						unit: 'days',
@@ -283,8 +284,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: 10,
-					key: 'config.title.boost',
-					label: 'Title Boost',
+					label: 'Boost',
+					name: 'boost',
 					type: 'slider',
 				})
 			).toEqual(10);
@@ -293,8 +294,8 @@ describe('utils', () => {
 		it('gets default value for empty slider', () => {
 			expect(
 				getDefaultValue({
-					key: 'config.title.boost',
-					label: 'Title Boost',
+					label: 'Boost',
+					name: 'Boost',
 					type: 'slider',
 				})
 			).toEqual('');
@@ -311,8 +312,8 @@ describe('utils', () => {
 							locale: '${context.language_id}',
 						},
 					],
-					key: 'fields',
 					label: 'Field',
+					name: 'fields',
 					type: 'field-list',
 					typeOptions: {
 						boost: true,
@@ -337,8 +338,8 @@ describe('utils', () => {
 							value: 'localized_title',
 						},
 					],
-					key: 'fields',
 					label: 'Field',
+					name: 'fields',
 					type: 'field-list',
 					typeOptions: {
 						boost: true,
@@ -350,8 +351,8 @@ describe('utils', () => {
 		it('gets default value for empty field list', () => {
 			expect(
 				getDefaultValue({
-					key: 'fields',
 					label: 'Field',
+					name: 'fields',
 					type: 'field-list',
 					typeOptions: {
 						boost: true,
@@ -367,8 +368,8 @@ describe('utils', () => {
 						field: '',
 						locale: '',
 					},
-					key: 'field',
 					label: 'Field',
+					name: 'field',
 					type: 'field',
 				})
 			).toEqual({
@@ -380,8 +381,8 @@ describe('utils', () => {
 		it('gets default value for empty field', () => {
 			expect(
 				getDefaultValue({
-					key: 'field',
 					label: 'Field',
+					name: 'field',
 					type: 'field',
 				})
 			).toEqual({
@@ -394,7 +395,7 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: {test: 'abc'},
-					key: 'query',
+					name: 'query',
 					type: 'json',
 				})
 			).toEqual({test: 'abc'});
@@ -403,7 +404,7 @@ describe('utils', () => {
 		it('gets default value for empty json', () => {
 			expect(
 				getDefaultValue({
-					key: 'query',
+					name: 'query',
 					type: 'json',
 				})
 			).toEqual({});
@@ -414,8 +415,8 @@ describe('utils', () => {
 				getDefaultValue({
 					defaultValue: 'simple text value',
 					helpText: 'Add asset tag value',
-					key: 'asset_tag',
 					label: 'Asset Tag',
+					name: 'asset_tag',
 					type: 'text',
 				})
 			).toEqual('simple text value');
@@ -424,8 +425,8 @@ describe('utils', () => {
 		it('gets default value for empty text', () => {
 			expect(
 				getDefaultValue({
-					key: 'asset_tag',
 					label: 'Asset Tag',
+					name: 'asset_tag',
 					type: 'text',
 				})
 			).toEqual('');
@@ -435,8 +436,8 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: {test: 'abc'},
-					key: 'json',
 					label: 'Json',
+					name: 'json',
 				})
 			).toEqual({test: 'abc'});
 		});
@@ -444,10 +445,41 @@ describe('utils', () => {
 		it('gets default value for empty text/type', () => {
 			expect(
 				getDefaultValue({
-					key: 'tag',
 					label: 'Tag',
+					name: 'tag',
 				})
 			).toEqual('');
+		});
+	});
+
+	describe('getUIConfigurationValues', () => {
+		it('extracts the values within list of fieldsets', () => {
+			expect(
+				getUIConfigurationValues({
+					fieldSets: [
+						{
+							fields: [
+								{
+									defaultValue: 10,
+									label: 'Boost',
+									name: 'boost',
+									type: 'slider',
+								},
+							],
+						},
+						{
+							fields: [
+								{
+									defaultValue: 'en_US',
+									label: 'Language',
+									name: 'language',
+									type: 'text',
+								},
+							],
+						},
+					],
+				})
+			).toEqual({boost: 10, language: 'en_US'});
 		});
 	});
 
@@ -456,18 +488,24 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						start_date: '${config.start_date}',
+						start_date: '${configuration.start_date}',
 					},
-					uiConfigurationJSON: [
-						{
-							key: 'start_date',
-							label: 'Create Date: From',
-							type: 'date',
-							typeOptions: {
-								format: 'YYYYMMDD',
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										label: 'Create Date: From',
+										name: 'start_date',
+										type: 'date',
+										typeOptions: {
+											format: 'YYYYMMDD',
+										},
+									},
+								],
 							},
-						},
-					],
+						],
+					},
 					uiConfigurationValues: {
 						start_date: 1609488000,
 					},
@@ -481,32 +519,38 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						type: '${config.type}',
+						type: '${configuration.type}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: 'best_fields',
-							key: 'type',
-							label: 'Match Type',
-							type: 'select',
-							typeOptions: {
-								options: [
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
 									{
-										label: 'Best Fields',
-										value: 'best_fields',
-									},
-									{
-										label: 'Most Fields',
-										value: 'most_fields',
-									},
-									{
-										label: 'Cross Fields',
-										value: 'cross_fields',
+										defaultValue: 'best_fields',
+										label: 'Match Type',
+										name: 'type',
+										type: 'select',
+										typeOptions: {
+											options: [
+												{
+													label: 'Best Fields',
+													value: 'best_fields',
+												},
+												{
+													label: 'Most Fields',
+													value: 'most_fields',
+												},
+												{
+													label: 'Cross Fields',
+													value: 'cross_fields',
+												},
+											],
+										},
 									},
 								],
 							},
-						},
-					],
+						],
+					},
 					uiConfigurationValues: {
 						type: 'best_fields',
 					},
@@ -520,19 +564,25 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						role: '${config.role_id}',
+						role: '${configuration.role_id}',
 					},
-					uiConfigurationJSON: [
-						{
-							key: 'role_id',
-							label: 'Role',
-							type: 'itemSelector',
-							typeOptions: {
-								itemType:
-									'com.liferay.portal.kernel.model.Role',
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										label: 'Role',
+										name: 'role_id',
+										type: 'itemSelector',
+										typeOptions: {
+											itemType:
+												'com.liferay.portal.kernel.model.Role',
+										},
+									},
+								],
 							},
-						},
-					],
+						],
+					},
 					uiConfigurationValues: {
 						role_id: [{label: 'Administrator', value: '20107'}],
 					},
@@ -546,16 +596,22 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						keywords: '${config.keywords}',
+						keywords: '${configuration.keywords}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: [],
-							key: 'keywords',
-							label: 'Keywords',
-							type: 'multiselect',
-						},
-					],
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: [],
+										label: 'Keywords',
+										name: 'keywords',
+										type: 'multiselect',
+									},
+								],
+							},
+						],
+					},
 					uiConfigurationValues: {
 						keywords: [{label: 'test', value: 'test'}],
 					},
@@ -569,16 +625,22 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						asset_category_id: '${config.asset_category_id}',
+						asset_category_id: '${configuration.asset_category_id}',
 					},
-					uiConfigurationJSON: [
-						{
-							helpText: 'Add asset category ID',
-							key: 'asset_category_id',
-							label: 'Asset Category',
-							type: 'number',
-						},
-					],
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										helpText: 'Add asset category ID',
+										label: 'Asset Category',
+										name: 'asset_category_id',
+										type: 'number',
+									},
+								],
+							},
+						],
+					},
 					uiConfigurationValues: {
 						asset_category_id: 1032490,
 					},
@@ -592,20 +654,26 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						time_range: '${config.time_range}',
+						time_range: '${configuration.time_range}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: 30,
-							key: 'time_range',
-							label: 'Time range',
-							type: 'number',
-							typeOptions: {
-								unit: 'days',
-								unitSuffix: 'd',
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: 30,
+										label: 'Time range',
+										name: 'time_range',
+										type: 'number',
+										typeOptions: {
+											unit: 'days',
+											unitSuffix: 'd',
+										},
+									},
+								],
 							},
-						},
-					],
+						],
+					},
 					uiConfigurationValues: {
 						time_range: 30,
 					},
@@ -619,16 +687,22 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						boost: '${config.boost}',
+						boost: '${configuration.boost}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: 10,
-							key: 'boost',
-							label: 'Boost',
-							type: 'slider',
-						},
-					],
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: 10,
+										label: 'Boost',
+										name: 'boost',
+										type: 'slider',
+									},
+								],
+							},
+						],
+					},
 					uiConfigurationValues: {
 						boost: 20,
 					},
@@ -642,19 +716,25 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						field: '${config.field}',
+						field: '${configuration.field}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: {
-								field: '',
-								locale: '',
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: {
+											field: '',
+											locale: '',
+										},
+										label: 'Field',
+										name: 'field',
+										type: 'field',
+									},
+								],
 							},
-							key: 'field',
-							label: 'Field',
-							type: 'field',
-						},
-					],
+						],
+					},
 					uiConfigurationValues: {
 						field: {
 							boost: 1,
@@ -672,30 +752,38 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						fields: '${config.fields}',
+						fields: '${configuration.fields}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: [
-								{
-									boost: 2,
-									field: 'localized_title',
-									locale: '${context.language_id}',
-								},
-								{
-									boost: 1,
-									field: 'content',
-									locale: '${context.language_id}',
-								},
-							],
-							key: 'fields',
-							label: 'Field',
-							type: 'field-list',
-							typeOptions: {
-								boost: true,
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: [
+											{
+												boost: 2,
+												field: 'localized_title',
+												locale:
+													'${context.language_id}',
+											},
+											{
+												boost: 1,
+												field: 'content',
+												locale:
+													'${context.language_id}',
+											},
+										],
+										label: 'Field',
+										name: 'fields',
+										type: 'field-list',
+										typeOptions: {
+											boost: true,
+										},
+									},
+								],
 							},
-						},
-					],
+						],
+					},
 					uiConfigurationValues: {
 						fields: [
 							{
@@ -723,15 +811,21 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						json: '${config.json}',
+						json: '${configuration.json}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue: {},
-							key: 'json',
-							type: 'json',
-						},
-					],
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: {},
+										name: 'json',
+										type: 'json',
+									},
+								],
+							},
+						],
+					},
 					uiConfigurationValues: {
 						json: {
 							category: 'custom',
@@ -747,18 +841,24 @@ describe('utils', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
-						geopoint: '${config.geopoint}',
+						geopoint: '${configuration.geopoint}',
 					},
-					uiConfigurationJSON: [
-						{
-							defaultValue:
-								'expando__keyword__custom_fields__location_geolocation',
-							helpText: 'A geopoint field',
-							key: 'geopoint',
-							label: 'Geopoint',
-							type: 'text',
-						},
-					],
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue:
+											'expando__keyword__custom_fields__location_geolocation',
+										helpText: 'A geopoint field',
+										label: 'Geopoint',
+										name: 'geopoint',
+										type: 'text',
+									},
+								],
+							},
+						],
+					},
 					uiConfigurationValues: {
 						geopoint:
 							'expando__keyword__custom_fields__location_geolocation',

@@ -73,7 +73,7 @@ export const isNotNullOrUndefined = (item) =>
  * Function to replace all instances of a string.
  *
  * Example:
- * replaceStr('title_${config.language}', '${config.language}', 'en_US')
+ * replaceStr('title_${configuration.language}', '${configuration.language}', 'en_US')
  * => 'title_en_US'
  *
  * @param {String} str Original string
@@ -174,15 +174,15 @@ export const toNumber = (str) => {
  * Examples:
  * getDefaultValue({
  *  	defaultValue: 10,
- *  	key: 'config.title.boost',
  *  	label: 'Title Boost',
+ *  	name: 'boost',
  *  	type: 'slider',
  *  })
  * => 10
  *
  * getDefaultValue({
- * 		key: 'config.lfr.enabled',
  * 		label: 'Enabled',
+ * 		name: 'enabled',
  * 		type: 'select',
  * 		typeOptions: {
  * 			options: [
@@ -268,34 +268,50 @@ export const getDefaultValue = (item) => {
  * Function for getting all the default values from a UI configuration.
  *
  * Example:
- * getUIConfigurationValues(
- *  	[
- *  		{
- *  			defaultValue: 10,
- *  			key: 'boost',
- *  			label: 'Boost',
- *  			type: 'slider',
- *  		},
- *  		{
- *  			defaultValue: 'en_US',
- *  			key: 'language',
- *  			label: 'Language',
- *  			type: 'text',
- *  		}
- *  	]
- * )
+ * getUIConfigurationValues({
+ * 	fieldSets: [
+ * 		{
+ * 			fields: [
+ * 				{
+ * 					defaultValue: 10,
+ * 					label: 'Boost',
+ * 					name: 'boost',
+ * 					type: 'slider',
+ * 				},
+ * 			],
+ * 		},
+ * 		{
+ * 			fields: [
+ * 				{
+ * 					defaultValue: 'en_US',
+ * 					label: 'Language',
+ * 					name: 'language',
+ * 					type: 'text',
+ * 				},
+ * 			],
+ * 		},
+ * 	],
+ * });
  * => {boost: 10, language: 'en_US'}
  *
  * @param {object} uiConfigurationJSON Object with UI configuration
  * @return {object}
  */
 export const getUIConfigurationValues = (uiConfigurationJSON) => {
-	if (uiConfigurationJSON) {
-		return uiConfigurationJSON.reduce((acc, curr) => {
-			return {
-				...acc,
-				[`${curr.key}`]: getDefaultValue(curr),
-			};
+	if (uiConfigurationJSON.fieldSets) {
+		return uiConfigurationJSON.fieldSets.reduce((allValues, fieldSet) => {
+			const uiConfigurationValues = fieldSet.fields
+				? fieldSet.fields.reduce((acc, curr) => {
+						return {
+							...acc,
+							[`${curr.name}`]: getDefaultValue(curr),
+						};
+				  }, {})
+				: {};
+
+			// gets uiConfigurationValues within each fields array
+
+			return {...allValues, ...uiConfigurationValues};
 		}, {});
 	}
 
@@ -315,61 +331,44 @@ export const getElementOutput = ({
 	uiConfigurationJSON,
 	uiConfigurationValues,
 }) => {
-	if (uiConfigurationJSON) {
+	if (uiConfigurationJSON.fieldSets) {
 		let flattenJSON = JSON.stringify(elementTemplateJSON);
 
-		uiConfigurationJSON.map((config) => {
-			let configValue = uiConfigurationValues[config.key];
-			const configTypeOptions = config.typeOptions || {};
+		uiConfigurationJSON.fieldSets.map((fieldSet) => {
+			if (fieldSet.fields) {
+				fieldSet.fields.map((config) => {
+					let configValue = uiConfigurationValues[config.name];
+					const configTypeOptions = config.typeOptions || {};
 
-			if (config.type === INPUT_TYPES.DATE) {
-				configValue = uiConfigurationValues[config.key]
-					? JSON.parse(
-							moment
-								.unix(uiConfigurationValues[config.key])
-								.format(
-									configTypeOptions.format || 'YYYYMMDDHHMMSS'
-								)
-					  )
-					: '';
-			}
-			else if (config.type === INPUT_TYPES.ITEM_SELECTOR) {
-				configValue = JSON.stringify(
-					uiConfigurationValues[config.key].map((item) => item.value)
-				);
-			}
-			else if (config.type === INPUT_TYPES.FIELD) {
-				const {
-					boost,
-					field,
-					languageIdPosition,
-					locale = '',
-				} = uiConfigurationValues[config.key];
+					if (config.type === INPUT_TYPES.DATE) {
+						configValue = uiConfigurationValues[config.name]
+							? JSON.parse(
+									moment
+										.unix(
+											uiConfigurationValues[config.name]
+										)
+										.format(
+											configTypeOptions.format ||
+												'YYYYMMDDHHMMSS'
+										)
+							  )
+							: '';
+					}
+					else if (config.type === INPUT_TYPES.ITEM_SELECTOR) {
+						configValue = JSON.stringify(
+							uiConfigurationValues[config.name].map(
+								(item) => item.value
+							)
+						);
+					}
+					else if (config.type === INPUT_TYPES.FIELD) {
+						const {
+							boost,
+							field,
+							languageIdPosition,
+							locale = '',
+						} = uiConfigurationValues[config.name];
 
-				const transformedLocale =
-					!locale || locale.includes('$') ? locale : `_${locale}`;
-
-				let localizedField;
-
-				if (languageIdPosition > -1) {
-					localizedField =
-						field.substring(0, languageIdPosition) +
-						transformedLocale +
-						field.substring(languageIdPosition);
-				}
-				else {
-					localizedField = field + transformedLocale;
-				}
-
-				configValue =
-					boost && boost > 0
-						? `${localizedField}^${boost}`
-						: localizedField;
-			}
-			else if (config.type === INPUT_TYPES.FIELD_LIST) {
-				const fields = uiConfigurationValues[config.key]
-					.filter(({field}) => !!field) // Remove blank fields
-					.map(({boost, field, languageIdPosition, locale = ''}) => {
 						const transformedLocale =
 							!locale || locale.includes('$')
 								? locale
@@ -387,55 +386,97 @@ export const getElementOutput = ({
 							localizedField = field + transformedLocale;
 						}
 
-						return boost && boost > 0
-							? `${localizedField}^${boost}`
-							: localizedField;
-					});
+						configValue =
+							boost && boost > 0
+								? `${localizedField}^${boost}`
+								: localizedField;
+					}
+					else if (config.type === INPUT_TYPES.FIELD_LIST) {
+						const fields = uiConfigurationValues[config.name]
+							.filter(({field}) => !!field) // Remove blank fields
+							.map(
+								({
+									boost,
+									field,
+									languageIdPosition,
+									locale = '',
+								}) => {
+									const transformedLocale =
+										!locale || locale.includes('$')
+											? locale
+											: `_${locale}`;
 
-				configValue = JSON.stringify(fields);
+									let localizedField;
+
+									if (languageIdPosition > -1) {
+										localizedField =
+											field.substring(
+												0,
+												languageIdPosition
+											) +
+											transformedLocale +
+											field.substring(languageIdPosition);
+									}
+									else {
+										localizedField =
+											field + transformedLocale;
+									}
+
+									return boost && boost > 0
+										? `${localizedField}^${boost}`
+										: localizedField;
+								}
+							);
+
+						configValue = JSON.stringify(fields);
+					}
+					else if (config.type === INPUT_TYPES.JSON) {
+						configValue = JSON.stringify(
+							uiConfigurationValues[config.name]
+						);
+					}
+					else if (config.type === INPUT_TYPES.MULTISELECT) {
+						configValue = JSON.stringify(
+							uiConfigurationValues[config.name].map(
+								(item) => item.value
+							)
+						);
+					}
+					else if (config.type === INPUT_TYPES.NUMBER) {
+						const oldConfigValue =
+							uiConfigurationValues[config.name];
+
+						configValue = isNotEmpty(configTypeOptions.unitSuffix)
+							? typeof oldConfigValue == 'string'
+								? oldConfigValue.concat(
+										'',
+										configTypeOptions.unitSuffix
+								  )
+								: JSON.stringify(oldConfigValue).concat(
+										'',
+										configTypeOptions.unitSuffix
+								  )
+							: oldConfigValue;
+					}
+
+					let key = `\${${CONFIG_PREFIX}.${config.name}}`;
+
+					// Check whether to add quotes around output
+
+					if (
+						typeof configValue === 'number' ||
+						typeof configValue === 'boolean' ||
+						config.type === INPUT_TYPES.ITEM_SELECTOR ||
+						config.type === INPUT_TYPES.FIELD_LIST ||
+						config.type === INPUT_TYPES.JSON ||
+						config.type === INPUT_TYPES.MULTISELECT
+					) {
+						key = `"$\{${CONFIG_PREFIX}.${config.name}}"`;
+					}
+
+					flattenJSON = replaceStr(flattenJSON, key, configValue);
+				});
 			}
-			else if (config.type === INPUT_TYPES.JSON) {
-				configValue = JSON.stringify(uiConfigurationValues[config.key]);
-			}
-			else if (config.type === INPUT_TYPES.MULTISELECT) {
-				configValue = JSON.stringify(
-					uiConfigurationValues[config.key].map((item) =>
-						toNumber(item.value)
-					)
-				);
-			}
-			else if (config.type === INPUT_TYPES.NUMBER) {
-				const oldConfigValue = uiConfigurationValues[config.key];
-
-				configValue = isNotEmpty(configTypeOptions.unitSuffix)
-					? typeof oldConfigValue == 'string'
-						? oldConfigValue.concat(
-								'',
-								configTypeOptions.unitSuffix
-						  )
-						: JSON.stringify(oldConfigValue).concat(
-								'',
-								configTypeOptions.unitSuffix
-						  )
-					: oldConfigValue;
-			}
-
-			let key = `\${${CONFIG_PREFIX}.${config.key}}`;
-
-			// Check whether to add quotes around output
-
-			if (
-				typeof configValue === 'number' ||
-				typeof configValue === 'boolean' ||
-				config.type === INPUT_TYPES.ITEM_SELECTOR ||
-				config.type === INPUT_TYPES.FIELD_LIST ||
-				config.type === INPUT_TYPES.JSON ||
-				config.type === INPUT_TYPES.MULTISELECT
-			) {
-				key = `"$\{${CONFIG_PREFIX}.${config.key}}"`;
-			}
-
-			flattenJSON = replaceStr(flattenJSON, key, configValue);
 		});
 
 		return JSON.parse(flattenJSON);

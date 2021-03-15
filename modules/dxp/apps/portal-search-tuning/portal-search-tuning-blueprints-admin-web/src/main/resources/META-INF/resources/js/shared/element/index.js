@@ -85,46 +85,50 @@ function Element({
 	};
 
 	const _hasConfigurationValues =
-		!!uiConfigurationJSON && uiConfigurationJSON.length > 0;
+		!!uiConfigurationJSON &&
+		uiConfigurationJSON.fieldSets &&
+		uiConfigurationJSON.fieldSets.some(
+			(item) => item.fields && item.fields.length > 0
+		);
 
 	const _renderInput = (config) => {
 		const disabled = !elementTemplateJSON.enabled;
-		const inputId = _getInputId(id, config.key);
+		const inputId = _getInputId(id, config.name);
 		const typeOptions = config.typeOptions || {};
 
 		switch (config.type) {
 			case INPUT_TYPES.DATE:
 				return (
 					<DateInput
-						configKey={config.key}
+						configKey={config.name}
 						disabled={disabled}
 						onChange={_handleChange}
-						value={uiConfigurationValues[config.key]}
+						value={uiConfigurationValues[config.name]}
 					/>
 				);
 			case INPUT_TYPES.FIELD:
 				return (
 					<FieldInput
-						configKey={config.key}
+						configKey={config.name}
 						defaultValue={config.defaultValue}
 						disabled={disabled}
 						id={inputId}
 						indexFields={indexFields}
-						initialValue={initialUIConfigurationValues[config.key]}
+						initialValue={initialUIConfigurationValues[config.name]}
 						onChange={_handleChange}
 						showBoost={typeOptions.boost}
-						value={uiConfigurationValues[config.key]}
+						value={uiConfigurationValues[config.name]}
 					/>
 				);
 			case INPUT_TYPES.FIELD_LIST:
 				return (
 					<FieldListInput
-						configKey={config.key}
+						configKey={config.name}
 						defaultValue={config.defaultValue}
 						disabled={disabled}
 						id={inputId}
 						indexFields={indexFields}
-						initialValue={initialUIConfigurationValues[config.key]}
+						initialValue={initialUIConfigurationValues[config.name]}
 						onChange={_handleChange}
 						showBoost={typeOptions.boost}
 					/>
@@ -132,21 +136,21 @@ function Element({
 			case INPUT_TYPES.ITEM_SELECTOR:
 				return (
 					<ItemSelectorInput
-						configKey={config.key}
+						configKey={config.name}
 						disabled={disabled}
 						entityJSON={entityJSON}
 						itemType={typeOptions.itemType}
 						label={config.label}
 						onChange={_handleChange}
-						value={uiConfigurationValues[config.key]}
+						value={uiConfigurationValues[config.name]}
 					/>
 				);
 			case INPUT_TYPES.JSON:
 				return (
 					<JSONInput
-						configKey={config.key}
+						configKey={config.name}
 						disabled={disabled}
-						initialValue={uiConfigurationValues[config.key]}
+						initialValue={uiConfigurationValues[config.name]}
 						label={config.label}
 						onChange={_handleChange}
 					/>
@@ -154,20 +158,20 @@ function Element({
 			case INPUT_TYPES.MULTISELECT:
 				return (
 					<MultiSelectInput
-						configKey={config.key}
+						configKey={config.name}
 						disabled={disabled}
 						onChange={_handleChange}
-						value={uiConfigurationValues[config.key]}
+						value={uiConfigurationValues[config.name]}
 					/>
 				);
 			case INPUT_TYPES.NUMBER:
 				return (
 					<NumberInput
-						configKey={config.key}
+						configKey={config.name}
 						defaultValue={config.defaultValue}
 						disabled={disabled}
 						id={inputId}
-						initialValue={initialUIConfigurationValues[config.key]}
+						initialValue={initialUIConfigurationValues[config.name]}
 						label={config.label}
 						max={typeOptions.max}
 						min={typeOptions.min}
@@ -179,23 +183,23 @@ function Element({
 			case INPUT_TYPES.SELECT:
 				return (
 					<SelectInput
-						configKey={config.key}
+						configKey={config.name}
 						disabled={disabled}
 						id={inputId}
 						label={config.label}
 						onChange={_handleChange}
 						options={typeOptions.options}
-						value={uiConfigurationValues[config.key]}
+						value={uiConfigurationValues[config.name]}
 					/>
 				);
 			case INPUT_TYPES.SLIDER:
 				return (
 					<SliderInput
-						configKey={config.key}
+						configKey={config.name}
 						defaultValue={config.defaultValue}
 						disabled={disabled}
 						id={inputId}
-						initialValue={initialUIConfigurationValues[config.key]}
+						initialValue={initialUIConfigurationValues[config.name]}
 						label={config.label}
 						max={typeOptions.max}
 						min={typeOptions.min}
@@ -206,11 +210,11 @@ function Element({
 			default:
 				return (
 					<TextInput
-						configKey={config.key}
+						configKey={config.name}
 						defaultValue={config.defaultValue}
 						disabled={disabled}
 						id={inputId}
-						initialValue={initialUIConfigurationValues[config.key]}
+						initialValue={initialUIConfigurationValues[config.name]}
 						label={config.label}
 						onChange={_handleChange}
 					/>
@@ -340,42 +344,51 @@ function Element({
 
 			{!collapse && _hasConfigurationValues && (
 				<ClayList className="configuration-form-list">
-					{uiConfigurationJSON.map((config) => (
-						<ClayList.Item
-							className={config.type}
-							flex
-							key={config.key}
-						>
-							{config.type !== INPUT_TYPES.JSON && (
-								<ClayList.ItemField className="list-item-label">
-									<label
-										htmlFor={_getInputId(id, config.key)}
-									>
-										{config.label}
+					{uiConfigurationJSON.fieldSets.map((fieldSet) => {
+						if (fieldSet.fields) {
+							return fieldSet.fields.map((config) => (
+								<ClayList.Item
+									className={config.type}
+									flex
+									key={config.name}
+								>
+									{config.type !== INPUT_TYPES.JSON && (
+										<ClayList.ItemField className="list-item-label">
+											<label
+												htmlFor={_getInputId(
+													id,
+													config.name
+												)}
+											>
+												{config.label}
 
-										{config.helpText && (
-											<ClayTooltipProvider>
-												<ClaySticker
-													displayType="unstyled"
-													size="sm"
-												>
-													<ClayIcon
-														data-tooltip-align="top"
-														symbol="info-circle"
-														title={config.helpText}
-													/>
-												</ClaySticker>
-											</ClayTooltipProvider>
-										)}
-									</label>
-								</ClayList.ItemField>
-							)}
+												{config.helpText && (
+													<ClayTooltipProvider>
+														<ClaySticker
+															displayType="unstyled"
+															size="sm"
+														>
+															<ClayIcon
+																data-tooltip-align="top"
+																symbol="info-circle"
+																title={
+																	config.helpText
+																}
+															/>
+														</ClaySticker>
+													</ClayTooltipProvider>
+												)}
+											</label>
+										</ClayList.ItemField>
+									)}
 
-							<ClayList.ItemField expand>
-								{_renderInput(config)}
-							</ClayList.ItemField>
-						</ClayList.Item>
-					))}
+									<ClayList.ItemField expand>
+										{_renderInput(config)}
+									</ClayList.ItemField>
+								</ClayList.Item>
+							));
+						}
+					})}
 				</ClayList>
 			)}
 		</div>
@@ -391,7 +404,7 @@ Element.propTypes = {
 	initialUIConfigurationValues: PropTypes.object,
 	onDeleteElement: PropTypes.func,
 	onUpdateElement: PropTypes.func,
-	uiConfigurationJSON: PropTypes.arrayOf(PropTypes.object),
+	uiConfigurationJSON: PropTypes.object,
 	uiConfigurationValues: PropTypes.object,
 };
 

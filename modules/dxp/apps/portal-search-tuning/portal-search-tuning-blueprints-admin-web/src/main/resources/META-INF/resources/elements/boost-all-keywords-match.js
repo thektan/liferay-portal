@@ -19,11 +19,11 @@ export default {
 				query: {
 					query: {
 						multi_match: {
-							boost: '${config.boost}',
-							fields: '${config.fields}',
+							boost: '${configuration.boost}',
+							fields: '${configuration.fields}',
 							operator: 'and',
 							query: '${keywords}',
-							type: '${config.type}',
+							type: '${configuration.type}',
 						},
 					},
 				},
@@ -40,66 +40,72 @@ export default {
 			en_US: 'Boost All Keywords Match',
 		},
 	},
-	uiConfigurationJSON: [
-		{
-			defaultValue: [
-				{
-					boost: 2,
-					field: 'localized_title',
-					locale: '${context.language_id}',
-				},
-				{
-					boost: 1,
-					field: 'content',
-					locale: '${context.language_id}',
-				},
-			],
-			key: 'fields',
-			label: 'Field',
-			type: 'field-list',
-			typeOptions: {
-				boost: true,
-			},
-		},
-		{
-			defaultValue: 'best_fields',
-			key: 'type',
-			label: 'Match Type',
-			type: 'select',
-			typeOptions: {
-				options: [
+	uiConfigurationJSON: {
+		fieldSets: [
+			{
+				fields: [
 					{
-						label: 'Best Fields',
-						value: 'best_fields',
+						defaultValue: [
+							{
+								boost: 2,
+								field: 'localized_title',
+								locale: '${context.language_id}',
+							},
+							{
+								boost: 1,
+								field: 'content',
+								locale: '${context.language_id}',
+							},
+						],
+						label: 'Field',
+						name: 'fields',
+						type: 'field-list',
+						typeOptions: {
+							boost: true,
+						},
 					},
 					{
-						label: 'Most Fields',
-						value: 'most_fields',
+						defaultValue: 'best_fields',
+						label: 'Match Type',
+						name: 'type',
+						type: 'select',
+						typeOptions: {
+							options: [
+								{
+									label: 'Best Fields',
+									value: 'best_fields',
+								},
+								{
+									label: 'Most Fields',
+									value: 'most_fields',
+								},
+								{
+									label: 'Cross Fields',
+									value: 'cross_fields',
+								},
+								{
+									label: 'Phrase',
+									value: 'phrase',
+								},
+								{
+									label: 'Phrase Prefix',
+									value: 'phrase_prefix',
+								},
+								{
+									label: 'Boolean Prefix',
+									value: 'bool_prefix',
+								},
+							],
+						},
 					},
 					{
-						label: 'Cross Fields',
-						value: 'cross_fields',
-					},
-					{
-						label: 'Phrase',
-						value: 'phrase',
-					},
-					{
-						label: 'Phrase Prefix',
-						value: 'phrase_prefix',
-					},
-					{
-						label: 'Boolean Prefix',
-						value: 'bool_prefix',
+						defaultValue: 10,
+						label: 'Boost',
+						name: 'boost',
+						type: 'slider',
 					},
 				],
 			},
-		},
-		{
-			defaultValue: 10,
-			key: 'boost',
-			label: 'Boost',
-			type: 'slider',
-		},
-	],
+		],
+	},
 };

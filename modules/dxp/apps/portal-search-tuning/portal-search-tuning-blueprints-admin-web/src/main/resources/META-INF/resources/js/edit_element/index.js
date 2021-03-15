@@ -34,11 +34,13 @@ import PreviewModal from '../shared/PreviewModal';
 import SearchInput from '../shared/SearchInput';
 import ThemeContext from '../shared/ThemeContext';
 import Element from '../shared/element/index';
+import {CONFIG_PREFIX} from '../utils/constants';
 import {
 	getUIConfigurationValues,
 	isNotEmpty,
 	openErrorToast,
 	renameKeys,
+	replaceStr,
 	sub,
 } from '../utils/utils';
 
@@ -176,10 +178,24 @@ function EditElementForm({
 		parseUIConfigurationJSON
 	) => {
 		const elementKeys = [
-			...elementTemplateJSON.matchAll(/\$\{config.\w+\}/g),
-		].map((item) => item[0].replace('${config.', '').replace('}', ''));
+			...replaceStr(
+				elementTemplateJSON,
+				`$\{${CONFIG_PREFIX}.`,
+				'${CONFIG_PREFIX.'
+			).matchAll(/\$\{CONFIG_PREFIX.([\w\d_]+)\}/g),
+		].map((item) => item[1]);
 
-		const uiConfigKeys = parseUIConfigurationJSON.map((item) => item.key);
+		const uiConfigKeys = parseUIConfigurationJSON.fieldSets
+			? parseUIConfigurationJSON.fieldSets.reduce((acc, curr) => {
+					const configKeys = curr.fields
+						? curr.fields.map((item) => item.name)
+						: [];
+
+					// finds names within each fields array
+
+					return [...acc, ...configKeys];
+			  }, [])
+			: [];
 
 		const missingKeys = elementKeys.filter(
 			(item) => !uiConfigKeys.includes(item)

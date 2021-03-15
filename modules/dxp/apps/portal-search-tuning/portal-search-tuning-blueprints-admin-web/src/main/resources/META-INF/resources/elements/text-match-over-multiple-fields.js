@@ -19,12 +19,12 @@ export default {
 				query: {
 					query: {
 						multi_match: {
-							boost: '${config.boost}',
-							fields: '${config.fields}',
-							fuzziness: '${config.fuzziness}',
-							operator: '${config.operator}',
+							boost: '${configuration.boost}',
+							fields: '${configuration.fields}',
+							fuzziness: '${configuration.fuzziness}',
+							operator: '${configuration.operator}',
 							query: '${keywords}',
-							type: '${config.type}',
+							type: '${configuration.type}',
 						},
 					},
 				},
@@ -41,109 +41,115 @@ export default {
 			en_US: 'Text Match Over Multiple Fields',
 		},
 	},
-	uiConfigurationJSON: [
-		{
-			defaultValue: [
-				{
-					boost: '2',
-					field: 'localized_title',
-					locale: '${context.language_id}',
-				},
-				{
-					boost: '1',
-					field: 'content',
-					locale: '${context.language_id}',
-				},
-			],
-			key: 'fields',
-			label: 'Fields',
-			type: 'field-list',
-			typeOptions: {
-				boost: true,
-			},
-		},
-		{
-			defaultValue: 'or',
-			key: 'operator',
-			label: 'Operator',
-			type: 'select',
-			typeOptions: {
-				options: [
+	uiConfigurationJSON: {
+		fieldSets: [
+			{
+				fields: [
 					{
-						label: 'OR',
-						value: 'or',
+						defaultValue: [
+							{
+								boost: '2',
+								field: 'localized_title',
+								locale: '${context.language_id}',
+							},
+							{
+								boost: '1',
+								field: 'content',
+								locale: '${context.language_id}',
+							},
+						],
+						label: 'Fields',
+						name: 'fields',
+						type: 'field-list',
+						typeOptions: {
+							boost: true,
+						},
 					},
 					{
-						label: 'AND',
-						value: 'and',
+						defaultValue: 'or',
+						label: 'Operator',
+						name: 'operator',
+						type: 'select',
+						typeOptions: {
+							options: [
+								{
+									label: 'OR',
+									value: 'or',
+								},
+								{
+									label: 'AND',
+									value: 'and',
+								},
+							],
+						},
+					},
+					{
+						defaultValue: 'best_fields',
+						label: 'Match Type',
+						name: 'type',
+						type: 'select',
+						typeOptions: {
+							options: [
+								{
+									label: 'Best Fields',
+									value: 'best_fields',
+								},
+								{
+									label: 'Most Fields',
+									value: 'most_fields',
+								},
+								{
+									label: 'Cross Fields',
+									value: 'cross_fields',
+								},
+								{
+									label: 'Phrase',
+									value: 'phrase',
+								},
+								{
+									label: 'Phrase Prefix',
+									value: 'phrase_prefix',
+								},
+								{
+									label: 'Boolean Prefix',
+									value: 'bool_prefix',
+								},
+							],
+						},
+					},
+					{
+						label: 'Fuzziness',
+						name: 'fuzziness',
+						type: 'select',
+						typeOptions: {
+							options: [
+								{
+									label: 'Auto',
+									value: 'AUTO',
+								},
+								{
+									label: '0',
+									value: '0',
+								},
+								{
+									label: '1',
+									value: '1',
+								},
+								{
+									label: '2',
+									value: '2',
+								},
+							],
+						},
+					},
+					{
+						defaultValue: 1,
+						label: 'Boost',
+						name: 'boost',
+						type: 'slider',
 					},
 				],
 			},
-		},
-		{
-			defaultValue: 'best_fields',
-			key: 'type',
-			label: 'Match Type',
-			type: 'select',
-			typeOptions: {
-				options: [
-					{
-						label: 'Best Fields',
-						value: 'best_fields',
-					},
-					{
-						label: 'Most Fields',
-						value: 'most_fields',
-					},
-					{
-						label: 'Cross Fields',
-						value: 'cross_fields',
-					},
-					{
-						label: 'Phrase',
-						value: 'phrase',
-					},
-					{
-						label: 'Phrase Prefix',
-						value: 'phrase_prefix',
-					},
-					{
-						label: 'Boolean Prefix',
-						value: 'bool_prefix',
-					},
-				],
-			},
-		},
-		{
-			key: 'fuzziness',
-			label: 'Fuzziness',
-			type: 'select',
-			typeOptions: {
-				options: [
-					{
-						label: 'Auto',
-						value: 'AUTO',
-					},
-					{
-						label: '0',
-						value: '0',
-					},
-					{
-						label: '1',
-						value: '1',
-					},
-					{
-						label: '2',
-						value: '2',
-					},
-				],
-			},
-		},
-		{
-			defaultValue: 1,
-			key: 'boost',
-			label: 'Boost',
-			type: 'slider',
-		},
-	],
+		],
+	},
 };
