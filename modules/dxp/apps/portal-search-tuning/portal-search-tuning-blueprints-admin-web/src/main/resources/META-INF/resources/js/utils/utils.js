@@ -239,7 +239,7 @@ export const getDefaultValue = (item) => {
 			return isNotEmpty(itemValue) && typeof itemValue == 'number'
 				? itemValue
 				: '';
-		case INPUT_TYPES.FIELD_LIST:
+		case INPUT_TYPES.FIELD_MAPPING_LIST:
 			return isNotEmpty(itemValue) &&
 				itemValue.every(
 					(item) =>
@@ -248,7 +248,7 @@ export const getDefaultValue = (item) => {
 				)
 				? itemValue
 				: [];
-		case INPUT_TYPES.FIELD:
+		case INPUT_TYPES.FIELD_MAPPING:
 			return isNotEmpty(itemValue) &&
 				isNotNullOrUndefined(itemValue.field) &&
 				isNotNullOrUndefined(itemValue.locale)
@@ -361,7 +361,7 @@ export const getElementOutput = ({
 							)
 						);
 					}
-					else if (config.type === INPUT_TYPES.FIELD) {
+					else if (config.type === INPUT_TYPES.FIELD_MAPPING) {
 						const {
 							boost,
 							field,
@@ -391,7 +391,7 @@ export const getElementOutput = ({
 								? `${localizedField}^${boost}`
 								: localizedField;
 					}
-					else if (config.type === INPUT_TYPES.FIELD_LIST) {
+					else if (config.type === INPUT_TYPES.FIELD_MAPPING_LIST) {
 						const fields = uiConfigurationValues[config.name]
 							.filter(({field}) => !!field) // Remove blank fields
 							.map(
@@ -467,7 +467,7 @@ export const getElementOutput = ({
 						typeof configValue === 'number' ||
 						typeof configValue === 'boolean' ||
 						config.type === INPUT_TYPES.ITEM_SELECTOR ||
-						config.type === INPUT_TYPES.FIELD_LIST ||
+						config.type === INPUT_TYPES.FIELD_MAPPING_LIST ||
 						config.type === INPUT_TYPES.JSON ||
 						config.type === INPUT_TYPES.MULTISELECT
 					) {

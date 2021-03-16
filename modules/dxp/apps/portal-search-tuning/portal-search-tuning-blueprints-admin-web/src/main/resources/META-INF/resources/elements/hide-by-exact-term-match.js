@@ -55,7 +55,7 @@ export default {
 						},
 						label: 'Field',
 						name: 'field',
-						type: 'field',
+						type: 'fieldMapping',
 					},
 					{
 						label: 'Value',

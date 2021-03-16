@@ -301,7 +301,7 @@ describe('utils', () => {
 			).toEqual('');
 		});
 
-		it('gets default value for field list', () => {
+		it('gets default value for field mapping list', () => {
 			expect(
 				getDefaultValue({
 					boost: true,
@@ -314,7 +314,7 @@ describe('utils', () => {
 					],
 					label: 'Field',
 					name: 'fields',
-					type: 'field-list',
+					type: 'fieldMappinglist',
 					typeOptions: {
 						boost: true,
 					},
@@ -328,7 +328,7 @@ describe('utils', () => {
 			]);
 		});
 
-		it('gets default value for incorrect field list', () => {
+		it('gets default value for incorrect field mapping list', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: [
@@ -340,7 +340,7 @@ describe('utils', () => {
 					],
 					label: 'Field',
 					name: 'fields',
-					type: 'field-list',
+					type: 'fieldMappingList',
 					typeOptions: {
 						boost: true,
 					},
@@ -348,12 +348,12 @@ describe('utils', () => {
 			).toEqual([]); //defaultValue needs locale and field
 		});
 
-		it('gets default value for empty field list', () => {
+		it('gets default value for empty field mapping list', () => {
 			expect(
 				getDefaultValue({
 					label: 'Field',
 					name: 'fields',
-					type: 'field-list',
+					type: 'fieldMappingList',
 					typeOptions: {
 						boost: true,
 					},
@@ -361,7 +361,7 @@ describe('utils', () => {
 			).toEqual([]);
 		});
 
-		it('gets default value for field', () => {
+		it('gets default value for field mapping', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: {
@@ -370,7 +370,7 @@ describe('utils', () => {
 					},
 					label: 'Field',
 					name: 'field',
-					type: 'field',
+					type: 'fieldMapping',
 				})
 			).toEqual({
 				field: '',
@@ -378,12 +378,12 @@ describe('utils', () => {
 			});
 		});
 
-		it('gets default value for empty field', () => {
+		it('gets default value for empty field mapping', () => {
 			expect(
 				getDefaultValue({
 					label: 'Field',
 					name: 'field',
-					type: 'field',
+					type: 'fieldMapping',
 				})
 			).toEqual({
 				field: '',
@@ -712,7 +712,7 @@ describe('utils', () => {
 			});
 		});
 
-		it('gets elementOutput of field', () => {
+		it('gets elementOutput of field mapping', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
@@ -729,7 +729,7 @@ describe('utils', () => {
 										},
 										label: 'Field',
 										name: 'field',
-										type: 'field',
+										type: 'fieldMapping',
 									},
 								],
 							},
@@ -748,7 +748,7 @@ describe('utils', () => {
 			});
 		});
 
-		it('gets elementOutput of field-list', () => {
+		it('gets elementOutput of field mapping list', () => {
 			expect(
 				getElementOutput({
 					elementTemplateJSON: {
@@ -775,7 +775,7 @@ describe('utils', () => {
 										],
 										label: 'Field',
 										name: 'fields',
-										type: 'field-list',
+										type: 'fieldMappingList',
 										typeOptions: {
 											boost: true,
 										},

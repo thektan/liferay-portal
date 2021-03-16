@@ -106,7 +106,7 @@ function Element({
 						value={uiConfigurationValues[config.name]}
 					/>
 				);
-			case INPUT_TYPES.FIELD:
+			case INPUT_TYPES.FIELD_MAPPING:
 				return (
 					<FieldInput
 						configKey={config.name}
@@ -120,7 +120,7 @@ function Element({
 						value={uiConfigurationValues[config.name]}
 					/>
 				);
-			case INPUT_TYPES.FIELD_LIST:
+			case INPUT_TYPES.FIELD_MAPPING_LIST:
 				return (
 					<FieldListInput
 						configKey={config.name}

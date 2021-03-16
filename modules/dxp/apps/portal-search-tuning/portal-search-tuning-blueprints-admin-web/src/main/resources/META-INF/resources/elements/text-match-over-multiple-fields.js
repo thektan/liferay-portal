@@ -60,7 +60,7 @@ export default {
 						],
 						label: 'Fields',
 						name: 'fields',
-						type: 'field-list',
+						type: 'fieldMappingList',
 						typeOptions: {
 							boost: true,
 						},
