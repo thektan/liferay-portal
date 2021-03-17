@@ -13,54 +13,39 @@ import {
 	getDefaultValue,
 	getElementOutput,
 	getUIConfigurationValues,
-	isNotEmpty,
-	isNotNullOrUndefined,
+	isDefined,
 	renameKeys,
 	replaceStr,
 } from '../../../src/main/resources/META-INF/resources/js/utils/utils';
 
 describe('utils', () => {
-	describe('isNotEmpty', () => {
-		it('returns false for empty string', () => {
-			expect(isNotEmpty('')).toEqual(false);
-		});
-
-		it('returns false for null', () => {
-			expect(isNotEmpty(null)).toEqual(false);
-		});
-
-		it('returns false for undefined', () => {
-			expect(isNotEmpty(undefined)).toEqual(false);
-		});
-
-		it('returns true for []', () => {
-			expect(isNotEmpty([])).toEqual(true);
-		});
-
-		it('returns true for object', () => {
-			expect(isNotEmpty({test: [1, 2, 3]})).toEqual(true);
-		});
-	});
-
-	describe('isNotNullOrUndefined', () => {
+	describe('isDefined', () => {
 		it('returns true for empty string', () => {
-			expect(isNotNullOrUndefined('')).toEqual(true);
+			expect(isDefined('')).toEqual(true);
 		});
 
 		it('returns false for null', () => {
-			expect(isNotNullOrUndefined(null)).toEqual(false);
+			expect(isDefined(null)).toEqual(false);
 		});
 
 		it('returns false for undefined', () => {
-			expect(isNotNullOrUndefined(undefined)).toEqual(false);
+			expect(isDefined(undefined)).toEqual(false);
 		});
 
 		it('returns true for []', () => {
-			expect(isNotNullOrUndefined([])).toEqual(true);
+			expect(isDefined([])).toEqual(true);
+		});
+
+		it('returns true for 0', () => {
+			expect(isDefined(0)).toEqual(true);
+		});
+
+		it('returns true for empty object', () => {
+			expect(isDefined({})).toEqual(true);
 		});
 
 		it('returns true for object', () => {
-			expect(isNotNullOrUndefined({test: [1, 2, 3]})).toEqual(true);
+			expect(isDefined({test: [1, 2, 3]})).toEqual(true);
 		});
 	});
 
@@ -87,7 +72,7 @@ describe('utils', () => {
 	});
 
 	describe('getDefaultValue', () => {
-		it('gets default value for regular dates', () => {
+		it('gets default value for MM-DD-YYYY dates', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: '01-01-2021',
@@ -142,7 +127,7 @@ describe('utils', () => {
 			).toEqual(false);
 		});
 
-		it('gets default value for empty select', () => {
+		it('gets default value for empty select with boolean', () => {
 			expect(
 				getDefaultValue({
 					label: 'Enabled',
@@ -164,7 +149,7 @@ describe('utils', () => {
 			).toEqual(true); //gets first value in options
 		});
 
-		it('gets default value for empty select', () => {
+		it('gets default value for empty select with string', () => {
 			expect(
 				getDefaultValue({
 					label: 'Value',
@@ -233,13 +218,24 @@ describe('utils', () => {
 		it('gets default value for multiselect', () => {
 			expect(
 				getDefaultValue({
-					defaultValue: [],
+					defaultValue: [{label: 'one', value: 'one'}],
+					label: 'Values',
+					name: 'values',
+					type: 'multiselect',
+				})
+			).toEqual([{label: 'one', value: 'one'}]);
+		});
+
+		it('gets default value for incorrect multiselect', () => {
+			expect(
+				getDefaultValue({
+					defaultValue: [{field: 'one', label: 'one'}],
 					label: 'Values',
 					name: 'values',
 					type: 'multiselect',
 				})
 			).toEqual([]);
-		});
+		}); //multiselect requires label and value
 
 		it('gets default value for empty multiselect', () => {
 			expect(
@@ -264,6 +260,21 @@ describe('utils', () => {
 					},
 				})
 			).toEqual(30);
+		});
+
+		it('gets default value for incorrect number', () => {
+			expect(
+				getDefaultValue({
+					defaultValue: 'thirty',
+					label: 'Time range',
+					name: 'time_range',
+					type: 'number',
+					typeOptions: {
+						unit: 'days',
+						unitSuffix: 'd',
+					},
+				})
+			).toEqual('');
 		});
 
 		it('gets default value for empty number', () => {
@@ -291,6 +302,17 @@ describe('utils', () => {
 			).toEqual(10);
 		});
 
+		it('gets default value for incorrect slider', () => {
+			expect(
+				getDefaultValue({
+					defaultValue: 'ten',
+					label: 'Boost',
+					name: 'boost',
+					type: 'slider',
+				})
+			).toEqual('');
+		});
+
 		it('gets default value for empty slider', () => {
 			expect(
 				getDefaultValue({
@@ -304,7 +326,6 @@ describe('utils', () => {
 		it('gets default value for field mapping list', () => {
 			expect(
 				getDefaultValue({
-					boost: true,
 					defaultValue: [
 						{
 							boost: 2,
@@ -314,7 +335,7 @@ describe('utils', () => {
 					],
 					label: 'Field',
 					name: 'fields',
-					type: 'fieldMappinglist',
+					type: 'fieldMappingList',
 					typeOptions: {
 						boost: true,
 					},
@@ -345,7 +366,7 @@ describe('utils', () => {
 						boost: true,
 					},
 				})
-			).toEqual([]); //defaultValue needs locale and field
+			).toEqual([]); //defaultValue should have field
 		});
 
 		it('gets default value for empty field mapping list', () => {
@@ -365,8 +386,28 @@ describe('utils', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: {
-						field: '',
+						boost: 2,
+						field: 'localized_title',
 						locale: '',
+					},
+					label: 'Field',
+					name: 'field',
+					type: 'fieldMapping',
+				})
+			).toEqual({
+				boost: 2,
+				field: 'localized_title',
+				locale: '',
+			});
+		});
+
+		it('gets default value for incorrect field mapping', () => {
+			expect(
+				getDefaultValue({
+					defaultValue: {
+						boost: 2,
+						locale: '${context.language_id}',
+						value: 'localized_title',
 					},
 					label: 'Field',
 					name: 'field',
@@ -376,7 +417,7 @@ describe('utils', () => {
 				field: '',
 				locale: '',
 			});
-		});
+		}); //defaultValue should have field
 
 		it('gets default value for empty field mapping', () => {
 			expect(
@@ -401,6 +442,16 @@ describe('utils', () => {
 			).toEqual({test: 'abc'});
 		});
 
+		it('gets default value for incorrect json', () => {
+			expect(
+				getDefaultValue({
+					defaultValue: "{test: 'abc'}",
+					name: 'query',
+					type: 'json',
+				})
+			).toEqual({});
+		});
+
 		it('gets default value for empty json', () => {
 			expect(
 				getDefaultValue({
@@ -422,6 +473,17 @@ describe('utils', () => {
 			).toEqual('simple text value');
 		});
 
+		it('gets default value for incorrect text', () => {
+			expect(
+				getDefaultValue({
+					defaultValue: 0,
+					label: 'Asset Tag',
+					name: 'asset_tag',
+					type: 'text',
+				})
+			).toEqual('');
+		});
+
 		it('gets default value for empty text', () => {
 			expect(
 				getDefaultValue({
@@ -432,17 +494,17 @@ describe('utils', () => {
 			).toEqual('');
 		});
 
-		it('gets default value for empty type', () => {
+		it('gets default value for empty type and incorrect value', () => {
 			expect(
 				getDefaultValue({
 					defaultValue: {test: 'abc'},
 					label: 'Json',
 					name: 'json',
 				})
-			).toEqual({test: 'abc'});
+			).toEqual('');
 		});
 
-		it('gets default value for empty text/type', () => {
+		it('gets default value for empty type and value', () => {
 			expect(
 				getDefaultValue({
 					label: 'Tag',
@@ -867,6 +929,90 @@ describe('utils', () => {
 			).toEqual({
 				geopoint:
 					'expando__keyword__custom_fields__location_geolocation',
+			});
+		});
+
+		it('gets elementOutput of configuration with multiple fields', () => {
+			expect(
+				getElementOutput({
+					elementTemplateJSON: {
+						boost: '${configuration.boost}',
+						field: '${configuration.field}',
+						json: '${configuration.json}',
+					},
+					uiConfigurationJSON: {
+						fieldSets: [
+							{
+								fields: [
+									{
+										defaultValue: 10,
+										label: 'Boost',
+										name: 'boost',
+										type: 'slider',
+									},
+									{
+										defaultValue: {},
+										name: 'json',
+										type: 'json',
+									},
+								],
+							},
+							{
+								fields: [
+									{
+										defaultValue: {
+											field: '',
+											locale: '',
+										},
+										label: 'Field',
+										name: 'field',
+										type: 'fieldMapping',
+									},
+								],
+							},
+						],
+					},
+					uiConfigurationValues: {
+						boost: 20,
+						field: {
+							boost: 1,
+							field: 'localized_title',
+							locale: '${context.language_id}',
+						},
+						json: {
+							category: 'custom',
+						},
+					},
+				})
+			).toEqual({
+				boost: 20,
+				field: 'localized_title${context.language_id}^1',
+				json: {category: 'custom'},
+			});
+		});
+
+		it('gets elementOutput of custom json with no configuration', () => {
+			expect(
+				getElementOutput({
+					elementTemplateJSON: {
+						category: 'custom',
+						clauses: [],
+						conditions: [],
+						description: 'Editable JSON text area',
+						enabled: true,
+						icon: 'custom-field',
+						title: 'Custom JSON Element',
+					},
+					uiConfigurationValues: {},
+				})
+			).toEqual({
+				category: 'custom',
+				clauses: [],
+				conditions: [],
+				description: 'Editable JSON text area',
+				enabled: true,
+				icon: 'custom-field',
+				title: 'Custom JSON Element',
 			});
 		});
 	});

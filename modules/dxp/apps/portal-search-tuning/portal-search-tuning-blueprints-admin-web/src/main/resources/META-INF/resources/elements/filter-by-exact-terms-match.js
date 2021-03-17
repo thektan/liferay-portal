@@ -42,16 +42,11 @@ export default {
 			{
 				fields: [
 					{
-						defaultValue: {
-							field: '',
-							locale: '',
-						},
 						label: 'Field',
 						name: 'field',
 						type: 'fieldMapping',
 					},
 					{
-						defaultValue: [],
 						label: 'Values',
 						name: 'values',
 						type: 'multiselect',

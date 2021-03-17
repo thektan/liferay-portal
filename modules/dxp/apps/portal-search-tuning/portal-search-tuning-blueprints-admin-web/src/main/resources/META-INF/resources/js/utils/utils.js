@@ -34,40 +34,22 @@ export const openSuccessToast = (config) => {
 };
 
 /**
- * Function to validate the UI configuration, used to identify whether
- * a required value is not null, undefined, or simply an empty string
+ * Function used to identify whether a required value is not null or undefined
  *
  * Examples:
- * isNotEmpty([])
+ * isDefined(false)
  * => true
- * isNotEmpty('')
- * => false
- * isNotEmpty(null)
+ * isDefined([])
+ * => true
+ * isDefined('')
+ * => true
+ * isDefined(null)
  * => false
  *
  * @param {String|object} item Item to check
  * @return {boolean}
  */
-export const isNotEmpty = (item) =>
-	item !== null && item !== '' && typeof item !== 'undefined';
-
-/**
- * Function to validate the UI configuration, used to identify whether
- * a required value is not null or undefined
- *
- * Examples:
- * isNotNullOrUndefined([])
- * => true
- * isNotNullOrUndefined('')
- * => true
- * isNotNullOrUndefined(null)
- * => false
- *
- * @param {String|object} item Item to check
- * @return {boolean}
- */
-export const isNotNullOrUndefined = (item) =>
-	item !== null && typeof item !== 'undefined';
+export const isDefined = (item) => item !== null && typeof item !== 'undefined';
 
 /**
  * Function to replace all instances of a string.
@@ -207,60 +189,57 @@ export const getDefaultValue = (item) => {
 	const itemTypeOptions = item.typeOptions || {};
 
 	switch (item.type) {
-		case INPUT_TYPES.SELECT:
-			return isNotEmpty(itemValue)
-				? itemValue
-				: itemTypeOptions.options && itemTypeOptions.options[0].value
-				? itemTypeOptions.options[0].value
-				: '';
 		case INPUT_TYPES.DATE:
-			return isNotEmpty(itemValue)
-				? typeof itemValue == 'number'
-					? itemValue
-					: moment(itemValue, ['MM-DD-YYYY', 'YYYY-MM-DD']).isValid()
-					? moment(itemValue, ['MM-DD-YYYY', 'YYYY-MM-DD']).unix()
-					: ''
+			return typeof itemValue == 'number'
+				? itemValue
+				: moment(itemValue, ['MM-DD-YYYY', 'YYYY-MM-DD']).isValid()
+				? moment(itemValue, ['MM-DD-YYYY', 'YYYY-MM-DD']).unix()
 				: '';
-		case INPUT_TYPES.ITEM_SELECTOR:
-			return isNotEmpty(itemValue) &&
-				itemValue.length > 0 &&
-				itemValue.every(
-					(item) => isNotEmpty(item.value) && isNotEmpty(item.label)
-				)
-				? itemValue
-				: [];
-		case INPUT_TYPES.MULTISELECT:
-			return isNotEmpty(itemValue) ? itemValue : [];
-		case INPUT_TYPES.NUMBER:
-			return isNotEmpty(itemValue) && typeof itemValue == 'number'
-				? itemValue
-				: '';
-		case INPUT_TYPES.SLIDER:
-			return isNotEmpty(itemValue) && typeof itemValue == 'number'
-				? itemValue
-				: '';
-		case INPUT_TYPES.FIELD_MAPPING_LIST:
-			return isNotEmpty(itemValue) &&
-				itemValue.every(
-					(item) =>
-						isNotNullOrUndefined(item.field) &&
-						isNotNullOrUndefined(item.locale)
-				)
-				? itemValue
-				: [];
 		case INPUT_TYPES.FIELD_MAPPING:
-			return isNotEmpty(itemValue) &&
-				isNotNullOrUndefined(itemValue.field) &&
-				isNotNullOrUndefined(itemValue.locale)
+			return typeof itemValue == 'object' && itemValue.field
 				? itemValue
 				: {
 						field: '',
 						locale: '',
 				  };
+		case INPUT_TYPES.FIELD_MAPPING_LIST:
+			return Array.isArray(itemValue)
+				? itemValue.filter(({field}) => !!field) //filter for fields
+				: [];
+		case INPUT_TYPES.ITEM_SELECTOR:
+			return Array.isArray(itemValue)
+				? itemValue.filter((item) => item.label && item.value)
+				: [];
 		case INPUT_TYPES.JSON:
-			return isNotEmpty(itemValue) ? itemValue : {};
+			return typeof itemValue == 'object' ? itemValue : {};
+		case INPUT_TYPES.MULTISELECT:
+			return Array.isArray(itemValue)
+				? itemValue.filter((item) => item.label && item.value)
+				: [];
+		case INPUT_TYPES.NUMBER:
+			return typeof itemValue == 'number'
+				? itemValue
+				: typeof toNumber(itemValue) == 'number'
+				? toNumber(itemValue)
+				: '';
+		case INPUT_TYPES.SELECT:
+
+			// use isDefined in case of false or 0
+
+			return isDefined(itemValue)
+				? itemValue
+				: itemTypeOptions.options &&
+				  isDefined(itemTypeOptions.options[0].value)
+				? itemTypeOptions.options[0].value
+				: '';
+		case INPUT_TYPES.SLIDER:
+			return typeof itemValue == 'number'
+				? itemValue
+				: typeof toNumber(itemValue) == 'number'
+				? toNumber(itemValue)
+				: '';
 		default:
-			return isNotEmpty(itemValue) ? itemValue : '';
+			return typeof itemValue == 'string' ? itemValue : '';
 	}
 };
 
@@ -298,7 +277,7 @@ export const getDefaultValue = (item) => {
  * @return {object}
  */
 export const getUIConfigurationValues = (uiConfigurationJSON) => {
-	if (uiConfigurationJSON.fieldSets) {
+	if (uiConfigurationJSON && uiConfigurationJSON.fieldSets) {
 		return uiConfigurationJSON.fieldSets.reduce((allValues, fieldSet) => {
 			const uiConfigurationValues = fieldSet.fields
 				? fieldSet.fields.reduce((acc, curr) => {
@@ -331,22 +310,22 @@ export const getElementOutput = ({
 	uiConfigurationJSON,
 	uiConfigurationValues,
 }) => {
-	if (uiConfigurationJSON.fieldSets) {
+	if (uiConfigurationJSON && uiConfigurationJSON.fieldSets) {
 		let flattenJSON = JSON.stringify(elementTemplateJSON);
 
 		uiConfigurationJSON.fieldSets.map((fieldSet) => {
 			if (fieldSet.fields) {
 				fieldSet.fields.map((config) => {
-					let configValue = uiConfigurationValues[config.name];
+					let configValue = '';
+					const initialConfigValue =
+						uiConfigurationValues[config.name];
 					const configTypeOptions = config.typeOptions || {};
 
 					if (config.type === INPUT_TYPES.DATE) {
-						configValue = uiConfigurationValues[config.name]
+						configValue = initialConfigValue
 							? JSON.parse(
 									moment
-										.unix(
-											uiConfigurationValues[config.name]
-										)
+										.unix(initialConfigValue)
 										.format(
 											configTypeOptions.format ||
 												'YYYYMMDDHHMMSS'
@@ -356,9 +335,7 @@ export const getElementOutput = ({
 					}
 					else if (config.type === INPUT_TYPES.ITEM_SELECTOR) {
 						configValue = JSON.stringify(
-							uiConfigurationValues[config.name].map(
-								(item) => item.value
-							)
+							initialConfigValue.map((item) => item.value)
 						);
 					}
 					else if (config.type === INPUT_TYPES.FIELD_MAPPING) {
@@ -367,7 +344,7 @@ export const getElementOutput = ({
 							field,
 							languageIdPosition,
 							locale = '',
-						} = uiConfigurationValues[config.name];
+						} = initialConfigValue;
 
 						const transformedLocale =
 							!locale || locale.includes('$')
@@ -392,7 +369,7 @@ export const getElementOutput = ({
 								: localizedField;
 					}
 					else if (config.type === INPUT_TYPES.FIELD_MAPPING_LIST) {
-						const fields = uiConfigurationValues[config.name]
+						const fields = initialConfigValue
 							.filter(({field}) => !!field) // Remove blank fields
 							.map(
 								({
@@ -431,48 +408,40 @@ export const getElementOutput = ({
 						configValue = JSON.stringify(fields);
 					}
 					else if (config.type === INPUT_TYPES.JSON) {
-						configValue = JSON.stringify(
-							uiConfigurationValues[config.name]
-						);
+						configValue = JSON.stringify(initialConfigValue);
 					}
 					else if (config.type === INPUT_TYPES.MULTISELECT) {
 						configValue = JSON.stringify(
-							uiConfigurationValues[config.name].map(
-								(item) => item.value
-							)
+							initialConfigValue.map((item) => item.value)
 						);
 					}
 					else if (config.type === INPUT_TYPES.NUMBER) {
-						const oldConfigValue =
-							uiConfigurationValues[config.name];
-
-						configValue = isNotEmpty(configTypeOptions.unitSuffix)
-							? typeof oldConfigValue == 'string'
-								? oldConfigValue.concat(
-										'',
-										configTypeOptions.unitSuffix
-								  )
-								: JSON.stringify(oldConfigValue).concat(
-										'',
-										configTypeOptions.unitSuffix
-								  )
-							: oldConfigValue;
+						configValue =
+							typeof configTypeOptions.unitSuffix == 'string'
+								? typeof initialConfigValue == 'string'
+									? initialConfigValue.concat(
+											configTypeOptions.unitSuffix
+									  )
+									: JSON.stringify(initialConfigValue).concat(
+											configTypeOptions.unitSuffix
+									  )
+								: initialConfigValue;
 					}
-
-					let key = `\${${CONFIG_PREFIX}.${config.name}}`;
+					else {
+						configValue = initialConfigValue;
+					}
 
 					// Check whether to add quotes around output
 
-					if (
+					const key =
 						typeof configValue === 'number' ||
 						typeof configValue === 'boolean' ||
 						config.type === INPUT_TYPES.ITEM_SELECTOR ||
 						config.type === INPUT_TYPES.FIELD_MAPPING_LIST ||
 						config.type === INPUT_TYPES.JSON ||
 						config.type === INPUT_TYPES.MULTISELECT
-					) {
-						key = `"$\{${CONFIG_PREFIX}.${config.name}}"`;
-					}
+							? `"$\{${CONFIG_PREFIX}.${config.name}}"`
+							: `\${${CONFIG_PREFIX}.${config.name}}`;
 
 					flattenJSON = replaceStr(flattenJSON, key, configValue);
 				});

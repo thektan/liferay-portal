@@ -58,7 +58,6 @@ export default {
 						type: 'multiselect',
 					},
 					{
-						defaultValue: [],
 						label: 'Keywords',
 						name: 'values',
 						type: 'multiselect',

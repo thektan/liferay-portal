@@ -21,7 +21,7 @@ import {PropTypes} from 'prop-types';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {INPUT_TYPES} from '../../utils/inputTypes';
-import {getElementOutput} from '../../utils/utils';
+import {getDefaultValue, getElementOutput} from '../../utils/utils';
 import CodeMirrorEditor from '../CodeMirrorEditor';
 import PreviewModal from '../PreviewModal';
 import ThemeContext from '../ThemeContext';
@@ -110,21 +110,20 @@ function Element({
 				return (
 					<FieldInput
 						configKey={config.name}
-						defaultValue={config.defaultValue}
+						defaultValue={getDefaultValue(config)}
 						disabled={disabled}
 						id={inputId}
 						indexFields={indexFields}
 						initialValue={initialUIConfigurationValues[config.name]}
 						onChange={_handleChange}
 						showBoost={typeOptions.boost}
-						value={uiConfigurationValues[config.name]}
 					/>
 				);
 			case INPUT_TYPES.FIELD_MAPPING_LIST:
 				return (
 					<FieldListInput
 						configKey={config.name}
-						defaultValue={config.defaultValue}
+						defaultValue={getDefaultValue(config)}
 						disabled={disabled}
 						id={inputId}
 						indexFields={indexFields}
@@ -168,7 +167,7 @@ function Element({
 				return (
 					<NumberInput
 						configKey={config.name}
-						defaultValue={config.defaultValue}
+						defaultValue={getDefaultValue(config)}
 						disabled={disabled}
 						id={inputId}
 						initialValue={initialUIConfigurationValues[config.name]}
@@ -196,7 +195,7 @@ function Element({
 				return (
 					<SliderInput
 						configKey={config.name}
-						defaultValue={config.defaultValue}
+						defaultValue={getDefaultValue(config)}
 						disabled={disabled}
 						id={inputId}
 						initialValue={initialUIConfigurationValues[config.name]}
@@ -211,7 +210,7 @@ function Element({
 				return (
 					<TextInput
 						configKey={config.name}
-						defaultValue={config.defaultValue}
+						defaultValue={getDefaultValue(config)}
 						disabled={disabled}
 						id={inputId}
 						initialValue={initialUIConfigurationValues[config.name]}

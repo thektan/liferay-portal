@@ -42,7 +42,6 @@ export default {
 			{
 				fields: [
 					{
-						defaultValue: [],
 						label: 'Asset Tags',
 						name: 'asset_tags',
 						type: 'multiselect',

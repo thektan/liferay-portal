@@ -37,7 +37,6 @@ import Element from '../shared/element/index';
 import {CONFIG_PREFIX} from '../utils/constants';
 import {
 	getUIConfigurationValues,
-	isNotEmpty,
 	openErrorToast,
 	renameKeys,
 	replaceStr,
@@ -239,13 +238,13 @@ function EditElementForm({
 
 			_validateConfigKeys(elementTemplateJSON, parseUIConfigurationJSON);
 
-			if (!isNotEmpty(parseElementTemplateJSON.title)) {
+			if (!parseElementTemplateJSON.title) {
 				throw Liferay.Language.get('error.title-empty');
 			}
 
 			if (
 				typeof parseElementTemplateJSON.title === 'object' &&
-				!isNotEmpty(parseElementTemplateJSON.title[defaultLocale])
+				!parseElementTemplateJSON.title[defaultLocale]
 			) {
 				throw Liferay.Language.get('error.default-locale-title-empty');
 			}

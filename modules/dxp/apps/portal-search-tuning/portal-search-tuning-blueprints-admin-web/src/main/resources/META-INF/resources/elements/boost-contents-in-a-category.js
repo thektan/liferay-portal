@@ -43,7 +43,6 @@ export default {
 			{
 				fields: [
 					{
-						defaultValue: [],
 						helpText: 'Add asset category IDs',
 						label: 'Asset Categories',
 						name: 'asset_category_ids',
