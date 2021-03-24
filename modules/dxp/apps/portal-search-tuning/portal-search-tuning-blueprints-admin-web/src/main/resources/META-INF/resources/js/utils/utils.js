@@ -12,7 +12,7 @@
 import {openToast} from 'frontend-js-web';
 import moment from 'moment';
 
-import {CONFIG_PREFIX} from './constants';
+import {CONFIG_PREFIX, KEYWORDS_VARIABLE} from './constants';
 import {INPUT_TYPES} from './inputTypes';
 
 export const openErrorToast = (config) => {
@@ -426,6 +426,9 @@ export const getElementOutput = ({
 					}
 					else if (config.type === INPUT_TYPES.JSON) {
 						configValue = JSON.stringify(initialConfigValue);
+					}
+					else if (config.type === INPUT_TYPES.KEYWORDS) {
+						configValue = initialConfigValue || KEYWORDS_VARIABLE;
 					}
 					else if (config.type === INPUT_TYPES.MULTISELECT) {
 						configValue = JSON.stringify(

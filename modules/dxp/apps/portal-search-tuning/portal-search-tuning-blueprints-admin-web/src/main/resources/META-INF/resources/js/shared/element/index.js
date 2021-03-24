@@ -20,6 +20,7 @@ import getCN from 'classnames';
 import {PropTypes} from 'prop-types';
 import React, {useContext, useEffect, useState} from 'react';
 
+import {KEYWORDS_VARIABLE} from '../../utils/constants';
 import {INPUT_TYPES} from '../../utils/inputTypes';
 import {getDefaultValue, getElementOutput, isEmpty} from '../../utils/utils';
 import CodeMirrorEditor from '../CodeMirrorEditor';
@@ -157,6 +158,19 @@ function Element({
 						initialValue={uiConfigurationValues[config.name]}
 						label={config.label}
 						onChange={_handleChange}
+					/>
+				);
+			case INPUT_TYPES.KEYWORDS:
+				return (
+					<TextInput
+						configKey={config.name}
+						defaultValue={getDefaultValue(config)}
+						disabled={disabled}
+						id={inputId}
+						initialValue={initialUIConfigurationValues[config.name]}
+						label={config.label}
+						onChange={_handleChange}
+						placeholder={KEYWORDS_VARIABLE}
 					/>
 				);
 			case INPUT_TYPES.MULTISELECT:

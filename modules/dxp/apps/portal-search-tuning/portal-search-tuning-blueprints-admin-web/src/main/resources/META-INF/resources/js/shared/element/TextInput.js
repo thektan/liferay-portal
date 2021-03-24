@@ -22,6 +22,7 @@ function TextInput({
 	initialValue,
 	label,
 	onChange,
+	placeholder,
 }) {
 	const [value, setValue] = useState(initialValue || defaultValue);
 
@@ -42,6 +43,7 @@ function TextInput({
 					id={id}
 					onBlur={_handleBlur}
 					onChange={_handleChange}
+					placeholder={placeholder}
 					value={value}
 				/>
 			</ClayInput.GroupItem>

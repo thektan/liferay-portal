@@ -14,3 +14,5 @@ export const CONFIG_PREFIX = 'configuration';
 export const ELEMENT_PREFIX = {
 	QUERY: 'queryElement',
 };
+
+export const KEYWORDS_VARIABLE = '${keywords}';
