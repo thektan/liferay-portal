@@ -29,21 +29,17 @@
 		}
 	}
 
+	.component-text {
+		margin-right: 16px;
+	}
+
+	.configuration-changed-alert {
+		margin-bottom: 16px;
+	}
+
 	.empty-list-message {
 		padding: 16px;
 		text-align: center;
-	}
-
-	.search-message {
-		color: $secondary;
-		margin: 0.5rem auto 1.5rem;
-		padding: 16px 0;
-		text-align: center;
-		width: 340px;
-	}
-
-	.component-text {
-		margin-right: 16px;
 	}
 
 	.preview-error-list {
@@ -219,6 +215,20 @@
 		}
 	}
 
+	.results-toolbar {
+		font-size: 0.875rem;
+		margin-bottom: 16px;
+		margin-top: 8px;
+	}
+
+	.search-message {
+		color: $secondary;
+		margin: 0.5rem auto 1.5rem;
+		padding: 16px 0;
+		text-align: center;
+		width: 340px;
+	}
+
 	.shortcut-icon {
 		padding-left: 4px;
 	}
@@ -256,6 +266,6 @@
 
 	.sidebar-search {
 		height: auto;
-		padding-bottom: 16px;
+		margin-bottom: 16px;
 	}
 }

@@ -9,6 +9,7 @@
  * distribution rights of the Software.
  */
 
+import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayEmptyState from '@clayui/empty-state';
 import ClayIcon from '@clayui/icon';
@@ -27,6 +28,7 @@ import ErrorListItem from './ErrorListItem';
 import ResultListItem from './ResultListItem';
 
 function Preview({
+	configurationChanged,
 	loading,
 	onClose,
 	onFetchResults,
@@ -87,32 +89,36 @@ function Preview({
 		</div>
 	);
 
-	const ResultsManagementBar = () => (
-		<ClayManagementToolbar>
-			<ClayManagementToolbar.ItemList>
-				<ClayManagementToolbar.Item>
-					<span className="component-text text-truncate-inline">
-						<span className="text-truncate">
-							{sub(Liferay.Language.get('x-results'), [
-								results.meta.totalHits,
-							])}
-						</span>
-					</span>
-				</ClayManagementToolbar.Item>
+	const ConfigurationChangedWarning = () =>
+		configurationChanged ? (
+			<ClayAlert
+				className="configuration-changed-alert"
+				displayType="warning"
+				title={Liferay.Language.get('warning')}
+				variant="stripe"
+			>
+				{Liferay.Language.get(
+					'the-query-configuration-has-changed-and-the-results-may-be-different'
+				)}
 
-				<ClayManagementToolbar.Item>
-					<ClayButton
-						aria-label={Liferay.Language.get('refresh')}
-						disabled={!value || loading}
-						displayType="secondary"
-						onClick={_handleFetch}
-						small
-					>
-						{Liferay.Language.get('refresh')}
-					</ClayButton>
-				</ClayManagementToolbar.Item>
-			</ClayManagementToolbar.ItemList>
-		</ClayManagementToolbar>
+				<ClayAlert.Footer>
+					<ClayButton.Group>
+						<ClayButton alert onClick={_handleFetch}>
+							{Liferay.Language.get('refresh')}
+						</ClayButton>
+					</ClayButton.Group>
+				</ClayAlert.Footer>
+			</ClayAlert>
+		) : null;
+
+	const ResultsToolbar = () => (
+		<div className="container-fluid results-toolbar">
+			<span className="text-truncate">
+				{sub(Liferay.Language.get('x-results'), [
+					results.meta.totalHits,
+				])}
+			</span>
+		</div>
 	);
 
 	return (
@@ -149,19 +155,31 @@ function Preview({
 				</div>
 			</nav>
 
-			{results.meta && (!results.errors || !results.errors.length) && (
-				<ResultsManagementBar />
-			)}
-
 			{!loading ? (
 				results.errors && results.errors.length ? (
-					_renderErrors()
+					<>
+						<ConfigurationChangedWarning />
+
+						{_renderErrors()}
+					</>
 				) : results.hits && results.hits.length ? (
-					_renderHits()
+					<>
+						<ConfigurationChangedWarning />
+
+						<ResultsToolbar />
+
+						{_renderHits()}
+					</>
 				) : results.meta ? (
-					<div className="empty-list-message">
-						<ClayEmptyState />
-					</div>
+					<>
+						<ConfigurationChangedWarning />
+
+						<ResultsToolbar />
+
+						<div className="empty-list-message">
+							<ClayEmptyState />
+						</div>
+					</>
 				) : (
 					<div className="search-message">
 						{Liferay.Language.get(

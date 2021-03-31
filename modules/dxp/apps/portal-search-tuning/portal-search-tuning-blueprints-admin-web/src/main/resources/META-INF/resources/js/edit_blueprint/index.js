@@ -58,6 +58,7 @@ function EditBlueprintForm({
 }) {
 	const {namespace} = useContext(ThemeContext);
 
+	const [configurationChanged, setConfigurationChanged] = useState(false);
 	const [showSidebar, setShowSidebar] = useState(true);
 	const [showPreview, setShowPreview] = useState(false);
 	const [tab, setTab] = useState('query-builder');
@@ -127,6 +128,8 @@ function EditBlueprintForm({
 			...previewInfo,
 			loading: true,
 		}));
+
+		setConfigurationChanged(false);
 
 		const formData = new FormData(form.current);
 
@@ -207,6 +210,8 @@ function EditBlueprintForm({
 			},
 			...selectedElements,
 		]);
+
+		setConfigurationChanged(true);
 	}, []);
 
 	const _handleDeleteElement = useCallback((id) => {
@@ -217,6 +222,8 @@ function EditBlueprintForm({
 		openSuccessToast({
 			message: Liferay.Language.get('element-removed'),
 		});
+
+		setConfigurationChanged(true);
 	}, []);
 
 	const _handleFocusElement = (prefixedId) => {
@@ -243,6 +250,8 @@ function EditBlueprintForm({
 
 	const _handleFrameworkConfigChange = (value) => {
 		setFrameworkConfig({...frameworkConfig, ...value});
+
+		setConfigurationChanged(true);
 	};
 
 	const _handleSubmit = useCallback(
@@ -344,6 +353,22 @@ function EditBlueprintForm({
 	);
 
 	const _handleUpdateQueryElement = useCallback((id, newElementValues) => {
+
+		// When using with formik, possibly do this on blur instead to improve
+		// performance.
+
+		const index = selectedQueryElements.findIndex((item) => id == item.id);
+
+		const prevElement = selectedQueryElements[index];
+		const newElement = {
+			...selectedQueryElements[index],
+			...newElementValues,
+		};
+
+		if (JSON.stringify(prevElement) !== JSON.stringify(newElement)) {
+			setConfigurationChanged(true);
+		}
+
 		setSelectedQueryElements((selectedQueryElements) => {
 			const index = selectedQueryElements.findIndex(
 				(item) => id == item.id
@@ -387,6 +412,7 @@ function EditBlueprintForm({
 				return (
 					<>
 						<Preview
+							configurationChanged={configurationChanged}
 							loading={previewInfo.loading}
 							onClose={() => setShowPreview(false)}
 							onFetchResults={_handleFetchPreviewSearch}
