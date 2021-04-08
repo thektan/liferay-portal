@@ -94,7 +94,7 @@ function Preview({
 					<span className="component-text text-truncate-inline">
 						<span className="text-truncate">
 							{sub(Liferay.Language.get('x-results'), [
-								results.meta.totalHits,
+								results.meta.totalHits.toLocaleString(),
 							])}
 						</span>
 					</span>
