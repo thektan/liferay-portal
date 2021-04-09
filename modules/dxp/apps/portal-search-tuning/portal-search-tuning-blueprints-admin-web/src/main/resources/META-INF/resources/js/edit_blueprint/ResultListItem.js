@@ -75,7 +75,7 @@ function ResultListItem({item}) {
 				)}
 
 				{!collapse &&
-					Object.keys(item).map((property) => {
+					Object.keys(item).sort().map((property) => {
 						if (
 							![
 								...RESULTS_DEFAULT_KEYS,
