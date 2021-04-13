@@ -325,6 +325,22 @@ storiesOf('Components|Preview', module)
 			visible={true}
 		/>
 	))
+	.add('Empty', () => (
+		<Preview
+			loading={false}
+			onFetchResults={action('onFetchResults')}
+			results={{
+				hits: [],
+				meta: {
+					executionTime: '0.061',
+					keywords: 'test',
+					totalHits: 0,
+				},
+				pagination: {activePage: 1, totalPages: 1},
+			}}
+			visible={true}
+		/>
+	))
 	.add('Error', () => (
 		<Preview
 			loading={false}
@@ -334,6 +350,7 @@ storiesOf('Components|Preview', module)
 					{
 						className:
 							'com.liferay.portal.search.tuning.blueprints.engine.internal.searchrequest.QuerySearchRequestBodyContributor',
+						elementId: 'queryElement-1',
 						localizationKey: 'core.error.unknown-occur-value',
 						msg:
 							'No enum constant com.liferay.portal.search.tuning.blueprints.constants.json.values.Occur.FILTERED',
