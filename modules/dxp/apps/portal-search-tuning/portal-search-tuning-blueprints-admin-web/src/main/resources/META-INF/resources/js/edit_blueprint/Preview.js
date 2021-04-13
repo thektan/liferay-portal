@@ -160,7 +160,7 @@ function Preview({
 					_renderHits()
 				) : results.meta ? (
 					<div className="empty-list-message">
-						<ClayEmptyState />
+						<ClayEmptyState description="" />
 					</div>
 				) : (
 					<div className="search-message">
