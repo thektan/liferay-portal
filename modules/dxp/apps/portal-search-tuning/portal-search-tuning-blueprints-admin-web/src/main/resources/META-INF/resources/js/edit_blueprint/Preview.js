@@ -59,7 +59,7 @@ function Preview({
 	);
 
 	const _renderHits = () => (
-		<div className="preview-results-list">
+		<div className="preview-results-list sidebar-body">
 			<ClayList>
 				{results.hits.map((result) => (
 					<ResultListItem item={result} key={result.id} />
