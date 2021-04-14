@@ -69,9 +69,9 @@ const QueryElementList = ({category, expand, onAddElement, queryElements}) => {
 						({elementTemplateJSON, uiConfigurationJSON}, index) => {
 							return (
 								<ClayList.Item
-									className={`${
-										showAdd === index ? 'hover' : ''
-									}`}
+									className={getCN({
+										hover: showAdd === index,
+									})}
 									flex
 									key={index}
 									onMouseEnter={() => setShowAdd(index)}
