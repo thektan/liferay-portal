@@ -23,8 +23,8 @@ import '../../src/main/resources/META-INF/resources/css/main.scss';
 import ClayLayout from '@clayui/layout';
 
 import BlueprintForm from '../../src/main/resources/META-INF/resources/js/edit_blueprint';
+import AddElementSidebar from '../../src/main/resources/META-INF/resources/js/edit_blueprint/AddElementSidebar';
 import Preview from '../../src/main/resources/META-INF/resources/js/edit_blueprint/Preview';
-import Sidebar from '../../src/main/resources/META-INF/resources/js/edit_blueprint/Sidebar';
 import QueryBuilder from '../../src/main/resources/META-INF/resources/js/edit_blueprint/tabs/QueryBuilder';
 import SelectAssetTypes from '../../src/main/resources/META-INF/resources/js/edit_blueprint/tabs/SelectAssetTypes';
 import ElementForm from '../../src/main/resources/META-INF/resources/js/edit_element';
@@ -305,10 +305,10 @@ storiesOf('Components|SelectAssetTypes', module)
 		/>
 	));
 
-storiesOf('Components|Sidebar', module)
+storiesOf('Components|AddElementSidebar', module)
 	.addDecorator(withBlueprintsClass)
-	.add('Sidebar', () => (
-		<Sidebar
+	.add('AddElementSidebar', () => (
+		<AddElementSidebar
 			addElement={action('addElement')}
 			elements={SELECTED_ELEMENTS}
 			visible={true}

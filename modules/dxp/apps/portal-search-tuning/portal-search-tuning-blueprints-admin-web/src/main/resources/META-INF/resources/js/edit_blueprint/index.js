@@ -31,8 +31,8 @@ import {
 	openSuccessToast,
 	sub,
 } from '../utils/utils';
+import AddElementSidebar from './AddElementSidebar';
 import Preview from './Preview';
-import Sidebar from './Sidebar';
 import QueryBuilder from './tabs/QueryBuilder';
 import Settings from './tabs/Settings';
 
@@ -519,10 +519,14 @@ function EditBlueprintForm({
 							visible={showPreview}
 						/>
 
-						<Sidebar
+						<AddElementSidebar
 							elements={sidebarQueryElements.current}
+							emptyMessage={Liferay.Language.get(
+								'no-query-elements-found'
+							)}
 							onAddElement={_handleAddElement}
 							onClose={() => setShowSidebar(false)}
+							title={Liferay.Language.get('add-query-elements')}
 							visible={showSidebar}
 						/>
 
