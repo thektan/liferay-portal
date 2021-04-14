@@ -30,12 +30,21 @@ const LAST_CATEGORIES = [DEFAULT_CATEGORY, 'custom'];
 const ElementList = ({category, elements, expand, onAddElement}) => {
 	const {locale} = useContext(ThemeContext);
 
-	const [showAdd, setShowAdd] = useState(-1);
 	const [showList, setShowList] = useState(expand);
 
 	useEffect(() => {
 		setShowList(expand);
 	}, [expand]);
+
+	const _handleAddElement = (
+		elementTemplateJSON,
+		uiConfigurationJSON
+	) => () => {
+		onAddElement({
+			elementTemplateJSON,
+			uiConfigurationJSON,
+		});
+	};
 
 	return (
 		<>
@@ -61,13 +70,9 @@ const ElementList = ({category, elements, expand, onAddElement}) => {
 						({elementTemplateJSON, uiConfigurationJSON}, index) => {
 							return (
 								<ClayList.Item
-									className={getCN({
-										hover: showAdd === index,
-									})}
+									className="element-item"
 									flex
 									key={index}
-									onMouseEnter={() => setShowAdd(index)}
-									onMouseLeave={() => setShowAdd(-1)}
 								>
 									<ClayList.ItemField>
 										<ClaySticker size="md">
@@ -101,29 +106,22 @@ const ElementList = ({category, elements, expand, onAddElement}) => {
 									</ClayList.ItemField>
 
 									<ClayList.ItemField>
-										{showAdd === index && (
-											<div className="button-wrapper">
-												<div className="add-element-button">
-													<ClayButton
-														aria-label={Liferay.Language.get(
-															'add'
-														)}
-														displayType="secondary"
-														onClick={() => {
-															onAddElement({
-																elementTemplateJSON,
-																uiConfigurationJSON,
-															});
-														}}
-														small
-													>
-														{Liferay.Language.get(
-															'add'
-														)}
-													</ClayButton>
-												</div>
-											</div>
-										)}
+										<div className="add-element-button-background" />
+
+										<ClayButton
+											aria-label={Liferay.Language.get(
+												'add'
+											)}
+											className="add-element-button"
+											displayType="secondary"
+											onClick={_handleAddElement(
+												elementTemplateJSON,
+												uiConfigurationJSON
+											)}
+											small
+										>
+											{Liferay.Language.get('add')}
+										</ClayButton>
 									</ClayList.ItemField>
 								</ClayList.Item>
 							);
@@ -206,8 +204,7 @@ function AddElementSidebar({
 					return elementTitle
 						.toLowerCase()
 						.includes(value.toLowerCase());
-				}
-				else {
+				} else {
 					return true;
 				}
 			});
