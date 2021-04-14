@@ -21,7 +21,7 @@ import CodeMirrorEditor from '../shared/CodeMirrorEditor';
 import PreviewModal from '../shared/PreviewModal';
 
 const RESULTS_DEFAULT_KEYS = ['type', 'description', 'date', 'userName'];
-const RESULTS_HIDE_KEYS = ['explanation'];
+const RESULTS_HIDE_KEYS = ['explanation', 'score', 'viewURL'];
 
 function ResultListItem({item}) {
 	const [collapse, setCollapse] = useState(true);
