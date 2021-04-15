@@ -32,7 +32,7 @@ import {
 	sub,
 } from '../utils/utils';
 import AddElementSidebar from './AddElementSidebar';
-import Preview from './Preview';
+import PreviewSidebar from './PreviewSidebar';
 import QueryBuilder from './tabs/QueryBuilder';
 import Settings from './tabs/Settings';
 
@@ -510,7 +510,7 @@ function EditBlueprintForm({
 			default:
 				return (
 					<>
-						<Preview
+						<PreviewSidebar
 							loading={previewInfo.loading}
 							onClose={() => setShowPreview(false)}
 							onFetchResults={_handleFetchPreviewSearch}

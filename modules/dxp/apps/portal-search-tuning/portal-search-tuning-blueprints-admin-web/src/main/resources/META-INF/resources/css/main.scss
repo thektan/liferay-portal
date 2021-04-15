@@ -2,6 +2,8 @@
 
 @import '_utils';
 
+// Components Rendered On Document Body
+
 @import '_edit_title_modal';
 @import '_field_row_dropdown';
 @import '_json_modal';
@@ -13,8 +15,19 @@
 }
 
 .portlet-blueprints-admin {
+	// Shared
+
+	@import '_sidebar';
+
+	// Components
+
+	@import '_add_element_sidebar';
+	@import '_builder';
 	@import '_element';
+	@import '_error_list_item';
 	@import '_page_toolbar';
+	@import '_preview_sidebar';
+	@import '_result_list_item';
 
 	.blueprints-search-container {
 		margin-top: 20px;
@@ -25,9 +38,6 @@
 	}
 
 	.edit-blueprint-root {
-		@import '_builder';
-		@import '_sidebar';
-
 		.bold {
 			font-weight: 700;
 		}
