@@ -267,7 +267,7 @@ function AddElementSidebar({
 					</div>
 				) : (
 					<div className="empty-list-message">
-						<ClayEmptyState title={emptyMessage} />
+						<ClayEmptyState description="" title={emptyMessage} />
 					</div>
 				)
 			) : (
