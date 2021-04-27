@@ -135,6 +135,7 @@ function FieldRow({
 					<FocusScope>
 						<ClayAutocomplete>
 							<ClayAutocomplete.Input
+								aria-label={Liferay.Language.get('field')}
 								autoComplete="off"
 								disabled={disabled}
 								id={id}
