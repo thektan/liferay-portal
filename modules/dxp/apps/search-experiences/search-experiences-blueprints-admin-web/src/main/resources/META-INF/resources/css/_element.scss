@@ -135,6 +135,22 @@
 
 				label {
 					margin: auto 0;
+					display: flex;
+
+					.form-check {
+						padding-right: 4px;
+
+						.custom-control-input {
+							margin: 0;
+						}
+
+						.custom-control-label {
+							&:after,
+							&:before {
+								margin: 0;
+							}
+						}
+					}
 				}
 
 				.sticker {
@@ -142,6 +158,12 @@
 
 					.lexicon-icon {
 						margin-top: -3px;
+					}
+				}
+
+				&.nullable-null {
+					label {
+						color: $secondaryL1;
 					}
 				}
 			}

@@ -17,10 +17,10 @@ function NullableCheckbox({defaultValue = '', disabled, onChange, value}) {
 		<div className="form-check">
 			<ClayCheckbox
 				aria-label={Liferay.Language.get('exclude-property')}
-				checked={value === null}
+				checked={value !== null}
 				disabled={disabled}
-				label={Liferay.Language.get('exclude-property')}
 				onChange={() => onChange(value === null ? defaultValue : null)}
+				title={Liferay.Language.get('exclude-property')}
 			/>
 		</div>
 	);

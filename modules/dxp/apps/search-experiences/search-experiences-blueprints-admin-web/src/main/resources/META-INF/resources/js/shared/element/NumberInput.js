@@ -13,8 +13,6 @@ import {ClayInput} from '@clayui/form';
 import getCN from 'classnames';
 import React from 'react';
 
-import NullableCheckbox from './NullableCheckbox';
-
 function NumberInput({
 	configKey,
 	disabled,
@@ -23,10 +21,8 @@ function NumberInput({
 	max,
 	min,
 	name,
-	nullable,
 	onBlur,
 	onChange,
-	setFieldValue,
 	step,
 	unit,
 	value,
@@ -68,14 +64,6 @@ function NumberInput({
 					</ClayInput.GroupItem>
 				)}
 			</ClayInput.Group>
-
-			{nullable && (
-				<NullableCheckbox
-					disabled={disabled}
-					onChange={(val) => setFieldValue(name, val)}
-					value={value}
-				/>
-			)}
 		</>
 	);
 }

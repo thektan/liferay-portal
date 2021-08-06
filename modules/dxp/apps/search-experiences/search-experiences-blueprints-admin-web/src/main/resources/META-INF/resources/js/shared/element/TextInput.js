@@ -12,19 +12,7 @@
 import {ClayInput} from '@clayui/form';
 import React from 'react';
 
-import NullableCheckbox from './NullableCheckbox';
-
-function TextInput({
-	disabled,
-	id,
-	label,
-	name,
-	nullable,
-	onBlur,
-	onChange,
-	setFieldValue,
-	value,
-}) {
+function TextInput({disabled, id, label, name, onBlur, onChange, value}) {
 	return (
 		<>
 			<ClayInput.Group small>
@@ -40,14 +28,6 @@ function TextInput({
 					/>
 				</ClayInput.GroupItem>
 			</ClayInput.Group>
-
-			{nullable && (
-				<NullableCheckbox
-					disabled={disabled}
-					onChange={(val) => setFieldValue(name, val)}
-					value={value}
-				/>
-			)}
 		</>
 	);
 }

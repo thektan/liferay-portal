@@ -11,7 +11,7 @@
 
 import ClayButton from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
-import ClayForm, {ClayToggle} from '@clayui/form';
+import ClayForm, {ClayCheckbox, ClayToggle} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayList from '@clayui/list';
 import ClaySticker from '@clayui/sticker';
@@ -81,6 +81,15 @@ function Element({
 
 	const _handleDelete = () => {
 		onDeleteElement(id);
+	};
+
+	const _handleNullableChange = (config) => () => {
+		const newValue =
+			uiConfigurationValues[config.name] === null
+				? config.defaultValue
+				: null;
+
+		setFieldValue(_getInputName(config.name), newValue);
 	};
 
 	const _handleToggle = () => {
@@ -200,10 +209,8 @@ function Element({
 						max={typeOptions.max}
 						min={typeOptions.min}
 						name={inputName}
-						nullable={nullable}
 						onBlur={onBlur}
 						onChange={onChange}
-						setFieldValue={setFieldValue}
 						step={typeOptions.step}
 						unit={typeOptions.unit}
 						value={uiConfigurationValues[config.name]}
@@ -250,10 +257,8 @@ function Element({
 						id={inputId}
 						label={config.label}
 						name={inputName}
-						nullable={nullable}
 						onBlur={onBlur}
 						onChange={onChange}
-						setFieldValue={setFieldValue}
 						value={uiConfigurationValues[config.name]}
 					/>
 				);
@@ -383,43 +388,84 @@ function Element({
 									key={config.name}
 								>
 									{config.type !== INPUT_TYPES.JSON && (
-										<ClayList.ItemField className="list-item-label">
+										<ClayList.ItemField
+											className={getCN(
+												'list-item-label',
+												{
+													['nullable-null']:
+														config.typeOptions
+															?.nullable &&
+														uiConfigurationValues[
+															config.name
+														] === null, // For styling label as greyed out when unchecked
+												}
+											)}
+										>
 											<label
 												htmlFor={_getInputId(
 													id,
 													config.name
 												)}
 											>
-												{config.label}
-
-												{isDefined(
-													config.typeOptions?.required
-												) &&
-													!config.typeOptions
-														.required && (
-														<span className="optional-text">
-															{Liferay.Language.get(
-																'optional'
+												{config.typeOptions
+													?.nullable && (
+													<div className="form-check">
+														<ClayCheckbox
+															aria-label={Liferay.Language.get(
+																'exclude-property'
 															)}
-														</span>
-													)}
-
-												{config.helpText && (
-													<ClayTooltipProvider>
-														<ClaySticker
-															displayType="unstyled"
-															size="sm"
-															title={
-																config.helpText
+															checked={
+																uiConfigurationValues[
+																	config.name
+																] !== null
 															}
-														>
-															<ClayIcon
-																data-tooltip-align="top"
-																symbol="info-circle"
-															/>
-														</ClaySticker>
-													</ClayTooltipProvider>
+															disabled={
+																!elementTemplateJSON.enabled ||
+																isSubmitting
+															}
+															onChange={_handleNullableChange(
+																config
+															)}
+															title={Liferay.Language.get(
+																'exclude-property'
+															)}
+														/>
+													</div>
 												)}
+
+												<span>
+													{config.label}
+
+													{isDefined(
+														config.typeOptions
+															?.required
+													) &&
+														!config.typeOptions
+															.required && (
+															<span className="optional-text">
+																{Liferay.Language.get(
+																	'optional'
+																)}
+															</span>
+														)}
+
+													{config.helpText && (
+														<ClayTooltipProvider>
+															<ClaySticker
+																displayType="unstyled"
+																size="sm"
+																title={
+																	config.helpText
+																}
+															>
+																<ClayIcon
+																	data-tooltip-align="top"
+																	symbol="info-circle"
+																/>
+															</ClaySticker>
+														</ClayTooltipProvider>
+													)}
+												</span>
 											</label>
 										</ClayList.ItemField>
 									)}
