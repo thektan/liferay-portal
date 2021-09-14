@@ -80,25 +80,23 @@ public class IndexActionsDisplayBuilder {
 		}
 
 		for (long companyId : companyIds) {
-			String companyName = String.valueOf(companyId);
-
 			try {
 				Company company = CompanyLocalServiceUtil.getCompany(companyId);
 
-				companyName = company.getWebId();
+				jsonArray.put(
+					JSONUtil.put(
+						"id", companyId
+					).put(
+						"name", company.getWebId()
+					));
 			}
 			catch (Exception exception) {
 				if (_log.isDebugEnabled()) {
-					_log.debug(exception, exception);
+					_log.debug(
+						"Unable to get company with company id " + companyId,
+						exception);
 				}
 			}
-
-			jsonArray.put(
-				JSONUtil.put(
-					"id", companyId
-				).put(
-					"name", companyName
-				));
 		}
 
 		return jsonArray;
