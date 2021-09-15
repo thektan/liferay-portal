@@ -40,19 +40,22 @@ import com.liferay.portal.search.test.util.DocumentsAssert;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
+import com.liferay.search.experiences.blueprints.Blueprint;
+import com.liferay.search.experiences.blueprints.BlueprintLookup;
 import com.liferay.search.experiences.blueprints.engine.attributes.BlueprintsAttributes;
 import com.liferay.search.experiences.blueprints.engine.attributes.BlueprintsAttributesBuilder;
 import com.liferay.search.experiences.blueprints.engine.attributes.BlueprintsAttributesBuilderFactory;
 import com.liferay.search.experiences.blueprints.engine.cache.JSONDataProviderCache;
 import com.liferay.search.experiences.blueprints.engine.util.BlueprintsEngineHelper;
-import com.liferay.search.experiences.blueprints.model.Blueprint;
-import com.liferay.search.experiences.blueprints.service.BlueprintService;
+import com.liferay.search.experiences.model.SXPBlueprint;
 import com.liferay.search.experiences.problems.ProblemsHolderBuilderFactory;
+import com.liferay.search.experiences.service.SXPBlueprintLocalService;
 
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import org.junit.Before;
@@ -202,10 +205,35 @@ public class BlueprintsSearchRequestContributorTest {
 	private Blueprint _addCompanyBlueprint(String configurationString)
 		throws Exception {
 
+		ServiceContext serviceContext = _getServiceContext();
+
+		serviceContext.toString();
+
+		// TODO SXPBlueprintService.addCompanyBlueprint()
+
+		/*
 		Blueprint blueprint = _blueprintService.addCompanyBlueprint(
 			Collections.singletonMap(LocaleUtil.US, "testTitle"),
 			Collections.singletonMap(LocaleUtil.US, "testDescription"),
-			configurationString, "", _getServiceContext());
+			configurationString, "", serviceContext);
+		*/
+
+		SXPBlueprint sxpBlueprint1 =
+			_sxpBlueprintLocalService.createSXPBlueprint(0);
+
+		sxpBlueprint1.setDescriptionMap(
+			Collections.singletonMap(LocaleUtil.US, "testDescription"));
+		sxpBlueprint1.setTitleMap(
+			Collections.singletonMap(LocaleUtil.US, "testTitle"));
+		sxpBlueprint1.setConfigurationJSON(configurationString);
+
+		SXPBlueprint sxpBlueprint2 = _sxpBlueprintLocalService.addSXPBlueprint(
+			sxpBlueprint1);
+
+		Optional<Blueprint> optional = _blueprintLookup.getBlueprintOptional(
+			sxpBlueprint2.getSXPBlueprintId());
+
+		Blueprint blueprint = optional.get();
 
 		_blueprint = blueprint;
 
@@ -276,10 +304,10 @@ public class BlueprintsSearchRequestContributorTest {
 	private Blueprint _blueprint;
 
 	@Inject
-	private BlueprintsEngineHelper _blueprintsEngineHelper;
+	private BlueprintLookup _blueprintLookup;
 
 	@Inject
-	private BlueprintService _blueprintService;
+	private BlueprintsEngineHelper _blueprintsEngineHelper;
 
 	@DeleteAfterTestRun
 	private Group _group;
@@ -291,6 +319,10 @@ public class BlueprintsSearchRequestContributorTest {
 	private ProblemsHolderBuilderFactory _problemsHolderBuilderFactory;
 
 	private ServiceContext _serviceContext;
+
+	@Inject
+	private SXPBlueprintLocalService _sxpBlueprintLocalService;
+
 	private User _user;
 
 }

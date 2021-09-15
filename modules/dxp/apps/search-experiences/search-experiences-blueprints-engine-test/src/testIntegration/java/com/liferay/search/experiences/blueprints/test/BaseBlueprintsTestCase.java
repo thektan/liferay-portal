@@ -50,6 +50,8 @@ import com.liferay.portal.search.test.util.DocumentsAssert;
 import com.liferay.portal.search.test.util.SearchTestRule;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portlet.expando.util.test.ExpandoTestUtil;
+import com.liferay.search.experiences.blueprints.Blueprint;
+import com.liferay.search.experiences.blueprints.BlueprintLookup;
 import com.liferay.search.experiences.blueprints.engine.attributes.BlueprintsAttributes;
 import com.liferay.search.experiences.blueprints.engine.attributes.BlueprintsAttributesBuilder;
 import com.liferay.search.experiences.blueprints.engine.attributes.BlueprintsAttributesBuilderFactory;
@@ -57,9 +59,9 @@ import com.liferay.search.experiences.blueprints.engine.cache.JSONDataProviderCa
 import com.liferay.search.experiences.blueprints.engine.exception.BlueprintsEngineException;
 import com.liferay.search.experiences.blueprints.engine.util.BlueprintsEngineHelper;
 import com.liferay.search.experiences.blueprints.facets.constants.FacetsBlueprintKeys;
-import com.liferay.search.experiences.blueprints.model.Blueprint;
-import com.liferay.search.experiences.blueprints.service.BlueprintService;
+import com.liferay.search.experiences.model.SXPBlueprint;
 import com.liferay.search.experiences.problems.ProblemsHolderBuilderFactory;
+import com.liferay.search.experiences.service.SXPBlueprintLocalService;
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiNodeLocalService;
@@ -71,6 +73,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import org.junit.Before;
@@ -113,9 +116,29 @@ public abstract class BaseBlueprintsTestCase {
 			String configuration, String selectedElements)
 		throws Exception {
 
+		// TODO SXPBlueprintService.addCompanyBlueprint()
+
+		/*
 		Blueprint blueprint = blueprintService.addCompanyBlueprint(
 			titleMap, descriptionMap, configuration, selectedElements,
 			serviceContext);
+		*/
+
+		SXPBlueprint sxpBlueprint1 =
+			_sxpBlueprintLocalService.createSXPBlueprint(0);
+
+		sxpBlueprint1.setConfigurationJSON(configuration);
+		sxpBlueprint1.setDescriptionMap(descriptionMap);
+		sxpBlueprint1.setElementsJSON(selectedElements);
+		sxpBlueprint1.setTitleMap(titleMap);
+
+		SXPBlueprint sxpBlueprint2 = _sxpBlueprintLocalService.addSXPBlueprint(
+			sxpBlueprint1);
+
+		Optional<Blueprint> optional = _blueprintLookup.getBlueprintOptional(
+			sxpBlueprint2.getSXPBlueprintId());
+
+		Blueprint blueprint = optional.get();
 
 		blueprints.add(blueprint);
 
@@ -162,9 +185,29 @@ public abstract class BaseBlueprintsTestCase {
 			String configuration, String selectedElements)
 		throws Exception {
 
+		// TODO SXPBlueprintService.addGroupBlueprint()
+
+		/*
 		Blueprint blueprint = blueprintService.addGroupBlueprint(
 			titleMap, descriptionMap, configuration, selectedElements,
 			serviceContext);
+		*/
+
+		SXPBlueprint sxpBlueprint1 =
+			_sxpBlueprintLocalService.createSXPBlueprint(0);
+
+		sxpBlueprint1.setConfigurationJSON(configuration);
+		sxpBlueprint1.setDescriptionMap(descriptionMap);
+		sxpBlueprint1.setElementsJSON(selectedElements);
+		sxpBlueprint1.setTitleMap(titleMap);
+
+		SXPBlueprint sxpBlueprint2 = _sxpBlueprintLocalService.addSXPBlueprint(
+			sxpBlueprint1);
+
+		Optional<Blueprint> optional = _blueprintLookup.getBlueprintOptional(
+			sxpBlueprint2.getSXPBlueprintId());
+
+		Blueprint blueprint = optional.get();
 
 		blueprints.add(blueprint);
 
@@ -450,9 +493,6 @@ public abstract class BaseBlueprintsTestCase {
 	@Inject
 	protected BlueprintsEngineHelper blueprintsEngineHelper;
 
-	@Inject
-	protected BlueprintService blueprintService;
-
 	@DeleteAfterTestRun
 	protected Group group;
 
@@ -467,10 +507,30 @@ public abstract class BaseBlueprintsTestCase {
 		if (!Validator.isBlank(configurationString) &&
 			!Validator.isBlank(selectedElementString)) {
 
+			// TODO SXPBlueprintService.updateBlueprint()
+
+			/*
 			blueprint = blueprintService.updateBlueprint(
 				blueprint.getBlueprintId(), blueprint.getTitleMap(),
 				blueprint.getDescriptionMap(), configurationString,
 				selectedElementString, serviceContext);
+			*/
+
+			SXPBlueprint sxpBlueprint1 =
+				_sxpBlueprintLocalService.getSXPBlueprint(
+					blueprint.getBlueprintId());
+
+			sxpBlueprint1.setConfigurationJSON(configurationString);
+			sxpBlueprint1.setElementsJSON(selectedElementString);
+
+			SXPBlueprint sxpBlueprint2 =
+				_sxpBlueprintLocalService.updateSXPBlueprint(sxpBlueprint1);
+
+			Optional<Blueprint> optional =
+				_blueprintLookup.getBlueprintOptional(
+					sxpBlueprint2.getSXPBlueprintId());
+
+			blueprint = optional.get();
 		}
 
 		return blueprintsEngineHelper.search(
@@ -484,6 +544,9 @@ public abstract class BaseBlueprintsTestCase {
 
 	@DeleteAfterTestRun
 	private final List<BlogsEntry> _blogsEntries = new ArrayList<>();
+
+	@Inject
+	private BlueprintLookup _blueprintLookup;
 
 	@Inject
 	private ClassNameLocalService _classNameLocalService;
@@ -505,6 +568,9 @@ public abstract class BaseBlueprintsTestCase {
 
 	@Inject
 	private ProblemsHolderBuilderFactory _problemsHolderBuilderFactory;
+
+	@Inject
+	private SXPBlueprintLocalService _sxpBlueprintLocalService;
 
 	@Inject
 	private WikiNodeLocalService _wikiNodeLocalService;

@@ -46,16 +46,19 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 import com.liferay.portletmvc4spring.test.mock.web.portlet.MockActionRequest;
+import com.liferay.search.experiences.blueprints.Blueprint;
+import com.liferay.search.experiences.blueprints.BlueprintLookup;
 import com.liferay.search.experiences.blueprints.admin.web.internal.constants.BlueprintsAdminMVCCommandNames;
 import com.liferay.search.experiences.blueprints.admin.web.internal.constants.BlueprintsAdminWebKeys;
 import com.liferay.search.experiences.blueprints.engine.constants.SearchContextAttributeKeys;
-import com.liferay.search.experiences.blueprints.model.Blueprint;
-import com.liferay.search.experiences.blueprints.service.BlueprintService;
+import com.liferay.search.experiences.model.SXPBlueprint;
+import com.liferay.search.experiences.service.SXPBlueprintLocalService;
 import com.liferay.users.admin.test.util.search.GroupBlueprint;
 import com.liferay.users.admin.test.util.search.GroupSearchFixture;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -145,10 +148,35 @@ public class CustomQueryBlueprintsTest {
 	protected void addBlueprint() throws Exception {
 		String configurationString = readConfiguration();
 
+		ServiceContext serviceContext = _getServiceContext();
+
+		serviceContext.toString();
+
+		// TODO SXPBlueprintService.addCompanyBlueprint()
+
+		/*
 		Blueprint blueprint = blueprintService.addCompanyBlueprint(
 			Collections.singletonMap(LocaleUtil.US, "Los Angeles Boost"),
 			Collections.singletonMap(LocaleUtil.US, "test Description"),
-			configurationString, "", _getServiceContext());
+			configurationString, "", serviceContext);
+		*/
+
+		SXPBlueprint sxpBlueprint1 =
+			_sxpBlueprintLocalService.createSXPBlueprint(0);
+
+		sxpBlueprint1.setDescriptionMap(
+			Collections.singletonMap(LocaleUtil.US, "test Description"));
+		sxpBlueprint1.setTitleMap(
+			Collections.singletonMap(LocaleUtil.US, "Los Angeles Boost"));
+		sxpBlueprint1.setConfigurationJSON(configurationString);
+
+		SXPBlueprint sxpBlueprint2 = _sxpBlueprintLocalService.addSXPBlueprint(
+			sxpBlueprint1);
+
+		Optional<Blueprint> optional = _blueprintLookup.getBlueprintOptional(
+			sxpBlueprint2.getSXPBlueprintId());
+
+		Blueprint blueprint = optional.get();
 
 		_blueprint = blueprint;
 
@@ -164,9 +192,6 @@ public class CustomQueryBlueprintsTest {
 				clazz.getSimpleName(), StringPool.PERIOD,
 				testName.getMethodName(), ".json"));
 	}
-
-	@Inject
-	protected BlueprintService blueprintService;
 
 	@Inject
 	protected CompanyLocalService companyLocalService;
@@ -252,10 +277,16 @@ public class CustomQueryBlueprintsTest {
 	@DeleteAfterTestRun
 	private Blueprint _blueprint;
 
+	@Inject
+	private BlueprintLookup _blueprintLookup;
+
 	private Group _group;
 
 	@DeleteAfterTestRun
 	private List<Group> _groups;
+
+	@Inject
+	private SXPBlueprintLocalService _sxpBlueprintLocalService;
 
 	private User _user;
 
