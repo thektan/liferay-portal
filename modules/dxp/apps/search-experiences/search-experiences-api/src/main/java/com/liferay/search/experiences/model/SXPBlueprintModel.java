@@ -410,6 +410,36 @@ public interface SXPBlueprintModel
 	public void setTitleMap(Map<Locale, String> titleMap, Locale defaultLocale);
 
 	/**
+	 * Returns the configuration json of this sxp blueprint.
+	 *
+	 * @return the configuration json of this sxp blueprint
+	 */
+	@AutoEscape
+	public String getConfigurationJSON();
+
+	/**
+	 * Sets the configuration json of this sxp blueprint.
+	 *
+	 * @param configurationJSON the configuration json of this sxp blueprint
+	 */
+	public void setConfigurationJSON(String configurationJSON);
+
+	/**
+	 * Returns the elements json of this sxp blueprint.
+	 *
+	 * @return the elements json of this sxp blueprint
+	 */
+	@AutoEscape
+	public String getElementsJSON();
+
+	/**
+	 * Sets the elements json of this sxp blueprint.
+	 *
+	 * @param elementsJSON the elements json of this sxp blueprint
+	 */
+	public void setElementsJSON(String elementsJSON);
+
+	/**
 	 * Returns the status of this sxp blueprint.
 	 *
 	 * @return the status of this sxp blueprint

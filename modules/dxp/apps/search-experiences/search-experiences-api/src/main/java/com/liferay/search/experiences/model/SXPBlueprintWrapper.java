@@ -53,6 +53,8 @@ public class SXPBlueprintWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("description", getDescription());
 		attributes.put("title", getTitle());
+		attributes.put("configurationJSON", getConfigurationJSON());
+		attributes.put("elementsJSON", getElementsJSON());
 		attributes.put("status", getStatus());
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
@@ -123,6 +125,18 @@ public class SXPBlueprintWrapper
 			setTitle(title);
 		}
 
+		String configurationJSON = (String)attributes.get("configurationJSON");
+
+		if (configurationJSON != null) {
+			setConfigurationJSON(configurationJSON);
+		}
+
+		String elementsJSON = (String)attributes.get("elementsJSON");
+
+		if (elementsJSON != null) {
+			setElementsJSON(elementsJSON);
+		}
+
 		Integer status = (Integer)attributes.get("status");
 
 		if (status != null) {
@@ -166,6 +180,16 @@ public class SXPBlueprintWrapper
 	@Override
 	public long getCompanyId() {
 		return model.getCompanyId();
+	}
+
+	/**
+	 * Returns the configuration json of this sxp blueprint.
+	 *
+	 * @return the configuration json of this sxp blueprint
+	 */
+	@Override
+	public String getConfigurationJSON() {
+		return model.getConfigurationJSON();
 	}
 
 	/**
@@ -257,6 +281,16 @@ public class SXPBlueprintWrapper
 	@Override
 	public Map<java.util.Locale, String> getDescriptionMap() {
 		return model.getDescriptionMap();
+	}
+
+	/**
+	 * Returns the elements json of this sxp blueprint.
+	 *
+	 * @return the elements json of this sxp blueprint
+	 */
+	@Override
+	public String getElementsJSON() {
+		return model.getElementsJSON();
 	}
 
 	/**
@@ -576,6 +610,16 @@ public class SXPBlueprintWrapper
 	}
 
 	/**
+	 * Sets the configuration json of this sxp blueprint.
+	 *
+	 * @param configurationJSON the configuration json of this sxp blueprint
+	 */
+	@Override
+	public void setConfigurationJSON(String configurationJSON) {
+		model.setConfigurationJSON(configurationJSON);
+	}
+
+	/**
 	 * Sets the create date of this sxp blueprint.
 	 *
 	 * @param createDate the create date of this sxp blueprint
@@ -650,6 +694,16 @@ public class SXPBlueprintWrapper
 		java.util.Locale defaultLocale) {
 
 		model.setDescriptionMap(descriptionMap, defaultLocale);
+	}
+
+	/**
+	 * Sets the elements json of this sxp blueprint.
+	 *
+	 * @param elementsJSON the elements json of this sxp blueprint
+	 */
+	@Override
+	public void setElementsJSON(String elementsJSON) {
+		model.setElementsJSON(elementsJSON);
 	}
 
 	/**

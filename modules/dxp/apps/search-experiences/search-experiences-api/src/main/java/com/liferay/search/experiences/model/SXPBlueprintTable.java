@@ -52,6 +52,12 @@ public class SXPBlueprintTable extends BaseTable<SXPBlueprintTable> {
 		"description", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<SXPBlueprintTable, String> title = createColumn(
 		"title", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<SXPBlueprintTable, String> configurationJSON =
+		createColumn(
+			"configurationJSON", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
+	public final Column<SXPBlueprintTable, String> elementsJSON = createColumn(
+		"elementsJSON", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<SXPBlueprintTable, Integer> status = createColumn(
 		"status", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
 	public final Column<SXPBlueprintTable, Long> statusByUserId = createColumn(
