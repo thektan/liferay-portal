@@ -12,6 +12,8 @@
 		<field name="modifiedDate" type="Date" />
 		<field localized="true" name="description" type="String" />
 		<field localized="true" name="title" type="String" />
+		<field name="configurationJSON" type="String" />
+		<field name="elementsJSON" type="String" />
 		<field name="status" type="int" />
 		<field name="statusByUserId" type="long" />
 		<field name="statusByUserName" type="String" />

@@ -9,6 +9,8 @@ create table SXPBlueprint (
 	modifiedDate DATE null,
 	description STRING null,
 	title STRING null,
+	configurationJSON VARCHAR(75) null,
+	elementsJSON VARCHAR(75) null,
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,

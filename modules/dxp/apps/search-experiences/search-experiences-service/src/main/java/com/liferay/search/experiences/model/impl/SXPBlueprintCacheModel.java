@@ -77,7 +77,7 @@ public class SXPBlueprintCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -99,6 +99,10 @@ public class SXPBlueprintCacheModel
 		sb.append(description);
 		sb.append(", title=");
 		sb.append(title);
+		sb.append(", configurationJSON=");
+		sb.append(configurationJSON);
+		sb.append(", elementsJSON=");
+		sb.append(elementsJSON);
 		sb.append(", status=");
 		sb.append(status);
 		sb.append(", statusByUserId=");
@@ -164,6 +168,20 @@ public class SXPBlueprintCacheModel
 			sxpBlueprintImpl.setTitle(title);
 		}
 
+		if (configurationJSON == null) {
+			sxpBlueprintImpl.setConfigurationJSON("");
+		}
+		else {
+			sxpBlueprintImpl.setConfigurationJSON(configurationJSON);
+		}
+
+		if (elementsJSON == null) {
+			sxpBlueprintImpl.setElementsJSON("");
+		}
+		else {
+			sxpBlueprintImpl.setElementsJSON(elementsJSON);
+		}
+
 		sxpBlueprintImpl.setStatus(status);
 		sxpBlueprintImpl.setStatusByUserId(statusByUserId);
 
@@ -201,6 +219,8 @@ public class SXPBlueprintCacheModel
 		modifiedDate = objectInput.readLong();
 		description = objectInput.readUTF();
 		title = objectInput.readUTF();
+		configurationJSON = objectInput.readUTF();
+		elementsJSON = objectInput.readUTF();
 
 		status = objectInput.readInt();
 
@@ -250,6 +270,20 @@ public class SXPBlueprintCacheModel
 			objectOutput.writeUTF(title);
 		}
 
+		if (configurationJSON == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(configurationJSON);
+		}
+
+		if (elementsJSON == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(elementsJSON);
+		}
+
 		objectOutput.writeInt(status);
 
 		objectOutput.writeLong(statusByUserId);
@@ -274,6 +308,8 @@ public class SXPBlueprintCacheModel
 	public long modifiedDate;
 	public String description;
 	public String title;
+	public String configurationJSON;
+	public String elementsJSON;
 	public int status;
 	public long statusByUserId;
 	public String statusByUserName;
