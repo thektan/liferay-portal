@@ -19,6 +19,17 @@ package com.liferay.search.experiences.web.internal.blueprint.constants;
  */
 public class SXPBlueprintMVCCommandNames {
 
+	public static final String DELETE_SXP_BLUEPRINT =
+		"/blueprint/delete_sxp_blueprint";
+
+	public static final String DELETE_SXP_ELEMENT =
+		"/blueprint/delete_sxp_element";
+
+	public static final String EDIT_SXP_BLUEPRINT =
+		"/blueprint/edit_sxp_blueprint";
+
+	public static final String EDIT_SXP_ELEMENT = "/blueprint/edit_sxp_element";
+
 	public static final String VIEW_SXP_BLUEPRINTS =
 		"/blueprint/sxp_blueprints";
 

@@ -23,6 +23,19 @@ public class SXPBlueprintWebKeys {
 
 	public static final String HIDDEN = "hidden";
 
+	public static final String HIDE = "hide";
+
+	public static final String KEYWORDS = "keywords";
+
+	public static final String READ_ONLY = "readOnly";
+
 	public static final String TAB = "tab";
 
+	public static final String
+		VIEW_SXP_BLUEPRINTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT =
+			"VIEW_SXP_BLUEPRINTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT";
+
+	public static final String
+		VIEW_SXP_ELEMENTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT =
+			"VIEW_SXP_ELEMENTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT";
 }
