@@ -29,7 +29,12 @@ public class SXPBlueprintWebKeys {
 
 	public static final String READ_ONLY = "readOnly";
 
+	public static final String SXP_BLUEPRINT_ID = "sxpBlueprintId";
+
 	public static final String TAB = "tab";
+
+	public static final String VIEW_SXP_BLUEPRINTS_DISPLAY_CONTEXT =
+		"VIEW_SXP_BLUEPRINTS_DISPLAY_CONTEXT";
 
 	public static final String
 		VIEW_SXP_BLUEPRINTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT =
@@ -38,4 +43,5 @@ public class SXPBlueprintWebKeys {
 	public static final String
 		VIEW_SXP_ELEMENTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT =
 			"VIEW_SXP_ELEMENTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT";
+
 }
