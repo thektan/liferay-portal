@@ -15,3 +15,35 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+
+<portlet:actionURL name="<%= SXPBlueprintMVCCommandNames.DELETE_SXP_ELEMENT %>" var="deleteSXPElementURL">
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%= SXPBlueprintMVCCommandNames.EDIT_SXP_ELEMENT %>" var="hideSXPElementURL">
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+	<portlet:param name="<%= Constants.CMD %>" value="<%= SXPBlueprintWebKeys.HIDE %>" />
+	<portlet:param name="hidden" value="<%= Boolean.TRUE.toString() %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%= SXPBlueprintMVCCommandNames.EDIT_SXP_ELEMENT %>" var="showSXPElementURL">
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+	<portlet:param name="<%= Constants.CMD %>" value="<%= SXPBlueprintWebKeys.HIDE %>" />
+	<portlet:param name="hidden" value="<%= Boolean.FALSE.toString() %>" />
+</portlet:actionURL>
+
+<clay:management-toolbar
+	additionalProps='<%=
+		HashMapBuilder.<String, Object>put(
+			"deleteSXPElementURL", deleteSXPElementURL
+		).put(
+			"hideSXPElementURL", hideSXPElementURL
+		).put(
+			"showSXPElementURL", showSXPElementURL
+		).build()
+	%>'
+	managementToolbarDisplayContext="<%= (ViewSXPElementsManagementToolbarDisplayContext)request.getAttribute(SXPBlueprintWebKeys.VIEW_SXP_ELEMENTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT) %>"
+	propsTransformer="js/view_sxp_elements/SXPElementEntriesManagementToolbarPropsTransformer"
+	searchContainerId="sxpElementEntries"
+	supportsBulkActions="<%= true %>"
+/>

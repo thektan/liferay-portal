@@ -15,3 +15,19 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+
+<portlet:actionURL name="<%= SXPBlueprintMVCCommandNames.DELETE_SXP_BLUEPRINT %>" var="deleteSXPBlueprintURL">
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+</portlet:actionURL>
+
+<clay:management-toolbar
+	additionalProps='<%=
+		HashMapBuilder.<String, Object>put(
+			"deleteSXPBlueprintURL", deleteSXPBlueprintURL
+		).build()
+	%>'
+	managementToolbarDisplayContext="<%= (ViewSXPBlueprintsManagementToolbarDisplayContext)request.getAttribute(SXPBlueprintWebKeys.VIEW_SXP_BLUEPRINTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT) %>"
+	propsTransformer="js/view_sxp_blueprints/SXPBlueprintEntriesManagementToolbarPropsTransformer"
+	searchContainerId="sxpBlueprintEntries"
+	supportsBulkActions="<%= true %>"
+/>
