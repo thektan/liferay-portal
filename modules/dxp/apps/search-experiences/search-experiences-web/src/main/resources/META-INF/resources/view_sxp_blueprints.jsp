@@ -16,6 +16,10 @@
 
 <%@ include file="/init.jsp" %>
 
+<%
+ViewSXPBlueprintsDisplayContext viewSXPBlueprintsDisplayContext = (ViewSXPBlueprintsDisplayContext)request.getAttribute(SXPBlueprintWebKeys.VIEW_SXP_BLUEPRINTS_DISPLAY_CONTEXT);
+%>
+
 <portlet:actionURL name="<%= SXPBlueprintMVCCommandNames.DELETE_SXP_BLUEPRINT %>" var="deleteSXPBlueprintURL">
 	<portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:actionURL>
@@ -31,3 +35,28 @@
 	searchContainerId="sxpBlueprintEntries"
 	supportsBulkActions="<%= true %>"
 />
+
+<clay:container-fluid>
+	<aui:form method="post" name="fm">
+		<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
+
+		<liferay-ui:search-container
+			cssClass="sxp-blueprints-search-container"
+			id="sxpBlueprintEntries"
+			searchContainer="<%= viewSXPBlueprintsDisplayContext.getSearchContainer() %>"
+		>
+			<liferay-ui:search-container-row
+				className="com.liferay.search.experiences.model.SXPBlueprint"
+				keyProperty="sxpBlueprintId"
+				modelVar="entry"
+			>
+				<%@ include file="/sxp_blueprint_search_columns.jspf" %>
+			</liferay-ui:search-container-row>
+
+			<liferay-ui:search-iterator
+				displayStyle="<%= viewSXPBlueprintsDisplayContext.getDisplayStyle() %>"
+				markupView="lexicon"
+			/>
+		</liferay-ui:search-container>
+	</aui:form>
+</clay:container-fluid>
