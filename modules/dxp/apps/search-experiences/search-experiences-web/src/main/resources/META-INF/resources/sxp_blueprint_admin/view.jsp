@@ -44,9 +44,16 @@ String tabs1 = ParamUtil.getString(request, "tabs1", "sxpBlueprints");
 
 <c:choose>
 	<c:when test='<%= tabs1.equals("sxpElements") %>'>
+<<<<<<< HEAD:modules/dxp/apps/search-experiences/search-experiences-web/src/main/resources/META-INF/resources/sxp_blueprint_admin/view.jsp
 		<liferay-util:include page="/sxp_blueprint_admin/view_sxp_elements.jsp" servletContext="<%= application %>" />
 	</c:when>
 	<c:otherwise>
 		<liferay-util:include page="/sxp_blueprint_admin/view_sxp_blueprints.jsp" servletContext="<%= application %>" />
+=======
+		<liferay-util:include page="/sxp_blueprints_admin/view_sxp_elements.jsp" servletContext="<%= application %>" />
+	</c:when>
+	<c:otherwise>
+		<liferay-util:include page="/sxp_blueprints_admin/view_sxp_blueprints.jsp" servletContext="<%= application %>" />
+>>>>>>> 17407e4f8aae (LPS-140994 search-experiences-web: Fix paths):modules/dxp/apps/search-experiences/search-experiences-web/src/main/resources/META-INF/resources/sxp_blueprints_admin/view.jsp
 	</c:otherwise>
 </c:choose>
