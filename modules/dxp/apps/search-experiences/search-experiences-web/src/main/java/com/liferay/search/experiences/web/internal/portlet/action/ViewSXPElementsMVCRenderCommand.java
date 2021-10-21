@@ -14,14 +14,23 @@
 
 package com.liferay.search.experiences.web.internal.portlet.action;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.search.experiences.constants.SXPPortletKeys;
+import com.liferay.search.experiences.web.internal.constants.SXPBlueprintWebKeys;
+import com.liferay.search.experiences.web.internal.display.context.ViewSXPElementsDisplayContext;
+import com.liferay.search.experiences.web.internal.display.context.ViewSXPElementsManagementToolbarDisplayContext;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Petteri Karttunen
@@ -41,7 +50,60 @@ public class ViewSXPElementsMVCRenderCommand implements MVCRenderCommand {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException {
 
+<<<<<<< HEAD
 		return "/sxp_blueprint_admin/view.jsp";
+=======
+		ViewSXPElementsDisplayContext viewSXPElementsDisplayContext =
+			_getViewElementsDisplayContext(renderRequest, renderResponse);
+
+		renderRequest.setAttribute(
+			SXPBlueprintWebKeys.VIEW_SXP_ELEMENTS_DISPLAY_CONTEXT,
+			viewSXPElementsDisplayContext);
+
+		_setSXPElementsManagementToolbar(
+			renderRequest, renderResponse, viewSXPElementsDisplayContext);
+
+		return "/sxp_blueprints_admin/view.jsp";
+>>>>>>> e4802e103127 (LPS-140994 search-experiences-web: Add View display context to render command)
 	}
+
+	private ViewSXPElementsDisplayContext _getViewElementsDisplayContext(
+		RenderRequest renderRequest, RenderResponse renderResponse) {
+
+		return new ViewSXPElementsDisplayContext(
+			_portal.getLiferayPortletRequest(renderRequest),
+			_portal.getLiferayPortletResponse(renderResponse));
+	}
+
+	private void _setSXPElementsManagementToolbar(
+		RenderRequest renderRequest, RenderResponse renderResponse,
+		ViewSXPElementsDisplayContext viewSXPElementsDisplayContext) {
+
+		try {
+			ViewSXPElementsManagementToolbarDisplayContext
+				viewSXPElementEntriesManagementToolbarDisplayContext =
+					new ViewSXPElementsManagementToolbarDisplayContext(
+						_portal.getLiferayPortletRequest(renderRequest),
+						_portal.getLiferayPortletResponse(renderResponse),
+						viewSXPElementsDisplayContext.getSearchContainer(),
+						viewSXPElementsDisplayContext.getDisplayStyle());
+
+			renderRequest.setAttribute(
+				SXPBlueprintWebKeys.
+					VIEW_SXP_ELEMENTS_MANAGEMENT_TOOLBAR_DISPLAY_CONTEXT,
+				viewSXPElementEntriesManagementToolbarDisplayContext);
+		}
+		catch (PortalException | PortletException exception) {
+			_log.error(exception.getMessage(), exception);
+
+			SessionErrors.add(renderRequest, exception.getClass());
+		}
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		ViewSXPElementsMVCRenderCommand.class);
+
+	@Reference
+	private Portal _portal;
 
 }
