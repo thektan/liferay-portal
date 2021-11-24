@@ -105,7 +105,10 @@ const CodeMirrorEditor = React.forwardRef(
 					mode: {globalVars: true, name: MODES[mode].type},
 					readOnly,
 					tabSize: 2,
-					value,
+					value:
+						typeof value === 'object'
+							? JSON.stringify(value)
+							: value,
 				});
 
 				codeMirror.on('change', (cm) => {
