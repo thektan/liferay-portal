@@ -435,7 +435,7 @@ function EditSXPBlueprintForm({
 		});
 	};
 
-	const _handleFetchPreviewSearch = (value, delta, page /* attributes*/) => {
+	const _handleFetchPreviewSearch = (value, delta, page, attributes) => {
 		setPreviewInfo((previewInfo) => ({
 			...previewInfo,
 			loading: true,
@@ -486,15 +486,13 @@ function EditSXPBlueprintForm({
 			}),
 			{
 				body: JSON.stringify({
-					configuration,
+					configuration: {
+						...configuration,
+						searchContextAttributes: attributes.filter(
+							(attribute) => attribute.key
+						),
+					},
 					elementInstances,
-
-					// TO DO: Enable when preview attributes available
-
-					// previewAttributes: attributes.filter(
-					// 	(attribute) => attribute.key
-					// ),
-
 				}),
 				headers: new Headers({
 					'Content-Type': 'application/json',
