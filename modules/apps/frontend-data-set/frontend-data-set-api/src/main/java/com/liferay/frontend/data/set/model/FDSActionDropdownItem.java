@@ -43,8 +43,24 @@ public class FDSActionDropdownItem extends DropdownItem {
 		setConfirmationMessage(confirmationMessage);
 	}
 
+	public FDSActionDropdownItem(
+		String confirmationMessage, String href, String icon, String id,
+		String label, String method, String permissionKey, String target,
+		String cssClass) {
+
+		this(
+			confirmationMessage, href, icon, id, label, method, permissionKey,
+			target);
+
+		setCssClass(cssClass);
+	}
+
 	public void setConfirmationMessage(String confirmationMessage) {
 		putData("confirmationMessage", confirmationMessage);
+	}
+
+	public void setCssClass(String cssClass) {
+		putData("cssClass", cssClass);
 	}
 
 	public void setId(String id) {
