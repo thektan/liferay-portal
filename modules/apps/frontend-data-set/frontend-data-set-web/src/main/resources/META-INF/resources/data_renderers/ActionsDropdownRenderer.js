@@ -122,6 +122,7 @@ export function handleAction(
 
 function ActionItem({
 	closeMenu,
+	cssClass,
 	data,
 	handleAction,
 	href,
@@ -164,6 +165,7 @@ function ActionItem({
 
 	return (
 		<ClayDropDown.Item
+			className={cssClass}
 			href={link ? href : null}
 			onClick={link ? null : handleClickOnLink}
 		>
@@ -350,6 +352,10 @@ function ActionsDropdownRenderer({actions, itemData, itemId}) {
 				<ActionItem
 					{...item}
 					closeMenu={() => setMenuActive(false)}
+					cssClass={
+						item.data?.cssClass &&
+						formatActionURL(item.data?.cssClass, itemData)
+					}
 					handleAction={handleAction}
 					href={item.href && formatActionURL(item.href, itemData)}
 					itemId={itemId}
@@ -394,6 +400,7 @@ ActionsDropdownRenderer.propTypes = {
 		PropTypes.shape({
 			data: PropTypes.shape({
 				confirmationMessage: PropTypes.string,
+				cssClass: PropTypes.string,
 				method: PropTypes.oneOf(['get', 'delete']),
 				permissionKey: PropTypes.string,
 				successMessage: PropTypes.string,
