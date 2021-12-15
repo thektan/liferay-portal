@@ -52,3 +52,9 @@ ViewSXPElementsDisplayContext viewSXPElementsDisplayContext = (ViewSXPElementsDi
 		%>'
 	/>
 </div>
+
+<style type="text/css">
+	.delete-element-readOnly-true {
+		display: none;
+	}
+</style>

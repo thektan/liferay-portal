@@ -95,7 +95,8 @@ public class ViewSXPElementsDisplayContext {
 					"are-you-sure-you-want-to-delete-this-entry"),
 				getAPIURL() + "/{id}", "trash", "delete",
 				LanguageUtil.get(_sxpRequestHelper.getRequest(), "delete"),
-				"delete", null, "async"));
+				"delete", null, "async",
+				"delete-element-readOnly-{readOnly}"));
 	}
 
 	public PortletURL getPortletURL() throws PortletException {
