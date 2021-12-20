@@ -18,7 +18,6 @@ import {fetch, navigate} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {DEFAULT_ERROR} from '../utils/constants';
-import {DEFAULT_EDIT_SXP_ELEMENT} from '../utils/data';
 import {isDefined} from '../utils/utils';
 
 const ADD_EVENT = 'addSXPElement';
@@ -60,7 +59,8 @@ const AddSXPElementModal = ({
 		fetch('/o/search-experiences-rest/v1.0/sxp-elements', {
 			body: JSON.stringify({
 				description_i18n: {[defaultLocale]: descriptionInputValue},
-				elementDefinition: DEFAULT_EDIT_SXP_ELEMENT.elementDefinition,
+				elementDefinition:
+					getElementDefinitionEmptyObject('ElementDefinition') || {},
 				title_i18n: {[defaultLocale]: titleInputValue},
 			}),
 			headers: new Headers({
