@@ -9,7 +9,7 @@
  * distribution rights of the Software.
  */
 
-import {ClayRadio, ClayRadioGroup} from '@clayui/form';
+import ClayForm, {ClayRadio, ClayRadioGroup, ClayToggle} from '@clayui/form';
 import ClayLayout from '@clayui/layout';
 import ClayPanel from '@clayui/panel';
 import React, {useState} from 'react';
@@ -17,6 +17,8 @@ import React, {useState} from 'react';
 import SelectTypes from './SelectTypes';
 
 function QuerySettings({
+	applyIndexerClauses,
+	onApplyIndexerClausesChange,
 	frameworkConfig,
 	onFrameworkConfigChange,
 	searchableTypes = [],
@@ -33,6 +35,10 @@ function QuerySettings({
 				? searchableTypes.map(({className}) => className)
 				: [],
 		});
+	};
+
+	const _handleApplyIndexerClausesChange = () => {
+		onApplyIndexerClausesChange(!applyIndexerClauses);
 	};
 
 	return (
@@ -92,6 +98,43 @@ function QuerySettings({
 										}
 									/>
 								</>
+							)}
+						</ClayPanel.Body>
+					</ClayPanel>
+
+					<ClayPanel
+						collapsable
+						displayTitle={Liferay.Language.get(
+							'search-framework-indexer-clauses'
+						)}
+						displayType="unstyled"
+						showCollapseIcon
+					>
+						<ClayPanel.Body>
+							<ClayToggle
+								label={
+									applyIndexerClauses
+										? Liferay.Language.get('on')
+										: Liferay.Language.get('off')
+								}
+								onToggle={_handleApplyIndexerClausesChange}
+								toggled={!!applyIndexerClauses}
+							/>
+
+							{!applyIndexerClauses && (
+								<div className="has-warning">
+									<ClayForm.FeedbackItem>
+										<ClayForm.FeedbackIndicator symbol="warning-full" />
+
+										{Liferay.Language.get('warning-colon')}
+
+										<span className="indexer-clauses-warning">
+											{Liferay.Language.get(
+												'search-framework-indexer-clauses-warning'
+											)}
+										</span>
+									</ClayForm.FeedbackItem>
+								</div>
 							)}
 						</ClayPanel.Body>
 					</ClayPanel>

@@ -25,6 +25,8 @@ const VERTICAL_NAV_KEYS = {
 };
 
 function QueryBuilderTab({
+	applyIndexerClauses,
+	onApplyIndexerClausesChange,
 	elementInstances,
 	entityJSON,
 	errors = [],
@@ -138,7 +140,11 @@ function QueryBuilderTab({
 							{activeVerticalNavKey ===
 								VERTICAL_NAV_KEYS.QUERY_SETTINGS && (
 								<QuerySettings
+									applyIndexerClauses={applyIndexerClauses}
 									frameworkConfig={frameworkConfig}
+									onApplyIndexerClausesChange={
+										onApplyIndexerClausesChange
+									}
 									onFrameworkConfigChange={
 										onFrameworkConfigChange
 									}

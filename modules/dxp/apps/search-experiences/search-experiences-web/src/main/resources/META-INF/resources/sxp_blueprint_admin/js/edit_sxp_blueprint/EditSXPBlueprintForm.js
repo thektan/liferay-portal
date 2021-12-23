@@ -632,6 +632,9 @@ function EditSXPBlueprintForm({
 							})}
 						>
 							<QueryBuilderTab
+								applyIndexerClauses={
+									formik.values.applyIndexerClauses
+								}
 								elementInstances={
 									formik.values.elementInstances
 								}
@@ -640,6 +643,9 @@ function EditSXPBlueprintForm({
 								frameworkConfig={formik.values.frameworkConfig}
 								isSubmitting={
 									formik.isSubmitting || previewInfo.loading
+								}
+								onApplyIndexerClausesChange={
+									_handleApplyIndexerClausesChange
 								}
 								onBlur={formik.handleBlur}
 								onChange={formik.handleChange}

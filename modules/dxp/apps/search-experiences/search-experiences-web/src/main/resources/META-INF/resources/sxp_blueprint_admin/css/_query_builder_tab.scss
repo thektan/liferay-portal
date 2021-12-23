@@ -11,6 +11,11 @@
 
 	.query-settings {
 		.sheet {
+			.indexer-clauses-warning {
+				font-weight: 400;
+				padding-left: 4px;
+			}
+
 			.framework-icon {
 				.sticker-overlay {
 					background-color: $lightBackground;
