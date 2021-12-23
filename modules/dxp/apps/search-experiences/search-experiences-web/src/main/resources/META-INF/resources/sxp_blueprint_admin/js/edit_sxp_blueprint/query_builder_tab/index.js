@@ -147,7 +147,7 @@ function QueryBuilderTab({
 		return (
 			<>
 				<ClayLayout.Row
-					className="configuration-header configuration-header-settings"
+					className="configuration-header"
 					justify="between"
 				>
 					<ClayLayout.Col size={12}>
@@ -274,13 +274,15 @@ function QueryBuilderTab({
 					</ClayLayout.Col>
 
 					<ClayLayout.Col size={9}>
-						{activeVerticalNavKey ===
-							VERTICAL_NAV_KEYS.QUERY_ELEMENTS &&
-							_renderContentQueryElements()}
+						<div className="vertical-nav-content-wrapper">
+							{activeVerticalNavKey ===
+								VERTICAL_NAV_KEYS.QUERY_ELEMENTS &&
+								_renderContentQueryElements()}
 
-						{activeVerticalNavKey ===
-							VERTICAL_NAV_KEYS.QUERY_SETTINGS &&
-							_renderContentQuerySettings()}
+							{activeVerticalNavKey ===
+								VERTICAL_NAV_KEYS.QUERY_SETTINGS &&
+								_renderContentQuerySettings()}
+						</div>
 					</ClayLayout.Col>
 				</ClayLayout.Row>
 			</div>
