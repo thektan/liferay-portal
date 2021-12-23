@@ -244,7 +244,7 @@ function QueryBuilderTab({
 		>
 			<div className="builder-content-shift">
 				<ClayLayout.Row>
-					<ClayLayout.Col size={3}>
+					<ClayLayout.Col md={3} sm={12}>
 						<ClayVerticalNav
 							items={[
 								{
@@ -273,7 +273,7 @@ function QueryBuilderTab({
 						/>
 					</ClayLayout.Col>
 
-					<ClayLayout.Col size={9}>
+					<ClayLayout.Col md={9} sm={12}>
 						<div className="vertical-nav-content-wrapper">
 							{activeVerticalNavKey ===
 								VERTICAL_NAV_KEYS.QUERY_ELEMENTS &&
