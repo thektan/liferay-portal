@@ -39,6 +39,7 @@ import {
 	validateRequired,
 } from '../utils/validation';
 import AddSXPElementSidebar from './AddSXPElementSidebar';
+import ClauseContributorsSidebar from './ClauseContributorsSidebar';
 import PreviewSidebar from './PreviewSidebar';
 import ClauseContributorsTab from './clause_contributors_tab/index';
 import QueryBuilderTab from './query_builder_tab/index';
@@ -70,6 +71,7 @@ function EditSXPBlueprintForm({
 	}));
 	const [showSidebar, setShowSidebar] = useState(true);
 	const [showPreview, setShowPreview] = useState(false);
+	const [showClauseContributors, setShowClauseContributors] = useState(false);
 	const [showSubmitWarningModal, setShowSubmitWarningModal] = useState(false);
 	const [tab, setTab] = useState('query-builder');
 
@@ -625,9 +627,14 @@ function EditSXPBlueprintForm({
 							visible={showSidebar}
 						/>
 
+						<ClauseContributorsSidebar
+							onToggle={setShowClauseContributors}
+							visible={showClauseContributors}
+						/>
+
 						<div
-							className={getCN('query-builder', {
-								'open-preview': showPreview,
+							className={getCN({
+								'open-clause-contributors': showClauseContributors,
 								'open-sidebar': showSidebar,
 							})}
 						>
@@ -659,6 +666,9 @@ function EditSXPBlueprintForm({
 								}}
 								setFieldTouched={formik.setFieldTouched}
 								setFieldValue={formik.setFieldValue}
+								setShowClauseContributors={
+									setShowClauseContributors
+								}
 								touched={formik.touched.elementInstances}
 							/>
 						</div>
