@@ -19,7 +19,7 @@ import JSONSXPElement from '../../shared/JSONSXPElement';
 import SXPElement from '../../shared/sxp_element/index';
 import {SXP_ELEMENT_PREFIX} from '../../utils/constants';
 
-function QueryElements({
+function QuerySXPElements({
 	elementInstances,
 	entityJSON,
 	errors = [],
@@ -84,10 +84,10 @@ function QueryElements({
 	);
 
 	return (
-		<div className="query-elements">
+		<div className="query-sxp-elements">
 			<ClayLayout.Row className="configuration-header" justify="between">
 				<ClayLayout.Col size={6}>
-					{Liferay.Language.get('query-builder')}
+					{Liferay.Language.get('query-elements')}
 				</ClayLayout.Col>
 
 				<ClayLayout.Col size={6}>
@@ -138,4 +138,4 @@ function QueryElements({
 	);
 }
 
-export default React.memo(QueryElements);
+export default React.memo(QuerySXPElements);
