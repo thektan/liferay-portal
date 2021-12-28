@@ -48,7 +48,7 @@
 }
 
 @media (min-width: calc(#{$builderMinWidth} + #{$sidebarWidth})) {
-	.open-sidebar .builder-content-shift {
+	.open-add-sxp-element .builder-content-shift {
 		margin-right: calc(
 			max(
 				50% - (#{$builderMaxWidth} / 2),

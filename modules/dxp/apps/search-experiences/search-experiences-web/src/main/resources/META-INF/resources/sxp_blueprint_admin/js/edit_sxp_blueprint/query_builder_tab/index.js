@@ -36,7 +36,7 @@ function QueryBuilderTab({
 	onChange,
 	onDeleteSXPElement,
 	onFrameworkConfigChange,
-	onToggleSidebar,
+	onToggleAddSXPElement,
 	setShowClauseContributors,
 	setFieldTouched,
 	setFieldValue,
@@ -179,7 +179,9 @@ function QueryBuilderTab({
 									onFrameworkConfigChange={
 										onFrameworkConfigChange
 									}
-									onToggleSidebar={onToggleSidebar}
+									onToggleAddSXPElement={
+										onToggleAddSXPElement
+									}
 									setFieldTouched={setFieldTouched}
 									setFieldValue={setFieldValue}
 									touched={touched}
@@ -230,9 +232,10 @@ QueryBuilderTab.propTypes = {
 	onChange: PropTypes.func,
 	onDeleteSXPElement: PropTypes.func,
 	onFrameworkConfigChange: PropTypes.func,
-	onToggleSidebar: PropTypes.func,
+	onToggleAddSXPElement: PropTypes.func,
 	setFieldTouched: PropTypes.func,
 	setFieldValue: PropTypes.func,
+	setShowClauseContributors: PropTypes.func,
 	touched: PropTypes.arrayOf(PropTypes.object),
 };
 
