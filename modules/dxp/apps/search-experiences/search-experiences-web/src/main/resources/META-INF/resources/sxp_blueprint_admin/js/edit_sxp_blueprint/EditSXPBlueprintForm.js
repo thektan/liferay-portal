@@ -69,7 +69,7 @@ function EditSXPBlueprintForm({
 		loading: false,
 		results: {},
 	}));
-	const [showSidebar, setShowSidebar] = useState(true);
+	const [showAddSXPElement, setShowAddSXPElement] = useState(true);
 	const [showPreview, setShowPreview] = useState(false);
 	const [showClauseContributors, setShowClauseContributors] = useState(false);
 	const [showSubmitWarningModal, setShowSubmitWarningModal] = useState(false);
@@ -623,8 +623,8 @@ function EditSXPBlueprintForm({
 					<>
 						<AddSXPElementSidebar
 							onAddSXPElement={_handleAddSXPElement}
-							onToggle={setShowSidebar}
-							visible={showSidebar}
+							onToggle={setShowAddSXPElement}
+							visible={showAddSXPElement}
 						/>
 
 						<ClauseContributorsSidebar
@@ -634,8 +634,8 @@ function EditSXPBlueprintForm({
 
 						<div
 							className={getCN({
+								'open-add-sxp-element': showAddSXPElement,
 								'open-clause-contributors': showClauseContributors,
-								'open-sidebar': showSidebar,
 							})}
 						>
 							<QueryBuilderTab
@@ -660,9 +660,9 @@ function EditSXPBlueprintForm({
 								onFrameworkConfigChange={
 									_handleFrameworkConfigChange
 								}
-								onToggleSidebar={() => {
+								onToggleAddSXPElement={() => {
 									setShowPreview(false);
-									setShowSidebar(!showSidebar);
+									setShowAddSXPElement(!showAddSXPElement);
 								}}
 								setFieldTouched={formik.setFieldTouched}
 								setFieldValue={formik.setFieldValue}
@@ -708,7 +708,7 @@ function EditSXPBlueprintForm({
 						})}
 						displayType="secondary"
 						onClick={() => {
-							setShowSidebar(false);
+							setShowAddSXPElement(false);
 							setShowPreview(!showPreview);
 						}}
 						small
