@@ -37,6 +37,7 @@ function QueryBuilderTab({
 	onDeleteSXPElement,
 	onFrameworkConfigChange,
 	onToggleSidebar,
+	setShowClauseContributors,
 	setFieldTouched,
 	setFieldValue,
 	touched = [],
@@ -48,6 +49,17 @@ function QueryBuilderTab({
 	);
 	const [searchableTypes, setSearchableTypes] = useState(null);
 	const [indexFields, setIndexFields] = useState(null);
+	const [keywordQueryContributors, setKeywordQueryContributors] = useState(
+		null
+	);
+	const [
+		modelPrefilterContributors,
+		setModelPrefilterContributors,
+	] = useState(null);
+	const [
+		queryPrefilterContributors,
+		setQueryPrefilterContributors,
+	] = useState(null);
 
 	useEffect(() => {
 		fetchData(
@@ -63,9 +75,46 @@ function QueryBuilderTab({
 			(responseContent) => setIndexFields(responseContent.items),
 			() => setIndexFields([])
 		);
+
+		[
+			{
+				setProperty: setKeywordQueryContributors,
+				url:
+					'/o/search-experiences-rest/v1.0/keyword-query-contributors',
+			},
+			{
+				setProperty: setModelPrefilterContributors,
+				url:
+					'/o/search-experiences-rest/v1.0/model-prefilter-contributors',
+			},
+			{
+				setProperty: setQueryPrefilterContributors,
+				url:
+					'/o/search-experiences-rest/v1.0/query-prefilter-contributors',
+			},
+		].forEach(({setProperty, url}) =>
+			fetchData(
+				url,
+				{method: 'GET'},
+				(responseContent) =>
+					setProperty(
+						responseContent.items
+							.map(({className}) => className)
+							.filter((item) => item)
+							.sort()
+					),
+				() => setProperty([])
+			)
+		);
 	}, []); //eslint-disable-line
 
-	if (!searchableTypes || !indexFields) {
+	if (
+		!searchableTypes ||
+		!indexFields ||
+		!keywordQueryContributors ||
+		!modelPrefilterContributors ||
+		!queryPrefilterContributors
+	) {
 		return null;
 	}
 
@@ -142,13 +191,25 @@ function QueryBuilderTab({
 								<QuerySettings
 									applyIndexerClauses={applyIndexerClauses}
 									frameworkConfig={frameworkConfig}
+									keywordQueryContributors={
+										keywordQueryContributors
+									}
+									modelPrefilterContributors={
+										modelPrefilterContributors
+									}
 									onApplyIndexerClausesChange={
 										onApplyIndexerClausesChange
 									}
 									onFrameworkConfigChange={
 										onFrameworkConfigChange
 									}
+									queryPrefilterContributors={
+										queryPrefilterContributors
+									}
 									searchableTypes={searchableTypes}
+									setShowClauseContributors={
+										setShowClauseContributors
+									}
 								/>
 							)}
 						</div>

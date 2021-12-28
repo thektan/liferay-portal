@@ -9,6 +9,7 @@
  * distribution rights of the Software.
  */
 
+import ClayButton from '@clayui/button';
 import ClayForm, {ClayRadio, ClayRadioGroup, ClayToggle} from '@clayui/form';
 import ClayLayout from '@clayui/layout';
 import ClayPanel from '@clayui/panel';
@@ -20,12 +21,35 @@ function QuerySettings({
 	applyIndexerClauses,
 	onApplyIndexerClausesChange,
 	frameworkConfig,
+	keywordQueryContributors,
+	modelPrefilterContributors,
+	queryPrefilterContributors,
 	onFrameworkConfigChange,
+	setShowClauseContributors,
 	searchableTypes = [],
 }) {
+	const allContributors = [
+		...keywordQueryContributors,
+		...modelPrefilterContributors,
+		...queryPrefilterContributors,
+	];
+
 	const [selectAllTypes, setSelectAllTypes] = useState(
 		searchableTypes.length === frameworkConfig.searchableAssetTypes?.length
 	);
+	const [selectAllContributors, setSelectAllContributors] = useState(
+		frameworkConfig.clauseContributorsIncludes?.length ===
+			allContributors.length
+	);
+
+	const _handleSelectAllContributorsChange = (selectedAll) => {
+		setSelectAllContributors(selectedAll);
+
+		onFrameworkConfigChange({
+			clauseContributorsExcludes: selectedAll ? [] : allContributors,
+			clauseContributorsIncludes: selectedAll ? allContributors : [],
+		});
+	};
 
 	const _handleSelectAllTypesChange = (selectedAll) => {
 		setSelectAllTypes(selectedAll);
@@ -128,13 +152,75 @@ function QuerySettings({
 
 										{Liferay.Language.get('warning-colon')}
 
-										<span className="indexer-clauses-warning">
+										<span className="warning-text">
 											{Liferay.Language.get(
 												'search-framework-indexer-clauses-warning'
 											)}
 										</span>
 									</ClayForm.FeedbackItem>
 								</div>
+							)}
+						</ClayPanel.Body>
+					</ClayPanel>
+
+					<ClayPanel
+						collapsable
+						displayTitle={Liferay.Language.get(
+							'search-framework-query-contributors'
+						)}
+						displayType="unstyled"
+						showCollapseIcon
+					>
+						<ClayPanel.Body>
+							<ClayRadioGroup
+								onSelectedValueChange={
+									_handleSelectAllContributorsChange
+								}
+								selectedValue={selectAllContributors}
+							>
+								<ClayRadio
+									label={Liferay.Language.get('enable-all')}
+									value={true}
+								/>
+
+								<ClayRadio
+									label={Liferay.Language.get(
+										'action.CUSTOMIZE'
+									)}
+									value={false}
+								/>
+							</ClayRadioGroup>
+
+							{!selectAllContributors && (
+								<>
+									<div className="has-warning">
+										<ClayForm.FeedbackItem>
+											<ClayForm.FeedbackIndicator symbol="warning-full" />
+
+											{Liferay.Language.get(
+												'warning-colon'
+											)}
+
+											<span className="warning-text">
+												{Liferay.Language.get(
+													'search-framework-query-contributors-warning'
+												)}
+											</span>
+										</ClayForm.FeedbackItem>
+									</div>
+
+									<ClayButton
+										displayType="secondary"
+										onClick={() =>
+											setShowClauseContributors(true)
+										}
+										small
+									>
+										{Liferay.Language.get(
+											'customize-contributors'
+										)}
+									</ClayButton>
+								</>
 							)}
 						</ClayPanel.Body>
 					</ClayPanel>
