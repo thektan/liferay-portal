@@ -16,12 +16,12 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import ThemeContext from '../../shared/ThemeContext';
 import {fetchData} from '../../utils/fetch';
-import QueryElements from './QueryElements';
+import QuerySXPElements from './QuerySXPElements';
 import QuerySettings from './QuerySettings';
 
 const VERTICAL_NAV_KEYS = {
-	QUERY_ELEMENTS: 'queryElements',
 	QUERY_SETTINGS: 'querySettings',
+	QUERY_SXP_ELEMENTS: 'querySXPElements',
 };
 
 function QueryBuilderTab({
@@ -45,7 +45,7 @@ function QueryBuilderTab({
 	const {locale} = useContext(ThemeContext);
 
 	const [activeVerticalNavKey, setActiveVerticalNavKey] = useState(
-		VERTICAL_NAV_KEYS.QUERY_ELEMENTS
+		VERTICAL_NAV_KEYS.QUERY_SXP_ELEMENTS
 	);
 	const [searchableTypes, setSearchableTypes] = useState(null);
 	const [indexFields, setIndexFields] = useState(null);
@@ -139,12 +139,12 @@ function QueryBuilderTab({
 								{
 									active:
 										activeVerticalNavKey ===
-										VERTICAL_NAV_KEYS.QUERY_ELEMENTS,
+										VERTICAL_NAV_KEYS.QUERY_SXP_ELEMENTS,
 									label: Liferay.Language.get(
 										'query-elements'
 									),
 									onClick: _handleClickVerticalNav(
-										VERTICAL_NAV_KEYS.QUERY_ELEMENTS
+										VERTICAL_NAV_KEYS.QUERY_SXP_ELEMENTS
 									),
 								},
 								{
@@ -165,8 +165,8 @@ function QueryBuilderTab({
 					<ClayLayout.Col md={9} sm={12}>
 						<div className="vertical-nav-content-wrapper">
 							{activeVerticalNavKey ===
-								VERTICAL_NAV_KEYS.QUERY_ELEMENTS && (
-								<QueryElements
+								VERTICAL_NAV_KEYS.QUERY_SXP_ELEMENTS && (
+								<QuerySXPElements
 									elementInstances={elementInstances}
 									entityJSON={entityJSON}
 									errors={errors}
