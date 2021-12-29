@@ -28,7 +28,7 @@ function QuerySXPElements({
 	onBlur,
 	onChange,
 	onDeleteSXPElement,
-	onToggleAddSXPElement,
+	onChangeAddSXPElementVisibility,
 	searchableTypes,
 	setFieldTouched,
 	setFieldValue,
@@ -110,7 +110,9 @@ function QuerySXPElements({
 								)}
 								displayType="primary"
 								monospaced
-								onClick={onToggleAddSXPElement}
+								onClick={() =>
+									onChangeAddSXPElementVisibility()
+								}
 								small
 								title={Liferay.Language.get(
 									'add-query-element'

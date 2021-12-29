@@ -25,7 +25,7 @@ function QuerySettings({
 	modelPrefilterContributors,
 	queryPrefilterContributors,
 	onFrameworkConfigChange,
-	setShowClauseContributors,
+	onChangeClauseContributorsVisibility,
 	searchableTypes = [],
 }) {
 	const allContributors = [
@@ -212,7 +212,9 @@ function QuerySettings({
 									<ClayButton
 										displayType="secondary"
 										onClick={() =>
-											setShowClauseContributors(true)
+											onChangeClauseContributorsVisibility(
+												true
+											)
 										}
 										small
 									>
