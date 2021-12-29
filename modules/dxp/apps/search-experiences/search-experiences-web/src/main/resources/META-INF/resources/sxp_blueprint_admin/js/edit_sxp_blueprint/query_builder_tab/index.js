@@ -34,10 +34,10 @@ function QueryBuilderTab({
 	onApplyIndexerClausesChange,
 	onBlur,
 	onChange,
+	onChangeAddSXPElementVisibility,
+	onChangeClauseContributorsVisibility,
 	onDeleteSXPElement,
 	onFrameworkConfigChange,
-	onToggleAddSXPElement,
-	setShowClauseContributors,
 	setFieldTouched,
 	setFieldValue,
 	touched = [],
@@ -124,6 +124,13 @@ function QueryBuilderTab({
 	 */
 	const _handleClickVerticalNav = (verticalNavKey) => () => {
 		setActiveVerticalNavKey(verticalNavKey);
+
+		if (verticalNavKey === VERTICAL_NAV_KEYS.QUERY_SXP_ELEMENTS) {
+			onChangeAddSXPElementVisibility(true);
+		}
+		else {
+			onChangeClauseContributorsVisibility(false);
+		}
 	};
 
 	return (
@@ -174,10 +181,10 @@ function QueryBuilderTab({
 									isSubmitting={isSubmitting}
 									onBlur={onBlur}
 									onChange={onChange}
-									onDeleteSXPElement={onDeleteSXPElement}
-									onToggleAddSXPElement={
-										onToggleAddSXPElement
+									onChangeAddSXPElementVisibility={
+										onChangeAddSXPElementVisibility
 									}
+									onDeleteSXPElement={onDeleteSXPElement}
 									searchableTypes={searchableTypes}
 									setFieldTouched={setFieldTouched}
 									setFieldValue={setFieldValue}
@@ -199,6 +206,9 @@ function QueryBuilderTab({
 									onApplyIndexerClausesChange={
 										onApplyIndexerClausesChange
 									}
+									onChangeClauseContributorsVisibility={
+										onChangeClauseContributorsVisibility
+									}
 									onFrameworkConfigChange={
 										onFrameworkConfigChange
 									}
@@ -206,9 +216,6 @@ function QueryBuilderTab({
 										queryPrefilterContributors
 									}
 									searchableTypes={searchableTypes}
-									setShowClauseContributors={
-										setShowClauseContributors
-									}
 								/>
 							)}
 						</div>
@@ -229,12 +236,13 @@ QueryBuilderTab.propTypes = {
 	onApplyIndexerClausesChange: PropTypes.func,
 	onBlur: PropTypes.func,
 	onChange: PropTypes.func,
+	onChangeAddSXPElementVisibility: PropTypes.func,
+	onChangeClauseContributorsVisibility: PropTypes.func,
+	onCloseQuerySidebars: PropTypes.func,
 	onDeleteSXPElement: PropTypes.func,
 	onFrameworkConfigChange: PropTypes.func,
-	onToggleAddSXPElement: PropTypes.func,
 	setFieldTouched: PropTypes.func,
 	setFieldValue: PropTypes.func,
-	setShowClauseContributors: PropTypes.func,
 	touched: PropTypes.arrayOf(PropTypes.object),
 };
 

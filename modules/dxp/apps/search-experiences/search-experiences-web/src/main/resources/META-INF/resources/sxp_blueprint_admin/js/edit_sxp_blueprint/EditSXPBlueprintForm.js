@@ -414,6 +414,22 @@ function EditSXPBlueprintForm({
 		});
 	};
 
+	const _handleChangeAddSXPElementVisibility = (
+		show = !showAddSXPElement
+	) => {
+		setShowPreview(false);
+		setShowClauseContributors(false);
+		setShowAddSXPElement(show);
+	};
+
+	const _handleChangeClauseContributorsVisibility = (
+		show = !showClauseContributors
+	) => {
+		setShowPreview(false);
+		setShowAddSXPElement(false);
+		setShowClauseContributors(show);
+	};
+
 	const _handleDeleteSXPElement = (id) => {
 		const index = formik.values.elementInstances.findIndex(
 			(item) => item.id === id
@@ -663,19 +679,18 @@ function EditSXPBlueprintForm({
 								}
 								onBlur={formik.handleBlur}
 								onChange={formik.handleChange}
+								onChangeAddSXPElementVisibility={
+									_handleChangeAddSXPElementVisibility
+								}
+								onChangeClauseContributorsVisibility={
+									_handleChangeClauseContributorsVisibility
+								}
 								onDeleteSXPElement={_handleDeleteSXPElement}
 								onFrameworkConfigChange={
 									_handleFrameworkConfigChange
 								}
-								onToggleAddSXPElement={() => {
-									setShowPreview(false);
-									setShowAddSXPElement(!showAddSXPElement);
-								}}
 								setFieldTouched={formik.setFieldTouched}
 								setFieldValue={formik.setFieldValue}
-								setShowClauseContributors={
-									setShowClauseContributors
-								}
 								touched={formik.touched.elementInstances}
 							/>
 						</div>
@@ -702,7 +717,13 @@ function EditSXPBlueprintForm({
 				initialTitle={initialTitle}
 				isSubmitting={formik.isSubmitting}
 				onCancel={redirectURL}
-				onChangeTab={setTab}
+				onChangeTab={(tab) => {
+					if (tab === 'configuration') {
+						setShowClauseContributors(false);
+					}
+
+					setTab(tab);
+				}}
 				onSubmit={_handleSubmit}
 				tab={tab}
 				tabs={TABS}
@@ -716,6 +737,7 @@ function EditSXPBlueprintForm({
 						displayType="secondary"
 						onClick={() => {
 							setShowAddSXPElement(false);
+							setShowClauseContributors(false);
 							setShowPreview(!showPreview);
 						}}
 						small
