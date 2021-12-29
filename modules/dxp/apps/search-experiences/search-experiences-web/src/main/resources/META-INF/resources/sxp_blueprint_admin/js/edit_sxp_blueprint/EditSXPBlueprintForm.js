@@ -39,8 +39,8 @@ import {
 	validateRequired,
 } from '../utils/validation';
 import AddSXPElementSidebar from './AddSXPElementSidebar';
-import ClauseContributorsSidebar from './ClauseContributorsSidebar';
 import PreviewSidebar from './PreviewSidebar';
+import ClauseContributorsSidebar from './clause_contributors_sidebar/index';
 import ClauseContributorsTab from './clause_contributors_tab/index';
 import QueryBuilderTab from './query_builder_tab/index';
 import SettingsTab from './settings_tab/index';
@@ -628,6 +628,13 @@ function EditSXPBlueprintForm({
 						/>
 
 						<ClauseContributorsSidebar
+							frameworkConfig={formik.values.frameworkConfig}
+							onApplyIndexerClausesChange={
+								_handleApplyIndexerClausesChange
+							}
+							onFrameworkConfigChange={
+								_handleFrameworkConfigChange
+							}
 							onToggle={setShowClauseContributors}
 							visible={showClauseContributors}
 						/>
