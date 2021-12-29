@@ -41,7 +41,6 @@ import {
 import AddSXPElementSidebar from './AddSXPElementSidebar';
 import PreviewSidebar from './PreviewSidebar';
 import ClauseContributorsSidebar from './clause_contributors_sidebar/index';
-import ClauseContributorsTab from './clause_contributors_tab/index';
 import QueryBuilderTab from './query_builder_tab/index';
 import SettingsTab from './settings_tab/index';
 
@@ -49,7 +48,6 @@ import SettingsTab from './settings_tab/index';
 /* eslint-disable sort-keys */
 const TABS = {
 	'query-builder': Liferay.Language.get('query-builder'),
-	'clause-contributors': Liferay.Language.get('clause-contributors'),
 	'settings': Liferay.Language.get('settings'),
 };
 /* eslint-enable sort-keys */
@@ -621,17 +619,6 @@ function EditSXPBlueprintForm({
 						setFieldValue={formik.setFieldValue}
 						sortConfig={formik.values.sortConfig}
 						touched={formik.touched}
-					/>
-				);
-			case 'clause-contributors':
-				return (
-					<ClauseContributorsTab
-						applyIndexerClauses={formik.values.applyIndexerClauses}
-						frameworkConfig={formik.values.frameworkConfig}
-						onApplyIndexerClausesChange={
-							_handleApplyIndexerClausesChange
-						}
-						onFrameworkConfigChange={_handleFrameworkConfigChange}
 					/>
 				);
 			default:
