@@ -26,12 +26,12 @@ const VERTICAL_NAV_KEYS = {
 
 function QueryBuilderTab({
 	applyIndexerClauses,
-	onApplyIndexerClausesChange,
 	elementInstances,
 	entityJSON,
 	errors = [],
 	frameworkConfig = {},
 	isSubmitting,
+	onApplyIndexerClausesChange,
 	onBlur,
 	onChange,
 	onDeleteSXPElement,
@@ -170,18 +170,15 @@ function QueryBuilderTab({
 									elementInstances={elementInstances}
 									entityJSON={entityJSON}
 									errors={errors}
-									frameworkConfig={frameworkConfig}
 									indexFields={indexFields}
 									isSubmitting={isSubmitting}
 									onBlur={onBlur}
 									onChange={onChange}
 									onDeleteSXPElement={onDeleteSXPElement}
-									onFrameworkConfigChange={
-										onFrameworkConfigChange
-									}
 									onToggleAddSXPElement={
 										onToggleAddSXPElement
 									}
+									searchableTypes={searchableTypes}
 									setFieldTouched={setFieldTouched}
 									setFieldValue={setFieldValue}
 									touched={touched}
@@ -223,11 +220,13 @@ function QueryBuilderTab({
 }
 
 QueryBuilderTab.propTypes = {
+	applyIndexerClauses: PropTypes.bool,
 	elementInstances: PropTypes.arrayOf(PropTypes.object),
 	entityJSON: PropTypes.object,
 	errors: PropTypes.arrayOf(PropTypes.object),
 	frameworkConfig: PropTypes.object,
 	isSubmitting: PropTypes.bool,
+	onApplyIndexerClausesChange: PropTypes.func,
 	onBlur: PropTypes.func,
 	onChange: PropTypes.func,
 	onDeleteSXPElement: PropTypes.func,
