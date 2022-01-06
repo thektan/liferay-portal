@@ -73,7 +73,7 @@ function QuerySettings({
 			</ClayLayout.Row>
 
 			<div className="sheet">
-				<ClayPanel.Group flush>
+				<ClayPanel.Group flush small>
 					<ClayPanel
 						className="searchable-types"
 						collapsable
