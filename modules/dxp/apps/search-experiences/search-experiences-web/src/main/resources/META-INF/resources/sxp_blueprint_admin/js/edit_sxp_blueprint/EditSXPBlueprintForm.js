@@ -23,10 +23,13 @@ import React, {
 	useState,
 } from 'react';
 
+import CodeMirrorEditor from '../shared/CodeMirrorEditor';
+import Debugger from '../shared/Debugger';
 import PageToolbar from '../shared/PageToolbar';
 import SubmitWarningModal from '../shared/SubmitWarningModal';
 import ThemeContext from '../shared/ThemeContext';
 import {DEFAULT_ERROR, SIDEBARS} from '../utils/constants';
+import {ENABLE_DEBUGGER} from '../utils/debugger';
 import {addParams, fetchData} from '../utils/fetch';
 import {INPUT_TYPES} from '../utils/inputTypes';
 import {openErrorToast, openSuccessToast} from '../utils/toasts';
@@ -874,6 +877,26 @@ function EditSXPBlueprintForm({
 			>
 				{_renderTabContent()}
 			</div>
+
+			{ENABLE_DEBUGGER && (
+				<Debugger>
+					<label>Configuration</label>
+
+					<CodeMirrorEditor
+						readOnly
+						showRefreshButton
+						value={JSON.stringify(formik.values, null, 2)}
+					/>
+
+					<label>JS Form Values (Formik)</label>
+
+					<CodeMirrorEditor
+						readOnly
+						showRefreshButton
+						value={JSON.stringify(formik.values, null, 2)}
+					/>
+				</Debugger>
+			)}
 		</form>
 	);
 }

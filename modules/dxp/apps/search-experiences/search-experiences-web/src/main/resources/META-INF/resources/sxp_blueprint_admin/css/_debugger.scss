@@ -1,0 +1,30 @@
+.debugger-container {
+	bottom: 8px;
+	opacity: 1;
+	position: fixed;
+	right: 8px;
+	z-index: 9999;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	.card-body {
+		height: 50%;
+		overflow: auto;
+	}
+
+	.card-header {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.debugger-card {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 0;
+		max-height: 95vh;
+		width: 800px;
+	}
+}

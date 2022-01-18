@@ -32,6 +32,8 @@ import 'codemirror/addon/fold/indent-fold';
 import 'codemirror/lib/codemirror.css';
 
 import 'codemirror/mode/javascript/javascript';
+import ClayButton from '@clayui/button';
+import ClayIcon from '@clayui/icon';
 import CodeMirror from 'codemirror';
 import React, {useEffect, useRef} from 'react';
 
@@ -75,8 +77,10 @@ const CodeMirrorEditor = React.forwardRef(
 			lineWrapping = true,
 			onChange = () => {},
 			mode = 'json',
-			value = '',
+			showRefreshButton,
 			readOnly = false,
+			refreshCallback,
+			value = '',
 		},
 		ref
 	) => {
@@ -84,8 +88,12 @@ const CodeMirrorEditor = React.forwardRef(
 		const editorWrapperRef = useRef();
 		const editorRef = useCombinedRefs(ref, innerRef);
 
+		const [updateValue, forceUpdate] = React.useReducer((x) => x + 1, 0);
+
 		useEffect(() => {
 			if (editorWrapperRef.current) {
+				editorWrapperRef.current.innerHTML = '';
+
 				const codeMirror = CodeMirror(editorWrapperRef.current, {
 					autoCloseTags: true,
 					autoRefresh: true,
@@ -126,13 +134,43 @@ const CodeMirrorEditor = React.forwardRef(
 
 				editorRef.current = codeMirror;
 			}
-		}, [editorWrapperRef]); // eslint-disable-line
+		}, [editorWrapperRef, updateValue]); // eslint-disable-line
+
+		/**
+		 * Handles refreshing the editor with the latest value.
+		 * `refreshCallback` is used to do any value transformations before it
+		 * is set to the editor.
+		 */
+		const _handleRefresh = () => {
+			if (refreshCallback) {
+				refreshCallback();
+			}
+
+			forceUpdate();
+		};
 
 		return (
-			<div
-				className="codemirror-editor-wrapper"
-				ref={editorWrapperRef}
-			></div>
+			<div className="codemirror-editor-root">
+				{showRefreshButton && (
+					<ClayButton
+						className="refresh-button"
+						displayType="secondary"
+						onClick={_handleRefresh}
+						small
+					>
+						<span className="inline-item inline-item-before">
+							<ClayIcon symbol="reload" />
+						</span>
+
+						{Liferay.Language.get('refresh')}
+					</ClayButton>
+				)}
+
+				<div
+					className="codemirror-editor-wrapper"
+					ref={editorWrapperRef}
+				/>
+			</div>
 		);
 	}
 );

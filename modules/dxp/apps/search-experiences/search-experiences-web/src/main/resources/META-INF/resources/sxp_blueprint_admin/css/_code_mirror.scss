@@ -1,19 +1,36 @@
-.codemirror-editor-wrapper {
-	border: 1px solid $mainLighten74;
-	border-radius: 4px;
+.codemirror-editor-root {
+	position: relative;
 
-	.CodeMirror-foldmarker {
-		border-radius: 0.25rem;
-		color: $primary;
-		padding: 0 4px;
-		text-shadow: none;
+	.codemirror-editor-wrapper {
+		border: 1px solid $mainLighten74;
+		border-radius: 4px;
 
-		&:hover {
-			background-color: $primaryL4;
+		.CodeMirror-foldmarker {
+			border-radius: 0.25rem;
+			color: $primary;
+			padding: 0 4px;
+			text-shadow: none;
+
+			&:hover {
+				background-color: $primaryL4;
+			}
+		}
+
+		.cm-s-default {
+			font-size: 13px;
 		}
 	}
 
-	.cm-s-default {
-		font-size: 13px;
+	.refresh-button {
+		position: absolute;
+		right: 8px;
+		top: 8px;
+		z-index: 999;
+	}
+
+	.refresh-button + .codemirror-editor-wrapper {
+		.CodeMirror-lines {
+			padding-top: 16px;
+		}
 	}
 }
