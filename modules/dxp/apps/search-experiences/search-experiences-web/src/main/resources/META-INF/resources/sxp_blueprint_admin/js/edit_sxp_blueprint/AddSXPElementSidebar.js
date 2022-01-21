@@ -18,13 +18,7 @@ import ClaySticker from '@clayui/sticker';
 import {useIsMounted} from '@liferay/frontend-js-react-web';
 import getCN from 'classnames';
 import PropTypes from 'prop-types';
-import React, {
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 
 import SearchInput from '../shared/SearchInput';
 import ThemeContext from '../shared/ThemeContext';
@@ -37,17 +31,63 @@ const DEFAULT_EXPANDED_LIST = ['match'];
 
 const LAST_CATEGORIES = [DEFAULT_CATEGORY, 'custom'];
 
-const SXPElementList = ({category, expand, onAddSXPElement, sxpElements}) => {
-	const {locale} = useContext(ThemeContext);
+const SXPElementListItem = ({
+	description,
+	icon = DEFAULT_SXP_ELEMENT_ICON,
+	id,
+	onClick,
+	title,
+}) => {
+	return (
+		<ClayList.Item className="sxp-element-item" flex key={id}>
+			<ClayList.ItemField>
+				<ClaySticker size="md">
+					<ClayIcon symbol={icon} />
+				</ClaySticker>
+			</ClayList.ItemField>
 
+			<ClayList.ItemField expand>
+				{title && <ClayList.ItemTitle>{title}</ClayList.ItemTitle>}
+
+				{description && (
+					<ClayList.ItemText subtext={true}>
+						{description}
+					</ClayList.ItemText>
+				)}
+			</ClayList.ItemField>
+
+			<ClayList.ItemField>
+				<div className="add-sxp-element-button-background" />
+
+				<ClayButton
+					aria-label={Liferay.Language.get('add')}
+					className="add-sxp-element-button"
+					displayType="secondary"
+					onClick={onClick}
+					small
+				>
+					{Liferay.Language.get('add')}
+				</ClayButton>
+			</ClayList.ItemField>
+		</ClayList.Item>
+	);
+};
+
+const SXPElementList = ({category, expand, onAddSXPElement, sxpElements}) => {
 	const [showList, setShowList] = useState(expand);
+
+	const {locale} = useContext(ThemeContext);
 
 	useEffect(() => {
 		setShowList(expand);
 	}, [expand]);
 
-	const _handleAddSXPElement = (sxpElement) => () => {
-		onAddSXPElement(sxpElement);
+	const _handleAddSXPElement = ({
+		description_i18n,
+		elementDefinition,
+		title_i18n,
+	}) => () => {
+		onAddSXPElement({description_i18n, elementDefinition, title_i18n});
 	};
 
 	return (
@@ -70,87 +110,36 @@ const SXPElementList = ({category, expand, onAddSXPElement, sxpElements}) => {
 
 			{showList && (
 				<ClayList>
-					{sxpElements.map((sxpElement, index) => {
-						const description = getLocalizedText(
-							sxpElement.description_i18n,
-							locale
-						);
-						const title = getLocalizedText(
-							sxpElement.title_i18n,
-							locale
-						);
-
-						return (
-							<ClayList.Item
-								className="sxp-element-item"
-								flex
-								key={index}
-							>
-								<ClayList.ItemField>
-									<ClaySticker size="md">
-										<ClayIcon
-											symbol={
-												sxpElement.elementDefinition
-													?.icon ||
-												DEFAULT_SXP_ELEMENT_ICON
-											}
-										/>
-									</ClaySticker>
-								</ClayList.ItemField>
-
-								<ClayList.ItemField expand>
-									{title && (
-										<ClayList.ItemTitle>
-											{title}
-										</ClayList.ItemTitle>
-									)}
-
-									{description && (
-										<ClayList.ItemText subtext={true}>
-											{description}
-										</ClayList.ItemText>
-									)}
-								</ClayList.ItemField>
-
-								<ClayList.ItemField>
-									<div className="add-sxp-element-button-background" />
-
-									<ClayButton
-										aria-label={Liferay.Language.get('add')}
-										className="add-sxp-element-button"
-										displayType="secondary"
-										onClick={_handleAddSXPElement(
-											sxpElement
-										)}
-										small
-									>
-										{Liferay.Language.get('add')}
-									</ClayButton>
-								</ClayList.ItemField>
-							</ClayList.Item>
-						);
-					})}
+					{sxpElements.map((sxpElement, index) => (
+						<SXPElementListItem
+							description={getLocalizedText(
+								sxpElement.description_i18n,
+								locale
+							)}
+							icon={sxpElement.elementDefinition?.icon}
+							id={sxpElement.id}
+							key={index}
+							onClick={_handleAddSXPElement(sxpElement)}
+							title={getLocalizedText(
+								sxpElement.title_i18n,
+								locale
+							)}
+						/>
+					))}
 				</ClayList>
 			)}
 		</>
 	);
 };
 
-function SXPElementSidebar({
+function AddSXPElement({
 	emptyMessage = Liferay.Language.get('no-query-elements-found'),
 	onAddSXPElement,
-	onClose,
-	querySXPElements,
-	visible,
+	sxpElements,
 }) {
 	const {locale} = useContext(ThemeContext);
 
 	const [loading, setLoading] = useState(true);
-
-	const sxpElements = useMemo(
-		() => [...querySXPElements, CUSTOM_JSON_SXP_ELEMENT],
-		[querySXPElements]
-	);
 
 	const [filteredSXPElements, setFilteredSXPElements] = useState(sxpElements);
 
@@ -213,9 +202,8 @@ function SXPElementSidebar({
 						.toLowerCase()
 						.includes(value.toLowerCase());
 				}
-				else {
-					return true;
-				}
+
+				return true;
 			});
 
 			_categorizeSXPElements(newSXPElements);
@@ -226,33 +214,7 @@ function SXPElementSidebar({
 	);
 
 	return (
-		<div
-			className={getCN(
-				'add-sxp-element-sidebar',
-				'sidebar',
-				'sidebar-light',
-				{open: visible}
-			)}
-		>
-			<div className="sidebar-header">
-				<h4 className="component-title">
-					<span className="text-truncate-inline">
-						<span className="text-truncate">
-							{Liferay.Language.get('add-query-elements')}
-						</span>
-					</span>
-				</h4>
-
-				<ClayButton
-					aria-label={Liferay.Language.get('close')}
-					displayType="unstyled"
-					onClick={onClose}
-					small
-				>
-					<ClayIcon symbol="times" />
-				</ClayButton>
-			</div>
-
+		<>
 			<nav className="component-tbar sidebar-search tbar">
 				<div className="container-fluid">
 					<SearchInput onChange={_handleSearchChange} />
@@ -283,7 +245,7 @@ function SXPElementSidebar({
 			) : (
 				<ClayLoadingIndicator />
 			)}
-		</div>
+		</>
 	);
 }
 
@@ -293,10 +255,9 @@ function AddSXPElementSidebar({
 	onClose,
 	visible,
 }) {
-	const {defaultLocale} = useContext(ThemeContext);
 	const isMounted = useIsMounted();
 
-	const [querySXPElements, setQuerySXPElements] = useState(null);
+	const [sxpElements, setSXPElements] = useState(null);
 
 	// TODO check pagesize
 
@@ -308,47 +269,58 @@ function AddSXPElementSidebar({
 			{method: 'GET'},
 			(responseContent) => {
 				if (isMounted()) {
-					setQuerySXPElements(
-						responseContent.items.map(
-							({
-								description,
-								description_i18n,
-								title,
-								title_i18n,
-								...props
-							}) => ({
-								...props,
-								description_i18n: description_i18n || {
-									[defaultLocale]: description,
-								},
-								title_i18n: title_i18n || {
-									[defaultLocale]: title,
-								},
-							})
-						)
-					);
+					setSXPElements([
+						...responseContent.items,
+						CUSTOM_JSON_SXP_ELEMENT,
+					]);
 				}
 			},
 			() => {
 				if (isMounted()) {
-					setQuerySXPElements([]);
+					setSXPElements([CUSTOM_JSON_SXP_ELEMENT]);
 				}
 			}
 		);
 	}, []); //eslint-disable-line
 
-	if (!querySXPElements) {
+	if (!sxpElements) {
 		return null;
 	}
 
 	return (
-		<SXPElementSidebar
-			emptyMessage={emptyMessage}
-			onAddSXPElement={onAddSXPElement}
-			onClose={onClose}
-			querySXPElements={querySXPElements}
-			visible={visible}
-		/>
+		<div
+			className={getCN(
+				'add-sxp-element-sidebar',
+				'sidebar',
+				'sidebar-light',
+				{open: visible}
+			)}
+		>
+			<div className="sidebar-header">
+				<h4 className="component-title">
+					<span className="text-truncate-inline">
+						<span className="text-truncate">
+							{Liferay.Language.get('add-query-elements')}
+						</span>
+					</span>
+				</h4>
+
+				<ClayButton
+					aria-label={Liferay.Language.get('close')}
+					displayType="unstyled"
+					onClick={onClose}
+					small
+				>
+					<ClayIcon symbol="times" />
+				</ClayButton>
+			</div>
+
+			<AddSXPElement
+				emptyMessage={emptyMessage}
+				onAddSXPElement={onAddSXPElement}
+				sxpElements={sxpElements}
+			/>
+		</div>
 	);
 }
 
