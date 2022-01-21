@@ -56,7 +56,6 @@
 	right: 0;
 	transform: translateX(100%);
 	transition: transform ease 0.2s;
-	width: $sidebarWidth;
 	z-index: 972;
 
 	&.open {
