@@ -94,6 +94,26 @@ const ViewSXPBlueprints = ({
 		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 	};
 
+	const _handleActionCopy = (id) => async () => {
+		try {
+			const sxpBlueprint = await fetch(`${apiURL}/${id}/copy`, {
+				method: 'POST',
+			}).then((response) => response.json());
+
+			openSuccessToast({
+				message: sub(
+					Liferay.Language.get('x-was-created-successfully'),
+					[sxpBlueprint.title]
+				),
+			});
+
+			refetch();
+		}
+		catch {
+			openErrorToast();
+		}
+	};
+
 	const _handleActionDelete = (id, title) => async () => {
 		if (
 			confirm(
@@ -177,6 +197,14 @@ const ViewSXPBlueprints = ({
 				href: _getEditURL(id),
 				label: Liferay.Language.get('edit'),
 				symbolLeft: 'pencil',
+			});
+		}
+
+		if (checkPermission('create', actions)) {
+			items.push({
+				label: Liferay.Language.get('copy'),
+				onClick: _handleActionCopy(id, title),
+				symbolLeft: 'copy',
 			});
 		}
 

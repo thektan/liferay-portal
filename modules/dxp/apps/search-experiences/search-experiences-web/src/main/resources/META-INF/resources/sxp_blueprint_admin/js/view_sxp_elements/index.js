@@ -90,6 +90,26 @@ const ViewSXPElements = ({
 		},
 	});
 
+	const _handleActionCopy = (id) => async () => {
+		try {
+			const sxpElement = await fetch(`${apiURL}/${id}/copy`, {
+				method: 'POST',
+			}).then((response) => response.json());
+
+			openSuccessToast({
+				message: sub(
+					Liferay.Language.get('x-was-created-successfully'),
+					[sxpElement.title]
+				),
+			});
+
+			refetch();
+		}
+		catch {
+			openErrorToast();
+		}
+	};
+
 	const _handleActionDelete = (id, title) => async () => {
 		if (
 			confirm(
@@ -184,6 +204,14 @@ const ViewSXPElements = ({
 				href: _getEditURL(id),
 				label: Liferay.Language.get('view'),
 				symbolLeft: 'view',
+			});
+		}
+
+		if (checkPermission('create', actions)) {
+			items.push({
+				label: Liferay.Language.get('copy'),
+				onClick: _handleActionCopy(id, title),
+				symbolLeft: 'copy',
 			});
 		}
 
