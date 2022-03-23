@@ -181,6 +181,8 @@ function hint(cm, options) {
 
 	console.log('propertyTree', propertyTree);
 
+	// Get autocomplete suggestions.
+
 	let list = TERMS[token.type];
 
 	const search = token.string.match(/[@]?\w+/);
