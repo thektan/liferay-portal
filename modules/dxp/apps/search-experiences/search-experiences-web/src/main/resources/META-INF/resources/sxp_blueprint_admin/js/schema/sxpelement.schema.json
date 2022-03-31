@@ -1,0 +1,633 @@
+{
+	"properties": {
+		"elementTemplateJSON": {
+			"$id": "query_configuration.schema.json",
+			"$schema": "http://json-schema.org/draft-07/schema#",
+			"definitions": {
+				"condition": {
+					"properties": {
+						"parameter_name": {
+							"type": "string"
+						}
+					}
+				},
+				"conditions": {
+					"properties": {
+						"all_of": {
+							"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"conditions\"]"
+						},
+						"any_of": {
+							"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"conditions\"]"
+						},
+						"contains": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["string", "number", "array"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"equals": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["number", "string", "boolean"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"exists": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {}
+							},
+							"required": ["parameter_name"],
+							"type": "object"
+						},
+						"greater_than": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["number", "string"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"greater_than_equals": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["number", "string"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"in": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["array"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"in_range": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["array"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"lower": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["number", "string"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"lower_than_equals": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["number", "string"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"not_contains": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["string", "number", "array"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"not_equals": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["number", "boolean", "string"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"not_exists": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {}
+							},
+							"required": ["parameter_name"],
+							"type": "object"
+						},
+						"not_in": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["array"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						},
+						"not_in_range": {
+							"allOf": [
+								{
+									"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"condition\"]"
+								}
+							],
+							"properties": {
+								"value": {
+									"type": ["array"]
+								}
+							},
+							"required": ["parameter_name", "value"],
+							"type": "object"
+						}
+					},
+					"type": "object"
+				}
+			},
+			"properties": {
+				"category": {
+					"type": "string"
+				},
+				"clauses": {
+					"items": {
+						"properties": {
+							"context": {
+								"enum": ["post_filter", "query", "rescore"],
+								"type": "string"
+							},
+							"occur": {
+								"pattern": "^(filter|must|must_not|should|\\$\\{.+\\})$",
+								"type": "string"
+							}
+						},
+						"type": "object"
+					},
+					"type": "array"
+				},
+				"conditions": {
+					"$ref": "$[\"properties\"][\"elementTemplateJSON\"][\"definitions\"][\"conditions\"]"
+				},
+				"description": {
+					"type": ["string", "object"]
+				},
+				"enabled": {
+					"type": "boolean"
+				},
+				"icon": {
+					"type": "string"
+				},
+				"title": {
+					"type": ["string", "object"]
+				}
+			},
+			"required": [],
+			"type": "object"
+		},
+		"uiConfigurationJSON": {
+			"$id": "ui_configuration.schema.json",
+			"$schema": "http://json-schema.org/draft-07/schema#",
+			"definitions": {
+				"field": {
+					"allOf": [
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "date"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"anyOf": [
+											{
+												"type": "number"
+											},
+											{
+												"type": "string"
+											}
+										]
+									},
+									"typeOptions": {
+										"properties": {
+											"format": {
+												"anyOf": [
+													{
+														"type": "number"
+													},
+													{
+														"type": "string"
+													}
+												]
+											}
+										},
+										"type": "object"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "fieldMapping"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"additionalProperties": false,
+										"properties": {
+											"boost": {
+												"anyOf": [
+													{
+														"type": "number"
+													},
+													{
+														"type": "string"
+													}
+												]
+											},
+											"field": {
+												"type": "string"
+											},
+											"languageIdPosition": {
+												"type": "number"
+											},
+											"locale": {
+												"type": "string"
+											}
+										},
+										"required": ["field"],
+										"type": "object"
+									},
+									"typeOptions": {
+										"properties": {
+											"boost": {
+												"type": "boolean"
+											}
+										},
+										"type": "object"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "fieldMappingList"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"items": {
+											"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][1][\"then\"][\"properties\"][\"defaultValue\"]"
+										},
+										"type": "array"
+									},
+									"typeOptions": {
+										"properties": {
+											"boost": {
+												"type": "boolean"
+											}
+										},
+										"type": "object"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "itemSelector"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"items": {
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											},
+											"type": "object"
+										},
+										"type": "array"
+									},
+									"typeOptions": {
+										"properties": {
+											"itemType": {
+												"type": "string"
+											}
+										},
+										"type": "object"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "json"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"type": "object"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "keywords"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "multiselect"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"items": {
+											"properties": {
+												"label": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											},
+											"type": "object"
+										},
+										"type": "array"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "select"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"type": "string"
+									},
+									"typeOptions": {
+										"properties": {
+											"options": {
+												"items": {
+													"properties": {
+														"label": {
+															"type": "string"
+														},
+														"value": {
+															"type": "string"
+														}
+													}
+												},
+												"type": "array"
+											}
+										},
+										"required": ["options"]
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "slider"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						{
+							"if": {
+								"properties": {
+									"type": {
+										"const": "text"
+									}
+								}
+							},
+							"then": {
+								"properties": {
+									"defaultValue": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					],
+					"properties": {
+						"helpText": {
+							"type": "string"
+						},
+						"label": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"type": {
+							"enum": [
+								"date",
+								"fieldMapping",
+								"fieldMappingList",
+								"itemSelector",
+								"json",
+								"keywords",
+								"multiselect",
+								"number",
+								"select",
+								"slider",
+								"text"
+							],
+							"type": "string"
+						},
+						"typeOptions": {
+							"properties": {
+								"nullable": {
+									"type": "boolean"
+								},
+								"required": {
+									"type": "boolean"
+								}
+							}
+						}
+					},
+					"required": ["label", "name", "type"]
+				},
+				"fieldDate": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][0][\"then\"]"
+				},
+				"fieldFieldMapping": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][1][\"then\"]"
+				},
+				"fieldFieldMappingList": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][2][\"then\"]"
+				},
+				"fieldItemSelector": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][3][\"then\"]"
+				},
+				"fieldJSON": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][4][\"then\"]"
+				},
+				"fieldKeywords": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][5][\"then\"]"
+				},
+				"fieldMappingItem": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][1][\"then\"][\"properties\"][\"defaultValue\"]"
+				},
+				"fieldMultiselect": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][6][\"then\"]"
+				},
+				"fieldSelect": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][7][\"then\"]"
+				},
+				"fieldSet": {
+					"properties": {
+						"fields": {
+							"items": {
+								"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"]"
+							},
+							"type": "array"
+						}
+					}
+				},
+				"fieldSlider": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][8][\"then\"]"
+				},
+				"fieldText": {
+					"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"field\"][\"allOf\"][9][\"then\"]"
+				}
+			},
+			"properties": {
+				"fieldSets": {
+					"items": {
+						"$ref": "$[\"properties\"][\"uiConfigurationJSON\"][\"definitions\"][\"fieldSet\"]"
+					},
+					"type": "array"
+				}
+			},
+			"required": [],
+			"type": "object"
+		}
+	},
+	"required": ["elementTemplateJSON", "uiConfigurationJSON"],
+	"type": "object"
+}

@@ -36,8 +36,31 @@ import 'codemirror/addon/hint/show-hint';
 import 'codemirror/lib/codemirror.css';
 
 import 'codemirror/mode/javascript/javascript';
+
+// import RefParser from '@apidevtools/json-schema-ref-parser';
+
 import CodeMirror from 'codemirror';
 import React, {useEffect, useRef} from 'react';
+
+// import SXPElementSchema from '../schema/sxpelement.schema.json';
+
+// console.log('RefParser', RefParser);
+
+// async function getSchema() {
+// 	const schema = await RefParser.dereference(SXPElementSchema);
+
+// 	console.log(schema.query_element.properties);
+// }
+
+// getSchema();
+
+// RefParser.dereference(SXPElementSchema, (error, schema) => {
+// 	if (error) {
+// 		console.error(error);
+// 	} else {
+// 		console.log('schema', schema);
+// 	}
+// });
 
 const AUTOCOMPLETE_EXCLUDED_KEYS = new Set([
 	' ',
@@ -65,26 +88,6 @@ const MODES = {
 		type: 'application/json',
 	},
 };
-
-// function hint(cm, callback, options) {
-// 	console.log('hello');
-// 	const cursor = cm.getCursor();
-// 	const token = cm.getTokenAt(cursor);
-
-// 	console.log(cursor, token);
-
-// 	const results = ['test', 'test2', 'test3'];
-
-// 	const line = cm.getLine(cursor.line).slice(0, cursor.ch);
-
-// 	const match = (line.match(new RegExp(/[[\]"]/, 'g')) || []).pop();
-
-// 	return {
-// 		from: CodeMirror.Pos(cursor.line, cursor.ch - match.length),
-// 		list: results,
-// 		to: CodeMirror.Pos(cursor.line, cursor.ch),
-// 	};
-// }
 
 const TERMS = {
 	['string property']: ['list', 'index', 'set'],

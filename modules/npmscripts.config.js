@@ -143,6 +143,8 @@ module.exports = {
 						buffer: '*',
 						domain: '*',
 						events: '*',
+						http: '*',
+						https: '*',
 						os: '*',
 						path: '*',
 						process: '*',

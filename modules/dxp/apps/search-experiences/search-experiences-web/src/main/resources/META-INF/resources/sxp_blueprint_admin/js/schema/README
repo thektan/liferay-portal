@@ -1,0 +1,3 @@
+The contents of this folder are copied from `search-experiences-service/src/main/resources/com/liferay/search/experiences/internal/validator/dependencies/*`.
+
+To update the contents, run the `yarn build:schema` command.

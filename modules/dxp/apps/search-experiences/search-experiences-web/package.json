@@ -19,6 +19,7 @@
 	"private": true,
 	"scripts": {
 		"build": "liferay-npm-scripts build",
+		"build:schema": "node ./scripts/dereference-schema.js",
 		"checkFormat": "liferay-npm-scripts check",
 		"format": "liferay-npm-scripts fix",
 		"test": "liferay-npm-scripts test"
