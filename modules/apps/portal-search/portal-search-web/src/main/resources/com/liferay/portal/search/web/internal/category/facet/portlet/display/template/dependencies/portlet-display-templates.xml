@@ -25,4 +25,12 @@
 		<script-file>com/liferay/portal/search/web/internal/category/facet/portlet/display/template/dependencies/portlet_display_template_label.ftl</script-file>
 		<cacheable>false</cacheable>
 	</template>
+	<template>
+		<template-key>category-facet-tree-ftl</template-key>
+		<name>portlet-display-template-name-tree-layout</name>
+		<description>portlet-display-template-description-facet-tree</description>
+		<language>ftl</language>
+		<script-file>com/liferay/portal/search/web/internal/category/facet/portlet/display/template/dependencies/portlet_display_template_tree.ftl</script-file>
+		<cacheable>false</cacheable>
+	</template>
 </root>
