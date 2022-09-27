@@ -111,43 +111,29 @@
 	</li>
 </#macro>
 
-<@liferay_ui["panel-container"]
-	extended=true
-	id="${namespace + 'facetAssetCategoriesPanelContainer'}"
-	markupView="lexicon"
-	persistState=true
->
-	<@liferay_ui.panel
-		collapsible=true
-		cssClass="search-facet search-facet-display-vocabulary"
-		id="${namespace + 'facetAssetCategoriesPanel'}"
-		markupView="lexicon"
-		persistState=true
-		title="category"
-	>
-		<#if assetCategoriesSearchFacetDisplayContext.getVocabularyNames()?has_content>
-			<ul class="treeview treeview-light treeview-nested treeview-vocabulary-display" role="tree">
-				<#list assetCategoriesSearchFacetDisplayContext.getVocabularyNames() as vocabularyName>
-					<@treeview_item
-						cssClassTreeItem="tree-item-vocabulary"
-						id=vocabularyName + vocabularyName?index
-						isFrequencyVisible=false
-						name=htmlUtil.escape(vocabularyName)
-						termDisplayContexts=assetCategoriesSearchFacetDisplayContext.getTermDisplayContexts(vocabularyName)
-					/>
-				</#list>
-			</ul>
-		</#if>
+<div class="search-facet search-facet-display-vocabulary">
+	<#if assetCategoriesSearchFacetDisplayContext.getVocabularyNames()?has_content>
+		<ul class="treeview treeview-light treeview-nested treeview-vocabulary-display" role="tree">
+			<#list assetCategoriesSearchFacetDisplayContext.getVocabularyNames() as vocabularyName>
+				<@treeview_item
+					cssClassTreeItem="tree-item-vocabulary"
+					id=vocabularyName + vocabularyName?index
+					isFrequencyVisible=false
+					name=htmlUtil.escape(vocabularyName)
+					termDisplayContexts=assetCategoriesSearchFacetDisplayContext.getTermDisplayContexts(vocabularyName)
+				/>
+			</#list>
+		</ul>
+	</#if>
+</div>
 
-		<#if !assetCategoriesSearchFacetDisplayContext.isNothingSelected()>
-			<@liferay_aui.button
-				cssClass="btn-link btn-unstyled facet-clear-btn"
-				onClick="Liferay.Search.FacetUtil.clearSelections(event);"
-				value="clear"
-			/>
-		</#if>
-	</@>
-</@>
+<#if !assetCategoriesSearchFacetDisplayContext.isNothingSelected()>
+	<@liferay_aui.button
+		cssClass="btn-link btn-unstyled facet-clear-btn"
+		onClick="Liferay.Search.FacetUtil.clearSelections(event);"
+		value="clear"
+	/>
+</#if>
 
 <@liferay_aui.script>
 	function ${namespace}toggleTreeItem(dataTarget) {
