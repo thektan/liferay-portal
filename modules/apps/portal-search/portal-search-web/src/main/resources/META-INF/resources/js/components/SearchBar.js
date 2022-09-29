@@ -24,6 +24,8 @@ import getCN from 'classnames';
 import {navigate} from 'frontend-js-web';
 import React, {useRef, useState} from 'react';
 
+import {getRecentSearches} from '../utils/SearchBarUtil';
+
 export default function SearchBar({
 	destinationFriendlyURL,
 	emptySearchEnabled,
@@ -53,6 +55,7 @@ export default function SearchBar({
 		loading: false,
 		networkStatus: 4,
 	}));
+	const [recentSearches] = useState(getRecentSearches(keywordsParameterName));
 	const [scope, setScope] = useState(
 		selectedEverythingSearchScope
 			? scopeParameterStringEverything
@@ -105,6 +108,10 @@ export default function SearchBar({
 		setScope(event.target.value);
 	};
 
+	const _handleFocus = () => {
+		setActive(!!recentSearches.length);
+	};
+
 	const _handleSubmit = (event) => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -153,6 +160,7 @@ export default function SearchBar({
 					data-qa-id="searchInput"
 					name={keywordsParameterName}
 					onChange={_handleValueChange}
+					onFocus={_handleFocus}
 					onKeyDown={_handleKeyDown}
 					placeholder={Liferay.Language.get('search-...')}
 					title={Liferay.Language.get('search')}
@@ -286,7 +294,10 @@ export default function SearchBar({
 				</ClayInput.Group>
 
 				<ClayDropDown.Menu
-					active={active && !!resource?.items?.length}
+					active={
+						active &&
+						(!!resource?.items?.length || !!recentSearches.length)
+					}
 					alignElementRef={alignElementRef}
 					autoBestAlign={false}
 					className="search-bar-suggestions-dropdown-menu"
@@ -299,6 +310,21 @@ export default function SearchBar({
 							alignElementRef.current.clientWidth + 'px',
 					}}
 				>
+					<ClayDropDown.ItemList
+						className="search-bar-suggestions-results-list"
+						key="RECENT_SEARCHES"
+					>
+						<ClayDropDown.Group header="Recent Searches">
+							{recentSearches.map((keywords, index) => (
+								<ClayDropDown.Item href="#" key={index}>
+									<div className="suggestion-item-title">
+										{keywords}
+									</div>
+								</ClayDropDown.Item>
+							))}
+						</ClayDropDown.Group>
+					</ClayDropDown.ItemList>
+
 					{resource?.items?.map((group, groupIndex) => (
 						<ClayDropDown.ItemList
 							className="search-bar-suggestions-results-list"
