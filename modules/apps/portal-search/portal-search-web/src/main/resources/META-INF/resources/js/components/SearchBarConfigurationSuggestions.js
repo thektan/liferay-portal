@@ -27,10 +27,11 @@ import SelectSXPBlueprintModal from './select_sxp_blueprint_modal/SelectSXPBluep
 
 const CONTRIBUTORS = {
 	BASIC: 'basic',
+	RECENT: 'recent',
 	SXP_BLUEPRINT: 'sxpBlueprint',
 };
 
-const DEFAULT_ATTRIBUTES = {
+const SXP_BLUEPRINT_DEFAULT_ATTRIBUTES = {
 	fields: [],
 	includeAssetSearchSummary: true,
 	includeAssetURL: true,
@@ -46,7 +47,10 @@ const DEFAULT_ATTRIBUTES = {
  */
 const removeEmptyFields = (fields) =>
 	fields.filter(({attributes, contributorName, displayGroupName, size}) => {
-		if (contributorName === CONTRIBUTORS.BASIC) {
+		if (
+			contributorName === CONTRIBUTORS.BASIC ||
+			contributorName === CONTRIBUTORS.RECENT
+		) {
 			return displayGroupName && size;
 		}
 
@@ -331,7 +335,7 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 		}
 		else {
 			onChange({
-				attributes: DEFAULT_ATTRIBUTES,
+				attributes: SXP_BLUEPRINT_DEFAULT_ATTRIBUTES,
 				contributorName: event.target.value,
 				displayGroupName: value.displayGroupName,
 				size: value.size,
@@ -456,39 +460,36 @@ function SearchBarConfigurationSuggestions({
 	);
 
 	const _getContributorOptions = (index) => {
-		if (!isDXP) {
-			return (
-				<ClaySelect.Option
-					label={Liferay.Language.get('basic')}
-					value={CONTRIBUTORS.BASIC}
-				/>
-			);
-		}
-
 		const indexOfBasic = suggestionsContributorConfiguration.findIndex(
 			(value) => value.contributorName === CONTRIBUTORS.BASIC
 		);
 
-		if (indexOfBasic > -1 && index !== indexOfBasic) {
-			return (
-				<ClaySelect.Option
-					label={Liferay.Language.get('blueprint')}
-					value={CONTRIBUTORS.SXP_BLUEPRINT}
-				/>
-			);
-		}
+		const indexOfRecent = suggestionsContributorConfiguration.findIndex(
+			(value) => value.contributorName === CONTRIBUTORS.RECENT
+		);
 
 		return (
 			<>
-				<ClaySelect.Option
-					label={Liferay.Language.get('basic')}
-					value={CONTRIBUTORS.BASIC}
-				/>
+				{(indexOfBasic === -1 || index === indexOfBasic) && (
+					<ClaySelect.Option
+						label={Liferay.Language.get('basic')}
+						value={CONTRIBUTORS.BASIC}
+					/>
+				)}
 
-				<ClaySelect.Option
-					label={Liferay.Language.get('blueprint')}
-					value={CONTRIBUTORS.SXP_BLUEPRINT}
-				/>
+				{(indexOfRecent === -1 || index === indexOfRecent) && (
+					<ClaySelect.Option
+						label={Liferay.Language.get('recent')}
+						value={CONTRIBUTORS.RECENT}
+					/>
+				)}
+
+				{isDXP && (
+					<ClaySelect.Option
+						label={Liferay.Language.get('blueprint')}
+						value={CONTRIBUTORS.SXP_BLUEPRINT}
+					/>
+				)}
 			</>
 		);
 	};
@@ -500,7 +501,7 @@ function SearchBarConfigurationSuggestions({
 			)
 		) {
 			return {
-				attributes: DEFAULT_ATTRIBUTES,
+				attributes: SXP_BLUEPRINT_DEFAULT_ATTRIBUTES,
 				contributorName: CONTRIBUTORS.SXP_BLUEPRINT,
 				displayGroupName: '',
 				size: '',
