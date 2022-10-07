@@ -38,6 +38,10 @@ const SXP_BLUEPRINT_DEFAULT_ATTRIBUTES = {
 	sxpBlueprintId: '',
 };
 
+const RECENT_DEFAULT_ATTRIBUTES = {
+	threshold: 1,
+};
+
 /**
  * Cleans up the fields array by removing those that do not have the required
  * fields (contributorName, displayGroupName, size). If blueprint, check
@@ -62,7 +66,55 @@ const removeEmptyFields = (fields) =>
 		);
 	});
 
-function SXPBlueprintAttributes({onBlur, onChange, touched, value}) {
+function RecentContributorAttributes({onBlur, onChange, touched, value}) {
+	const _handleThresholdChange = (event) => {
+		onChange({
+			attributes: {
+				threshold: event.target.value,
+			},
+		});
+	};
+
+	return (
+		<div className="form-group-autofit">
+			<ClayInput.GroupItem
+				className={getCN({
+					'has-error':
+						!value.attributes?.threshold && touched.threshold,
+				})}
+			>
+				<label>
+					{Liferay.Language.get('threshold')}
+
+					<span className="reference-mark">
+						<ClayIcon symbol="asterisk" />
+					</span>
+
+					<span
+						className="inline-item-after lfr-portal-tooltip tooltip-icon"
+						title={Liferay.Language.get(
+							'set-the-amount-of-results-required-to-save-the-keywords-as-a-recent-search'
+						)}
+					>
+						<ClayIcon symbol="question-circle-full" />
+					</span>
+				</label>
+
+				<ClayInput
+					aria-label={Liferay.Language.get('threshold')}
+					min="0"
+					onBlur={onBlur('threshold')}
+					onChange={_handleThresholdChange}
+					required
+					type="number"
+					value={value.attributes?.threshold || ''}
+				/>
+			</ClayInput.GroupItem>
+		</div>
+	);
+}
+
+function SXPBlueprintContributorAttributes({onBlur, onChange, touched, value}) {
 	const [showModal, setShowModal] = useState(false);
 	const [sxpBlueprint, setSXPBlueprint] = useState({
 		loading: false,
@@ -82,7 +134,6 @@ function SXPBlueprintAttributes({onBlur, onChange, touched, value}) {
 	});
 
 	useEffect(() => {
-
 		// Fetch the blueprint title using sxpBlueprintId inside attributes, since
 		// title is not saved within initialSuggestionsContributorConfiguration.
 
@@ -146,7 +197,6 @@ function SXPBlueprintAttributes({onBlur, onChange, touched, value}) {
 	};
 
 	const _handleSXPBlueprintSelectorChange = (event) => {
-
 		// To use validation from 'required' field, keep the onChange and value
 		// properties but make its behavior resemble readOnly (input can only be
 		// changed with the selector modal).
@@ -181,6 +231,7 @@ function SXPBlueprintAttributes({onBlur, onChange, touched, value}) {
 				fields: newValue.map((item) => item.value),
 			},
 		});
+
 		setMultiSelectItems(newValue);
 	};
 
@@ -315,6 +366,7 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 		displayGroupName: false,
 		size: false,
 		sxpBlueprintId: false,
+		threshold: false,
 	});
 
 	const _handleBlur = (field) => () => {
@@ -332,8 +384,14 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 				displayGroupName: value.displayGroupName,
 				size: value.size,
 			});
-		}
-		else {
+		} else if (event.target.value === CONTRIBUTORS.RECENT) {
+			onChange({
+				attributes: RECENT_DEFAULT_ATTRIBUTES,
+				contributorName: event.target.value,
+				displayGroupName: value.displayGroupName,
+				size: value.size,
+			});
+		} else {
 			onChange({
 				attributes: SXP_BLUEPRINT_DEFAULT_ATTRIBUTES,
 				contributorName: event.target.value,
@@ -429,8 +487,17 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 				</ClayInput.GroupItem>
 			</div>
 
+			{value.contributorName === CONTRIBUTORS.RECENT && (
+				<RecentContributorAttributes
+					onBlur={_handleBlur}
+					onChange={onChange}
+					touched={touched}
+					value={value}
+				/>
+			)}
+
 			{value.contributorName === CONTRIBUTORS.SXP_BLUEPRINT && (
-				<SXPBlueprintAttributes
+				<SXPBlueprintContributorAttributes
 					onBlur={_handleBlur}
 					onChange={onChange}
 					touched={touched}
@@ -503,6 +570,19 @@ function SearchBarConfigurationSuggestions({
 			return {
 				attributes: SXP_BLUEPRINT_DEFAULT_ATTRIBUTES,
 				contributorName: CONTRIBUTORS.SXP_BLUEPRINT,
+				displayGroupName: '',
+				size: '',
+			};
+		}
+
+		if (
+			suggestionsContributorConfiguration.some(
+				(config) => config.contributorName === CONTRIBUTORS.RECENT
+			)
+		) {
+			return {
+				attributes: RECENT_DEFAULT_ATTRIBUTES,
+				contributorName: CONTRIBUTORS.RECENT,
 				displayGroupName: '',
 				size: '',
 			};
