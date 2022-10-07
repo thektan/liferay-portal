@@ -20,6 +20,7 @@
 
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %><%@
 taglib uri="http://liferay.com/tld/ddm" prefix="liferay-ddm" %><%@
+taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
@@ -31,7 +32,9 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.portal.search.web.internal.result.display.context.SearchResultSummaryDisplayContext" %><%@
 page import="com.liferay.portal.search.web.internal.search.results.configuration.SearchResultsPortletInstanceConfiguration" %><%@
-page import="com.liferay.portal.search.web.internal.search.results.portlet.SearchResultsPortletDisplayContext" %>
+page import="com.liferay.portal.search.web.internal.search.results.portlet.SearchResultsPortletDisplayContext" %><%@
+page import="com.liferay.portal.search.web.internal.search.results.portlet.SearchResultsPortletPreferences" %><%@
+page import="com.liferay.portal.search.web.internal.search.results.portlet.SearchResultsPortletPreferencesImpl" %>
 
 <%@ page import="java.util.List" %>
 
@@ -49,6 +52,8 @@ SearchResultsPortletInstanceConfiguration searchResultsPortletInstanceConfigurat
 List<SearchResultSummaryDisplayContext> searchResultSummaryDisplayContexts = searchResultsPortletDisplayContext.getSearchResultSummaryDisplayContexts();
 
 SearchContainer<Document> searchContainer = searchResultsPortletDisplayContext.getSearchContainer();
+
+SearchResultsPortletPreferences searchResultsPortletPreferences = new SearchResultsPortletPreferencesImpl(java.util.Optional.ofNullable(portletPreferences));
 %>
 
 <c:choose>
@@ -89,3 +94,16 @@ SearchContainer<Document> searchContainer = searchResultsPortletDisplayContext.g
 		</aui:form>
 	</c:otherwise>
 </c:choose>
+
+<liferay-frontend:component
+	context='<%=
+		HashMapBuilder.<String, Object>put(
+			"federatedSearchKey", searchResultsPortletPreferences.getFederatedSearchKeyString()
+		).put(
+			"keywords", searchResultsPortletDisplayContext.getKeywords()
+		).put(
+			"totalCount", searchResultSummaryDisplayContexts.size()
+		).build()
+	%>'
+	module="js/utils/initializeSearchBarRecentSearches"
+/>
