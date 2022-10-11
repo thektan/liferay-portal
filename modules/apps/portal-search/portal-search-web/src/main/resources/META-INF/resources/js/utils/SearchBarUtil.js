@@ -12,8 +12,7 @@
  * details.
  */
 
-export const RECENT_SEARCHES_KEY =
-	'portal-search-web-search-bar-recent-searches';
+import {RECENT_SEARCHES_KEY} from '../constants/recentSearches';
 
 /**
  * Gets the recent searches. Returns an empty array if nothing is found.
@@ -32,7 +31,7 @@ export function getRecentSearches(federatedSearchKey, amount = 5) {
 		);
 
 		const recentSearchesArray =
-			recentSearchesObject[federatedSearchKey] || [];
+			recentSearchesObject[federatedSearchKey].items || [];
 
 		// Trim results.
 

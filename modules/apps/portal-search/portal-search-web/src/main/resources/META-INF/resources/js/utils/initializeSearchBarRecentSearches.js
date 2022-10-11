@@ -12,7 +12,8 @@
  * details.
  */
 
-import {RECENT_SEARCHES_KEY, getRecentSearches} from './SearchBarUtil';
+import {RECENT_SEARCHES_KEY} from '../constants/recentSearches';
+import {getRecentSearches} from './SearchBarUtil';
 
 /**
  * Sets up the listener to save recent searches.
@@ -36,7 +37,11 @@ export default function initializeSearchBarRecentSearches({
 	 *   'q': ['3rd search term', '2nd search term', '1st search term']
 	 * }
 	 */
-	Liferay.on('endNavigate', () => {
+	Liferay.on('allPortletsReady', () => {
+
+		// TODO: Figure out why keywords === '' && totalCount >= resultThreshold is not working
+		// debugger;
+
 		if (keywords === '' && totalCount >= resultThreshold) {
 			return;
 		}
@@ -52,7 +57,7 @@ export default function initializeSearchBarRecentSearches({
 			);
 
 			const existingRecentSearchesArray =
-				recentSearchesObject[federatedSearchKey] || [];
+				recentSearchesObject[federatedSearchKey].items || [];
 
 			// If the stored most recent search is the same as the search just
 			// made, there is no need to do anything further.
@@ -82,7 +87,10 @@ export default function initializeSearchBarRecentSearches({
 				RECENT_SEARCHES_KEY,
 				JSON.stringify({
 					...recentSearchesObject,
-					[federatedSearchKey]: newRecentSearchesArray,
+					[federatedSearchKey]: {
+						...recentSearchesObject[federatedSearchKey],
+						items: newRecentSearchesArray,
+					},
 				})
 			);
 		}
@@ -93,7 +101,7 @@ export default function initializeSearchBarRecentSearches({
 			localStorage.setItem(
 				RECENT_SEARCHES_KEY,
 				JSON.stringify({
-					[federatedSearchKey]: [keywords],
+					[federatedSearchKey]: {items: [keywords]},
 				})
 			);
 		}

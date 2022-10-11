@@ -134,6 +134,7 @@ function SXPBlueprintContributorAttributes({onBlur, onChange, touched, value}) {
 	});
 
 	useEffect(() => {
+
 		// Fetch the blueprint title using sxpBlueprintId inside attributes, since
 		// title is not saved within initialSuggestionsContributorConfiguration.
 
@@ -197,6 +198,7 @@ function SXPBlueprintContributorAttributes({onBlur, onChange, touched, value}) {
 	};
 
 	const _handleSXPBlueprintSelectorChange = (event) => {
+
 		// To use validation from 'required' field, keep the onChange and value
 		// properties but make its behavior resemble readOnly (input can only be
 		// changed with the selector modal).
@@ -384,14 +386,16 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 				displayGroupName: value.displayGroupName,
 				size: value.size,
 			});
-		} else if (event.target.value === CONTRIBUTORS.RECENT) {
+		}
+		else if (event.target.value === CONTRIBUTORS.RECENT) {
 			onChange({
 				attributes: RECENT_DEFAULT_ATTRIBUTES,
 				contributorName: event.target.value,
 				displayGroupName: value.displayGroupName,
 				size: value.size,
 			});
-		} else {
+		}
+		else {
 			onChange({
 				attributes: SXP_BLUEPRINT_DEFAULT_ATTRIBUTES,
 				contributorName: event.target.value,
