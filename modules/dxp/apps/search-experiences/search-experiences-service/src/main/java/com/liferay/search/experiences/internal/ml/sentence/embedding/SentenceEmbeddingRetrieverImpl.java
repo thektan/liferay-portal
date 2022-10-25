@@ -55,7 +55,8 @@ public class SentenceEmbeddingRetrieverImpl
 			return new Double[0];
 		}
 
-		return sentenceTransformer.getSentenceEmbedding(text);
+		return sentenceTransformer.getSentenceEmbedding(
+			semanticSearchConfiguration, text);
 	}
 
 	@Override
