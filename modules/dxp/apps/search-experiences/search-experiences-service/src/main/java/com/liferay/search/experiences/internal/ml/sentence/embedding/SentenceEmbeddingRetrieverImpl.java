@@ -40,20 +40,27 @@ public class SentenceEmbeddingRetrieverImpl
 	implements SentenceEmbeddingRetriever {
 
 	@Override
-	public Double[] getSentenceEmbedding(String text) {
+	public Double[] getSentenceEmbedding(
+		SemanticSearchConfiguration semanticSearchConfiguration, String text) {
+
 		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-163688"))) {
 			return new Double[0];
 		}
 
 		SentenceTransformer sentenceTransformer =
 			_sentenceTransformerServiceTrackerMap.getService(
-				_semanticSearchConfiguration.sentenceTransformProvider());
+				semanticSearchConfiguration.sentenceTransformProvider());
 
 		if (sentenceTransformer == null) {
 			return new Double[0];
 		}
 
 		return sentenceTransformer.getSentenceEmbedding(text);
+	}
+
+	@Override
+	public Double[] getSentenceEmbedding(String text) {
+		return getSentenceEmbedding(_semanticSearchConfiguration, text);
 	}
 
 	@Activate
