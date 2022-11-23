@@ -12,12 +12,14 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLink from '@clayui/link';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import ClayModal, {useModal} from '@clayui/modal';
-import React, {useState} from 'react';
+import React, {Suspense, lazy, useState} from 'react';
 
 import {COPY_BUTTON_CSS_CLASS} from '../utils/constants';
 import {openSuccessToast} from '../utils/toasts';
-import CodeMirrorEditor from './CodeMirrorEditor';
+
+const CodeMirrorEditor = lazy(() => import('./CodeMirrorEditor.js'));
 
 const PreviewModal = ({body, children, size = 'md', title}) => {
 	const [visible, setVisible] = useState(false);
@@ -96,12 +98,24 @@ export function PreviewModalWithCopyDownload({
 						</ClayLink>
 					</ClayButton.Group>
 
-					<CodeMirrorEditor
-						folded={folded}
-						lineWrapping={lineWrapping}
-						readOnly={readOnly}
-						value={text}
-					/>
+					<Suspense
+						fallback={
+							<div className="code-mirror-loading-state">
+								<ClayLoadingIndicator
+									displayType="primary"
+									shape="squares"
+									size="md"
+								/>
+							</div>
+						}
+					>
+						<CodeMirrorEditor
+							folded={folded}
+							lineWrapping={lineWrapping}
+							readOnly={readOnly}
+							value={text}
+						/>
+					</Suspense>
 				</>
 			}
 			size={size}

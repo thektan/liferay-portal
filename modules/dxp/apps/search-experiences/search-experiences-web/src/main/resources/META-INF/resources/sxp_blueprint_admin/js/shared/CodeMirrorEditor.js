@@ -724,15 +724,16 @@ const CodeMirrorEditor = React.forwardRef(
 				}
 
 				if (folded) {
-					codeMirror.operation(() => {
-						for (
-							let line = codeMirror.firstLine() + 1;
-							line <= codeMirror.lastLine() - 1;
-							++line
-						) {
-							codeMirror.foldCode({ch: 0, line}, null, 'fold');
-						}
-					});
+
+					// Fold all lines excluding the first line.
+
+					for (
+						let line = codeMirror.firstLine() + 1;
+						line <= codeMirror.lastLine() - 1;
+						++line
+					) {
+						codeMirror.foldCode({ch: 0, line}, null, 'fold');
+					}
 				}
 
 				editorRef.current = codeMirror;
