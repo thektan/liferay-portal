@@ -3,6 +3,12 @@
 		padding-bottom: 12px;
 	}
 
+	.code-mirror-loading-state {
+		align-items: center;
+		display: flex;
+		height: 600px;
+	}
+
 	.CodeMirror {
 		height: 600px;
 	}
