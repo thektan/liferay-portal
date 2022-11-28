@@ -287,6 +287,44 @@ function PreviewSidebar({
 
 				{isDefined(totalHits) && _renderResultsManagementBar()}
 
+				<PreviewModalWithCopyDownload
+					fileName="raw_request.json"
+					folded
+					lineWrapping={false}
+					size="lg"
+					text={parseAndPrettifyJSON(requestString)}
+					title={Liferay.Language.get('raw-request')}
+				>
+					<ClayButton
+						borderless
+						className="raw-request"
+						disabled={loading}
+						displayType="secondary"
+						small
+					>
+						{Liferay.Language.get('view-raw-request')}
+					</ClayButton>
+				</PreviewModalWithCopyDownload>
+
+				<PreviewModalWithCopyDownload
+					fileName="raw_response.json"
+					folded
+					lineWrapping={false}
+					size="lg"
+					text={parseAndPrettifyJSON(responseString)}
+					title={Liferay.Language.get('raw-response')}
+				>
+					<ClayButton
+						borderless
+						className="raw-response"
+						disabled={loading}
+						displayType="secondary"
+						small
+					>
+						{Liferay.Language.get('view-raw-response')}
+					</ClayButton>
+				</PreviewModalWithCopyDownload>
+
 				{!loading ? (
 					totalHits > 0 ? (
 						_renderHits()
