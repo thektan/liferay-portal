@@ -36,7 +36,6 @@ export default function SearchBar({
 	scopeParameterName,
 	scopeParameterStringCurrentSite,
 	scopeParameterStringEverything,
-	searchURL,
 	selectedEverythingSearchScope = false,
 	suggestionsContributorConfiguration = '[]',
 	suggestionsDisplayThreshold = '2',
@@ -168,7 +167,12 @@ export default function SearchBar({
 		if (!!inputValue.trim().length || emptySearchEnabled) {
 			const queryString = _updateQueryString(document.location.search);
 
-			navigate(searchURL + queryString);
+			const url = new URL(
+				`${Liferay.ThemeDisplay.getPathContext()}${destinationFriendlyURL}${queryString}`,
+				Liferay.ThemeDisplay.getPortalURL()
+			);
+
+			navigate(url);
 		}
 	};
 
