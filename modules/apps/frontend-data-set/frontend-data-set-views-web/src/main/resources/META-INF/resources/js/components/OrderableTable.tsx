@@ -38,6 +38,7 @@ interface Action {
 
 interface ContentRendererProps {
 	item: any;
+	query: string;
 }
 
 interface ContentRenderer {
@@ -151,7 +152,7 @@ const OrderableTableRow = ({
 
 					return (
 						<ClayTable.Cell key={field.name}>
-							<Component item={item} />
+							<Component item={item} query={query} />
 						</ClayTable.Cell>
 					);
 				}
