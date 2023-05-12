@@ -82,7 +82,13 @@ function alertSuccess() {
 	});
 }
 
-const SortingDirectionContentRenderer = ({item}: ContentRendererProps) => {
+const sortingDirectionTextMatch = (item: FDSSort) => {
+	return item.sortingDirection === SORTING_DIRECTION.ASCENDING.value
+		? SORTING_DIRECTION.ASCENDING.label
+		: SORTING_DIRECTION.DESCENDING.label;
+};
+
+const SortingDirectionComponent = ({item}: ContentRendererProps) => {
 	return (
 		<span>
 			{item.sortingDirection === SORTING_DIRECTION.ASCENDING.value
@@ -342,7 +348,10 @@ const Sorting = ({fdsView, fdsViewsURL}: FDSViewSectionInterface) => {
 								name: 'fieldName',
 							},
 							{
-								contentRenderer: SortingDirectionContentRenderer,
+								contentRenderer: {
+									component: SortingDirectionComponent,
+									textMatch: sortingDirectionTextMatch,
+								},
 								label: Liferay.Language.get('value'),
 								name: 'sortingDirection',
 							},

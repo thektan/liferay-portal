@@ -40,8 +40,13 @@ interface ContentRendererProps {
 	item: any;
 }
 
+interface ContentRenderer {
+	component: React.FC<ContentRendererProps>;
+	textMatch?: Function;
+}
+
 interface Field {
-	contentRenderer?: React.FC<ContentRendererProps>;
+	contentRenderer?: ContentRenderer;
 	headingTitle?: boolean;
 	label: string;
 	name: string;
@@ -141,13 +146,12 @@ const OrderableTableRow = ({
 
 			{fields.map((field) => {
 				if (field.contentRenderer) {
-					const ContentRenderer = field.contentRenderer as React.FC<
-						ContentRendererProps
-					>;
+					const Component = field.contentRenderer
+						.component as React.FC<ContentRendererProps>;
 
 					return (
 						<ClayTable.Cell key={field.name}>
-							<ContentRenderer item={item} />
+							<Component item={item} />
 						</ClayTable.Cell>
 					);
 				}
@@ -263,9 +267,15 @@ const OrderableTable = ({
 		setItems(
 			query
 				? initialItems.filter((item) =>
-						fields.some((field) =>
-							String(item[field.name]).match(regexp)
-						)
+						fields.some((field) => {
+							if (field.contentRenderer?.textMatch) {
+								return String(
+									field.contentRenderer.textMatch(item)
+								).match(regexp);
+							}
+
+							return String(item[field.name]).match(regexp);
+						})
 				  ) || []
 				: initialItems
 		);
