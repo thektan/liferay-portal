@@ -21,9 +21,14 @@ interface Action {
 }
 interface ContentRendererProps {
 	item: any;
+	query: string;
+}
+interface ContentRenderer {
+	component: React.FC<ContentRendererProps>;
+	textMatch?: Function;
 }
 interface Field {
-	contentRenderer?: React.FC<ContentRendererProps>;
+	contentRenderer?: ContentRenderer;
 	headingTitle?: boolean;
 	label: string;
 	name: string;
