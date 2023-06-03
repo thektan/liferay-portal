@@ -46,6 +46,28 @@ public class LearnMessageUtil {
 		return new LearnMessage(jsonObject, key, languageId);
 	}
 
+	public static JSONObject getReactDataJSONObject(String resource) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONObject learnMessageJSONObject = getJSONObject(resource);
+
+		jsonObject.put(resource, learnMessageJSONObject);
+
+		return jsonObject;
+	}
+
+	public static JSONObject getReactDataJSONObject(String[] resources) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		for (String resource : resources) {
+			JSONObject learnMessageJSONObject = getJSONObject(resource);
+
+			jsonObject.put(resource, learnMessageJSONObject);
+		}
+
+		return jsonObject;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		LearnMessageUtil.class);
 
