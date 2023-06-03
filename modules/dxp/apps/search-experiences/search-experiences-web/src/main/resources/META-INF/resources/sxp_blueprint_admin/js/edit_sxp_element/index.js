@@ -9,6 +9,7 @@
  * distribution rights of the Software.
  */
 
+import {LearnResourcesContext} from 'frontend-js-components-web';
 import React, {useEffect, useState} from 'react';
 
 import useClipboardJS from '../hooks/useClipboardJS';
@@ -85,7 +86,7 @@ const transformToSXPElementExportFormat = (
 
 export default function ({
 	defaultLocale,
-	learnMessages,
+	learnResources,
 	locale,
 	namespace,
 	redirectURL,
@@ -119,32 +120,33 @@ export default function ({
 	}
 
 	return (
-		<ThemeContext.Provider
-			value={{
-				availableLanguages: Liferay.Language.available,
-				defaultLocale,
-				learnMessages,
-				locale,
-				namespace,
-				redirectURL,
-			}}
-		>
-			<div className="edit-sxp-element-root">
-				<ErrorBoundary>
-					<EditSXPElementForm
-						initialDescription={sxpElementResponse.description}
-						initialElementJSONEditorValue={transformToSXPElementExportFormat(
-							sxpElementResponse,
-							defaultLocale
-						)}
-						initialTitle={sxpElementResponse.title}
-						predefinedVariables={predefinedVariables}
-						readOnly={sxpElementResponse.readOnly}
-						sxpElementId={sxpElementId}
-						type={sxpElementResponse.type}
-					/>
-				</ErrorBoundary>
-			</div>
-		</ThemeContext.Provider>
+		<LearnResourcesContext.Provider value={learnResources}>
+			<ThemeContext.Provider
+				value={{
+					availableLanguages: Liferay.Language.available,
+					defaultLocale,
+					locale,
+					namespace,
+					redirectURL,
+				}}
+			>
+				<div className="edit-sxp-element-root">
+					<ErrorBoundary>
+						<EditSXPElementForm
+							initialDescription={sxpElementResponse.description}
+							initialElementJSONEditorValue={transformToSXPElementExportFormat(
+								sxpElementResponse,
+								defaultLocale
+							)}
+							initialTitle={sxpElementResponse.title}
+							predefinedVariables={predefinedVariables}
+							readOnly={sxpElementResponse.readOnly}
+							sxpElementId={sxpElementId}
+							type={sxpElementResponse.type}
+						/>
+					</ErrorBoundary>
+				</div>
+			</ThemeContext.Provider>
+		</LearnResourcesContext.Provider>
 	);
 }
