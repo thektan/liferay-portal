@@ -16,6 +16,7 @@ import ClayIcon from '@clayui/icon';
 import ClayLayout from '@clayui/layout';
 import ClayToolbar from '@clayui/toolbar';
 import getCN from 'classnames';
+import {LearnMessage} from 'frontend-js-components-web';
 import {fetch, navigate} from 'frontend-js-web';
 import {PropTypes} from 'prop-types';
 import React, {
@@ -32,7 +33,6 @@ import useShouldConfirmBeforeNavigate from '../hooks/useShouldConfirmBeforeNavig
 import CodeMirrorEditor from '../shared/CodeMirrorEditor';
 import ErrorBoundary from '../shared/ErrorBoundary';
 import JSONSXPElement from '../shared/JSONSXPElement';
-import LearnMessage from '../shared/LearnMessage';
 import PageToolbar from '../shared/PageToolbar';
 import PreviewModal from '../shared/PreviewModal';
 import SearchInput from '../shared/SearchInput';
@@ -616,7 +616,10 @@ function EditSXPElementForm({
 						{Liferay.Language.get('element-source-description')}
 					</span>
 
-					<LearnMessage resourceKey="element-source" />
+					<LearnMessage
+						resource="search-experiences-web"
+						resourceKey="element-source"
+					/>
 				</div>
 
 				{!readOnly && (
