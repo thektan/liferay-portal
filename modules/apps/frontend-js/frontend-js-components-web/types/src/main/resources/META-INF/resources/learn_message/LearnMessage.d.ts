@@ -13,8 +13,23 @@
  */
 
 import React from 'react';
-export declare const LearnResourcesContext: React.Context<{}>;
-interface IProps {
+export declare const LearnResourcesContext: React.Context<Partial<
+	ILearnResourceContext
+>>;
+interface ILearnResourceLocaleItem {
+	message: string;
+	url?: string;
+}
+interface ILearnResourceKeyItem {
+	[locale: string]: ILearnResourceLocaleItem;
+}
+interface ILearnResourceItem {
+	[resourceKey: string]: ILearnResourceKeyItem;
+}
+interface ILearnResourceContext {
+	[learnResourceName: string]: ILearnResourceItem;
+}
+interface IProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 	className?: string;
 
 	/**
