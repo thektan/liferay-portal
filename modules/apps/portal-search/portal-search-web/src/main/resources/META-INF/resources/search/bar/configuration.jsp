@@ -34,6 +34,7 @@ page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.HashMapBuilder" %><%@
 page import="com.liferay.portal.kernel.util.ReleaseInfo" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
+page import="com.liferay.learn.LearnMessageUtil" %><%@
 page import="com.liferay.portal.search.web.internal.search.bar.portlet.SearchBarPortlet" %><%@
 page import="com.liferay.portal.search.web.internal.search.bar.portlet.SearchBarPortletPreferences" %><%@
 page import="com.liferay.portal.search.web.internal.search.bar.portlet.SearchBarPortletPreferencesImpl" %><%@
@@ -134,6 +135,8 @@ String suggestionsContributorConfiguration = StringBundler.concat(StringPool.OPE
 									"isSearchExperiencesSupported", searchBarPortletDisplayContext.isSearchExperiencesSupported()
 								).put(
 									"learnMessages", LearnMessageUtil.getJSONObject("portal-search-web")
+								).put(
+									"learnResources", LearnMessageUtil.getReactDataJSONObject("portal-search-web")
 								).put(
 									"namespace", liferayPortletResponse.getNamespace()
 								).put(
