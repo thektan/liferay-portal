@@ -5,6 +5,7 @@
 
 import {ClayDropDownWithItems} from '@clayui/drop-down';
 import React from 'react';
+
 import '../../css/OrderableTable.scss';
 interface IAction {
 	icon: string;
@@ -38,9 +39,9 @@ interface IOrderableTableProps {
 	noItemsButtonLabel: string;
 	noItemsDescription: string;
 	noItemsTitle: string;
-	onCancelButtonClick: Function;
+	onCancelButtonClick?: Function;
 	onOrderChange: (args: {orderedItems: any[]}) => void;
-	onSaveButtonClick: Function;
+	onSaveButtonClick?: Function;
 	title?: string;
 }
 declare const OrderableTable: ({

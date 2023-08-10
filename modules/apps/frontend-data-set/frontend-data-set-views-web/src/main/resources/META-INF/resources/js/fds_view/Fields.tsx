@@ -949,7 +949,6 @@ const Fields = ({
 						'add-fields-to-show-in-your-view'
 					)}
 					noItemsTitle={Liferay.Language.get('no-fields-added-yet')}
-					onCancelButtonClick={() => navigate(fdsViewsURL)}
 					onOrderChange={({
 						orderedItems,
 					}: {
@@ -961,7 +960,6 @@ const Fields = ({
 
 						updateFDSFieldsOrder();
 					}}
-					onSaveButtonClick={() => updateFDSFieldsOrder()}
 					title={Liferay.Language.get('fields')}
 				/>
 			) : (
