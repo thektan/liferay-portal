@@ -22,6 +22,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.Language;
@@ -97,6 +98,49 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 		).toString();
 	}
 
+	public Collection<ObjectEntry> getFDSFilters(
+			ObjectDefinition objectDefinition, ObjectEntry fdsViewObjectEntry)
+		throws Exception {
+
+		Collection<ObjectEntry> fdsFilters = new ArrayList<>();
+
+		Map<String, Object> fdsViewProperties =
+			fdsViewObjectEntry.getProperties();
+
+		String fdsFiltersOrder = (String)fdsViewProperties.get(
+			"fdsFiltersOrder");
+
+		fdsFilters.addAll(
+			_getRelatedObjectEntries(
+				objectDefinition, fdsViewObjectEntry,
+				"fdsViewFDSDateFilterRelationship"));
+
+		fdsFilters.addAll(
+			_getRelatedObjectEntries(
+				objectDefinition, fdsViewObjectEntry,
+				"fdsViewFDSDynamicFilterRelationship"));
+
+		return _sortObjectEntriesByIdsList(fdsFilters, fdsFiltersOrder);
+	}
+
+	public JSONArray getFiltersJSONArray(
+			ObjectDefinition fdsViewObjectDefinition,
+			ObjectEntry fdsViewObjectEntry)
+		throws Exception {
+
+		Collection<ObjectEntry> fdsFiltersObjectEntries = getFDSFilters(
+			fdsViewObjectDefinition, fdsViewObjectEntry);
+
+		if ((fdsFiltersObjectEntries == null) ||
+			fdsFiltersObjectEntries.isEmpty()) {
+
+			return _jsonFactory.createJSONArray();
+		}
+
+		return _getFiltersJSONArray(
+			fdsViewObjectDefinition, fdsFiltersObjectEntries);
+	}
+
 	@Override
 	public String getIcon() {
 		return "table";
@@ -104,6 +148,36 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 
 	public String getLabel(Locale locale) {
 		return _language.get(locale, "data-set");
+	}
+
+	public boolean isFDSDateFilter(
+		ObjectDefinition objectDefinition, ObjectEntry fdsFilterObjectEntry) {
+
+		DTOConverterContext dtoConverterContext =
+			new DefaultDTOConverterContext(
+				false, null, null, null, null, LocaleUtil.getSiteDefault(),
+				null, null);
+
+		try {
+			DefaultObjectEntryManager defaultObjectEntryManager =
+				DefaultObjectEntryManagerProvider.provide(
+					_objectEntryManagerRegistry.getObjectEntryManager(
+						objectDefinition.getStorageType()));
+
+			ObjectEntry fdsDateFilterObjectEntry =
+				defaultObjectEntryManager.getObjectEntry(
+					dtoConverterContext, objectDefinition,
+					fdsFilterObjectEntry.getId());
+
+			return fdsFilterObjectEntry.equals(fdsDateFilterObjectEntry);
+		}
+		catch (Exception exception) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(exception);
+			}
+
+			return false;
+		}
 	}
 
 	public boolean isSelectable(HttpServletRequest httpServletRequest) {
@@ -226,6 +300,9 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 			HashMapBuilder.<String, Object>put(
 				"apiURL", _getAPIURL(fdsEntryObjectEntry, httpServletRequest)
 			).put(
+				"filters",
+				getFiltersJSONArray(fdsViewObjectDefinition, fdsViewObjectEntry)
+			).put(
 				"id", "FDS_" + fragmentRendererContext.getFragmentElementId()
 			).put(
 				"namespace", fragmentRendererContext.getFragmentElementId()
@@ -274,6 +351,27 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 		sb.append(String.valueOf(properties.get("restEndpoint")));
 
 		return _interpolateURL(sb.toString(), httpServletRequest);
+	}
+
+	private JSONObject _getFDSDateFilterJSONObject(
+		ObjectEntry fdsDateFilterObjectEntry) {
+
+		Map<String, Object> fdsDateFilterProperties =
+			fdsDateFilterObjectEntry.getProperties();
+
+		return JSONUtil.put(
+			"entityFieldType", fdsDateFilterProperties.get("type")
+		).put(
+			"id", fdsDateFilterProperties.get("fieldName")
+		).put(
+			"label", (String)fdsDateFilterProperties.get("label")
+		).put(
+			"max", fdsDateFilterProperties.get("to")
+		).put(
+			"min", fdsDateFilterProperties.get("from")
+		).put(
+			"type", "dateRange"
+		);
 	}
 
 	private JSONArray _getFieldsJSONArray(
@@ -336,6 +434,34 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 					"default from " + fdsCellRendererCET.getURL()
 				);
 			});
+	}
+
+	private JSONArray _getFiltersJSONArray(
+		ObjectDefinition fdsViewObjectDefinition,
+		Collection<ObjectEntry> fdsFiltersObjectEntries) {
+
+		try {
+			return JSONUtil.toJSONArray(
+				fdsFiltersObjectEntries,
+				(ObjectEntry fdsFilterObjectEntry) -> {
+					if (isFDSDateFilter(
+							fdsViewObjectDefinition, fdsFilterObjectEntry)) {
+
+						return _getFDSDateFilterJSONObject(
+							fdsFilterObjectEntry);
+					}
+
+					return null;
+				});
+		}
+		catch (Exception exception) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to generate FDS filters from FDSView", exception);
+			}
+
+			return _jsonFactory.createJSONArray();
+		}
 	}
 
 	private ObjectEntry _getObjectEntry(
@@ -423,6 +549,24 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 		return apiUrl;
 	}
 
+	private Collection<ObjectEntry> _sortObjectEntriesByIdsList(
+		Collection<ObjectEntry> objectEntries, String idsOrderString) {
+
+		List<Long> idsOrder = ListUtil.toList(
+			Arrays.asList(StringUtil.split(idsOrderString, StringPool.COMMA)),
+			Long::parseLong);
+
+		List<ObjectEntry> objectEntriesList = new ArrayList<>(objectEntries);
+
+		Collections.sort(
+			objectEntriesList,
+			Comparator.comparing(
+				ObjectEntry::getId,
+				Comparator.comparingInt(idsOrder::indexOf)));
+
+		return objectEntriesList;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		FDSViewFragmentRenderer.class);
 
@@ -431,6 +575,9 @@ public class FDSViewFragmentRenderer implements FragmentRenderer {
 
 	@Reference
 	private FragmentEntryConfigurationParser _fragmentEntryConfigurationParser;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private Language _language;
