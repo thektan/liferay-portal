@@ -682,6 +682,12 @@ function Filters({fdsView, fdsViewsURL, namespace}: IProps) {
 		getFilters();
 	}, [fdsView]);
 
+	useEffect(() => {
+		if (newFiltersOrder.length) {
+			updateFDSFiltersOrder();
+		}
+	}, [newFiltersOrder]);
+
 	const updateFDSFiltersOrder = async () => {
 		const response = await fetch(
 			`${API_URL.FDS_VIEWS}/by-external-reference-code/${fdsView.externalReferenceCode}`,
