@@ -423,6 +423,12 @@ const Sorting = ({
 		});
 	}, [fdsView]);
 
+	useEffect(() => {
+		if (newFDSSortsOrder.length) {
+			handleSave();
+		}
+	}, [newFDSSortsOrder]);
+
 	const handleCreation = () =>
 		openModal({
 			contentComponent: ({closeModal}: {closeModal: Function}) => (
