@@ -49,6 +49,7 @@ interface IOrderableTableRowProps {
 	fields: Array<IField>;
 	index: number;
 	item: any;
+	onDrop: Function;
 	onOrderChange: Function;
 	query: string;
 }
@@ -58,6 +59,7 @@ const OrderableTableRow = ({
 	fields,
 	index,
 	item,
+	onDrop,
 	onOrderChange,
 	query,
 }: IOrderableTableRowProps) => {
@@ -75,6 +77,11 @@ const OrderableTableRow = ({
 
 	const [, dropRef] = useDrop({
 		accept: 'FIELD',
+		drop() {
+			console.log('drop');
+
+			onDrop();
+		},
 		hover(item: {index: number; type: string}, monitor) {
 			if (!tableRowRef.current || !onOrderChange) {
 				return;
@@ -108,6 +115,7 @@ const OrderableTableRow = ({
 				return;
 			}
 
+			console.log('hover onOrderChange');
 			onOrderChange({draggedIndex, targetIndex});
 
 			item.index = targetIndex;
@@ -231,7 +239,8 @@ interface IOrderableTableProps {
 	noItemsDescription: string;
 	noItemsTitle: string;
 	onCancelButtonClick?: Function;
-	onOrderChange: (args: {orderedItems: any[]}) => void;
+	onDrop?: (args: {items: any[]}) => void;
+	onOrderChange?: (args: {orderedItems: any[]}) => void;
 	onSaveButtonClick?: Function;
 	title?: string;
 }
@@ -248,6 +257,7 @@ const OrderableTable = ({
 	noItemsDescription,
 	noItemsTitle,
 	onCancelButtonClick,
+	onDrop,
 	onOrderChange,
 	onSaveButtonClick,
 	title,
@@ -279,6 +289,16 @@ const OrderableTable = ({
 		);
 	};
 
+	const handleDrop = () => {
+		console.log('handleDrop', {items});
+
+		// @TODO Only call `onDrop` if order has changed. Or check might need to go in `useDrop` `drop` function.
+
+		if (onDrop) {
+			onDrop({items});
+		}
+	};
+
 	const handleOnOrderChange = ({
 		draggedIndex,
 		targetIndex,
@@ -286,6 +306,8 @@ const OrderableTable = ({
 		draggedIndex: number;
 		targetIndex: number;
 	}) => {
+		console.log('handleOnOrderChange');
+
 		const orderedItems = items.slice(0);
 
 		orderedItems.splice(draggedIndex, 1);
@@ -294,9 +316,11 @@ const OrderableTable = ({
 
 		setItems(orderedItems);
 
-		onOrderChange({
-			orderedItems,
-		});
+		if (onOrderChange) {
+			onOrderChange({
+				orderedItems,
+			});
+		}
 	};
 
 	return (
@@ -380,6 +404,7 @@ const OrderableTable = ({
 										index={index}
 										item={item}
 										key={item.id || index}
+										onDrop={handleDrop}
 										onOrderChange={handleOnOrderChange}
 										query={query}
 									/>
