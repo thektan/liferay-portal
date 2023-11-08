@@ -920,6 +920,7 @@ const FDSEntries = ({
 	const views = [
 		{
 			contentRenderer: 'table',
+			label: Liferay.Language.get('table'),
 			name: 'table',
 			schema: {
 				fields: [
@@ -958,8 +959,21 @@ const FDSEntries = ({
 					},
 				],
 			},
+			thumbnail: 'table',
+		},
+		{
+			contentRenderer: 'list',
+			label: Liferay.Language.get('list'),
+			name: 'list',
+			schema: {
+				description: 'description',
+				symbol: 'symbol',
+				title: 'label'
+			},
+			thumbnail: 'list',
 		},
 	];
+
 
 	return (
 		<div className="fds-entries">
