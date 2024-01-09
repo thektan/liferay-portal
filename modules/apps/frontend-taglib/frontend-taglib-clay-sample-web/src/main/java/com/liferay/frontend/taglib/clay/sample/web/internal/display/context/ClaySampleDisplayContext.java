@@ -22,7 +22,6 @@ public class ClaySampleDisplayContext {
 
 		_tabsItems = TabsItemListBuilder.add(
 			tabsItem -> {
-				tabsItem.setActive(true);
 				tabsItem.setLabel("Alerts");
 				tabsItem.setPanelId("alerts");
 			}
@@ -94,12 +93,18 @@ public class ClaySampleDisplayContext {
 		).add(
 			tabsItem -> {
 				tabsItem.setLabel("Stickers");
-				tabsItem.setPanelId("Stickers");
+				tabsItem.setPanelId("stickers");
 			}
 		).add(
 			tabsItem -> {
 				tabsItem.setLabel("Tabs");
 				tabsItem.setPanelId("tabs");
+			}
+		).add(
+			tabsItem -> {
+				tabsItem.setActive(true);
+				tabsItem.setLabel("Toggle");
+				tabsItem.setPanelId("toggle");
 			}
 		).add(
 			tabsItem -> {
