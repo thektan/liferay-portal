@@ -7,11 +7,13 @@ import {test} from '@playwright/test';
 
 import {ActionsPage} from '../pages/ActionsPage';
 import {DataSetPage} from '../pages/DataSetPage';
+import {FieldsPage} from '../pages/FieldsPage';
 import {ViewsPage} from '../pages/ViewsPage';
 
 const dataSetManagerPagesTest = test.extend<{
 	actionsPage: ActionsPage;
 	dataSetsPage: DataSetPage;
+	fieldsPage: FieldsPage;
 	viewsPage: ViewsPage;
 }>({
 	actionsPage: async ({page}, use) => {
@@ -24,6 +26,9 @@ const dataSetManagerPagesTest = test.extend<{
 		await dataSetsPage.createTestDataSetUI();
 		await use(dataSetsPage);
 		await dataSetsPage.deleteTestDataSetUI();
+	},
+	fieldsPage: async ({page}, use) => {
+		await use(new FieldsPage(page));
 	},
 	viewsPage: async ({page}, use) => {
 		const viewsPage = new ViewsPage(page);
