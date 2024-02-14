@@ -2714,13 +2714,13 @@
 		</attribute>
 		<attribute>
 			<description></description>
-			<name>id</name>
+			<name>helpText</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description></description>
-			<name>inline</name>
+			<name>id</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

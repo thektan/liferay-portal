@@ -4,12 +4,17 @@
  */
 
 import {ClayToggle} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
+import {ClayTooltipProvider} from '@clayui/tooltip';
 import React, {useState} from 'react';
+
+import './Toggle.scss';
 
 export default function Toggle({
 	additionalProps: _additionalProps,
 	componentId: _componentId,
 	cssClass,
+	helpText,
 	label,
 	labelOff,
 	labelOn,
@@ -22,12 +27,29 @@ export default function Toggle({
 	const [toggled, setToggled] = useState(_initialToggled);
 
 	return (
-		<ClayToggle
-			className={cssClass}
-			label={(toggled ? labelOn : labelOff) ?? label}
-			onToggle={setToggled}
-			toggled={toggled}
-			{...otherProps}
-		/>
+		<>
+			<ClayToggle
+				className={cssClass}
+				label={
+					<>
+						{(toggled ? labelOn : labelOff) ?? label}
+
+						{helpText && (
+							<ClayTooltipProvider>
+								<span
+									className="help-text-icon ml-2"
+									title={helpText}
+								>
+									<ClayIcon symbol="question-circle-full" />
+								</span>
+							</ClayTooltipProvider>
+						)}
+					</>
+				}
+				onToggle={setToggled}
+				toggled={toggled}
+				{...otherProps}
+			/>
+		</>
 	);
 }

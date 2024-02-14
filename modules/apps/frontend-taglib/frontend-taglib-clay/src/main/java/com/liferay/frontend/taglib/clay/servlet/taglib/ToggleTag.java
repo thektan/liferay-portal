@@ -31,6 +31,10 @@ public class ToggleTag extends BaseContainerTag {
 		return _disabled;
 	}
 
+	public String getHelpText() {
+		return _helpText;
+	}
+
 	public String getId() {
 		return _id;
 	}
@@ -73,6 +77,10 @@ public class ToggleTag extends BaseContainerTag {
 
 	public void setDisabled(boolean disabled) {
 		_disabled = disabled;
+	}
+
+	public void setHelpText(String helpText) {
+		_helpText = helpText;
 	}
 
 	public void setId(String id) {
@@ -120,6 +128,7 @@ public class ToggleTag extends BaseContainerTag {
 		super.cleanUp();
 
 		_disabled = false;
+		_helpText = null;
 		_id = null;
 		_label = null;
 		_labelOff = null;
@@ -141,6 +150,7 @@ public class ToggleTag extends BaseContainerTag {
 	@Override
 	protected Map<String, Object> prepareProps(Map<String, Object> props) {
 		props.put("disabled", _disabled);
+		props.put("helpText", _helpText);
 		props.put("id", _id);
 		props.put("label", _label);
 		props.put("labelOff", _labelOff);
@@ -258,6 +268,7 @@ public class ToggleTag extends BaseContainerTag {
 	private static final String _ATTRIBUTE_NAMESPACE = "clay:toggle:";
 
 	private boolean _disabled;
+	private String _helpText;
 	private String _id;
 	private String _label;
 	private String _labelOff;
