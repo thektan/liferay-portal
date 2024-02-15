@@ -1,6 +1,6 @@
 <%--
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 --%>
@@ -27,7 +27,9 @@
 	cssClass="mb-3"
 >
 	<clay:col>
-		<clay:toggle toggled="<%= true %>" />
+		<clay:toggle
+			toggled="<%= true %>"
+		/>
 	</clay:col>
 </clay:row>
 
@@ -37,7 +39,9 @@
 	cssClass="mb-3"
 >
 	<clay:col>
-		<clay:toggle disabled="<%= true %>" />
+		<clay:toggle
+			disabled="<%= true %>"
+		/>
 	</clay:col>
 </clay:row>
 
@@ -47,7 +51,9 @@
 	cssClass="mb-3"
 >
 	<clay:col>
-		<clay:toggle label="Test" />
+		<clay:toggle
+			label="Label Text"
+		/>
 	</clay:col>
 </clay:row>
 
@@ -57,7 +63,11 @@
 	cssClass="mb-3"
 >
 	<clay:col>
-		<clay:toggle symbolOff="staging" symbolOn="live" />
+		<clay:toggle
+			label="Label Text"
+			symbolOff="staging"
+			symbolOn="live"
+		/>
 	</clay:col>
 </clay:row>
 
@@ -67,6 +77,22 @@
 	cssClass="mb-3"
 >
 	<clay:col>
-		<clay:toggle labelOff="Off" labelOn="On" />
+		<clay:toggle
+			labelOff="Off"
+			labelOn="On"
+		/>
+	</clay:col>
+</clay:row>
+
+<h3>TOGGLE WITH HELP TEXT</h3>
+
+<clay:row
+	cssClass="mb-3"
+>
+	<clay:col>
+		<clay:toggle
+			helpText="Help Text"
+			label="Label Text"
+		/>
 	</clay:col>
 </clay:row>
