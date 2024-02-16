@@ -2744,6 +2744,12 @@
 		</attribute>
 		<attribute>
 			<description></description>
+			<name>sizing</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
 			<name>symbolOff</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

@@ -59,6 +59,10 @@ public class ToggleTag extends BaseContainerTag {
 		return _role;
 	}
 
+	public String getSizing() {
+		return _sizing;
+	}
+
 	public String getSymbolOff() {
 		return _symbolOff;
 	}
@@ -107,6 +111,10 @@ public class ToggleTag extends BaseContainerTag {
 		_role = role;
 	}
 
+	public void setSizing(String sizing) {
+		_sizing = sizing;
+	}
+
 	public void setSymbolOff(String symbolOff) {
 		_symbolOff = symbolOff;
 	}
@@ -135,6 +143,7 @@ public class ToggleTag extends BaseContainerTag {
 		_labelOn = null;
 		_name = null;
 		_role = null;
+		_sizing = null;
 		_symbolOff = null;
 		_symbolOn = null;
 		_toggled = false;
@@ -161,6 +170,7 @@ public class ToggleTag extends BaseContainerTag {
 			props.put("role", _role);
 		}
 
+		props.put("sizing", _sizing);
 		props.put("toggled", _toggled);
 
 		if (Validator.isNotNull(_type)) {
@@ -192,7 +202,14 @@ public class ToggleTag extends BaseContainerTag {
 
 		JspWriter jspWriter = pageContext.getOut();
 
-		jspWriter.write("<label class=\"toggle-switch\">");
+		jspWriter.write("<label class=\"toggle-switch");
+
+		if (Validator.isNotNull(_sizing)) {
+			jspWriter.write(" simple-toggle-switch toggle-switch-" + _sizing);
+		}
+
+		jspWriter.write("\">");
+
 		jspWriter.write("<span class=\"toggle-switch-check-bar\">");
 
 		jspWriter.write("<input class=\"toggle-switch-check\"");
@@ -275,6 +292,7 @@ public class ToggleTag extends BaseContainerTag {
 	private String _labelOn;
 	private String _name;
 	private String _role;
+	private String _sizing;
 	private String _symbolOff;
 	private String _symbolOn;
 	private boolean _toggled;
