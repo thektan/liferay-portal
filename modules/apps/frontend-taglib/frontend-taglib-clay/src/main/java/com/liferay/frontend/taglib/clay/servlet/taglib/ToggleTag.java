@@ -204,6 +204,10 @@ public class ToggleTag extends BaseContainerTag {
 
 		jspWriter.write("<label class=\"toggle-switch");
 
+		if (_disabled) {
+			jspWriter.write(" disabled");
+		}
+
 		if (Validator.isNotNull(_sizing)) {
 			jspWriter.write(" simple-toggle-switch toggle-switch-" + _sizing);
 		}
