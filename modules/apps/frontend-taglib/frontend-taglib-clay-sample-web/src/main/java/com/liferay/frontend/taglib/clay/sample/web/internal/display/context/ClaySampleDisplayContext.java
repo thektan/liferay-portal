@@ -22,6 +22,7 @@ public class ClaySampleDisplayContext {
 
 		_tabsItems = TabsItemListBuilder.add(
 			tabsItem -> {
+				tabsItem.setActive(true);
 				tabsItem.setLabel("Alerts");
 				tabsItem.setPanelId("alerts");
 			}
@@ -102,7 +103,6 @@ public class ClaySampleDisplayContext {
 			}
 		).add(
 			tabsItem -> {
-				tabsItem.setActive(true);
 				tabsItem.setLabel("Toggle");
 				tabsItem.setPanelId("toggle");
 			}
