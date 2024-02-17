@@ -17,6 +17,12 @@ AssetAutoTaggerConfiguration assetAutoTaggerConfiguration = (AssetAutoTaggerConf
 		cssClass="panel-group-flush"
 		label='<%= LanguageUtil.get(request, "asset-auto-tagging") %>'
 	>
-		<aui:input helpMessage="asset-library-asset-auto-tagging-help" inlineLabel="right" label="enable-auto-tagging" labelCssClass="simple-toggle-switch" name="TypeSettingsProperties--assetAutoTaggingEnabled--" type="toggle-switch" value="<%= assetAutoTaggerConfiguration.isEnabled() %>" />
+		<clay:toggle
+			helpText="asset-library-asset-auto-tagging-help"
+			id='<%= liferayPortletResponse.getNamespace() + "assetAutoTaggingEnabled" %>'
+			label="enable-auto-tagging"
+			name='<%= liferayPortletResponse.getNamespace() + "TypeSettingsProperties--assetAutoTaggingEnabled--" %>'
+			toggled="<%= assetAutoTaggerConfiguration.isEnabled() %>"
+		/>
 	</liferay-frontend:fieldset>
 </c:if>
