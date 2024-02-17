@@ -8,7 +8,9 @@ package com.liferay.frontend.taglib.clay.servlet.taglib;
 import com.liferay.frontend.taglib.clay.internal.servlet.taglib.BaseContainerTag;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.taglib.util.TagResourceBundleUtil;
 
 import java.util.Map;
 
@@ -159,9 +161,13 @@ public class ToggleTag extends BaseContainerTag {
 	@Override
 	protected Map<String, Object> prepareProps(Map<String, Object> props) {
 		props.put("disabled", _disabled);
-		props.put("helpText", _helpText);
+		props.put("helpText", LanguageUtil.get(
+			TagResourceBundleUtil.getResourceBundle(pageContext), _helpText));
 		props.put("id", _id);
-		props.put("label", _label);
+		props.put(
+			"label",
+			LanguageUtil.get(
+				TagResourceBundleUtil.getResourceBundle(pageContext), _label));
 		props.put("labelOff", _labelOff);
 		props.put("labelOn", _labelOn);
 		props.put("name", _name);
@@ -269,13 +275,22 @@ public class ToggleTag extends BaseContainerTag {
 			jspWriter.write("<span class=\"toggle-switch-label\">");
 
 			if (Validator.isNotNull(_labelOff) && !_toggled) {
-				jspWriter.write(_labelOff);
+				jspWriter.write(
+					LanguageUtil.get(
+						TagResourceBundleUtil.getResourceBundle(pageContext),
+						_labelOff));
 			}
 			else if (Validator.isNotNull(_labelOn) && _toggled) {
-				jspWriter.write(_labelOn);
+				jspWriter.write(
+					LanguageUtil.get(
+						TagResourceBundleUtil.getResourceBundle(pageContext),
+						_labelOn));
 			}
 			else if (Validator.isNotNull(_label)) {
-				jspWriter.write(_label);
+				jspWriter.write(
+					LanguageUtil.get(
+						TagResourceBundleUtil.getResourceBundle(pageContext),
+						_label));
 			}
 
 			jspWriter.write("</span>");
