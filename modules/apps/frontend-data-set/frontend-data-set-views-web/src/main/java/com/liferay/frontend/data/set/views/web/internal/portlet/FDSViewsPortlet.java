@@ -598,6 +598,10 @@ public class FDSViewsPortlet extends MVCPortlet {
 				WorkflowConstants.STATUS_DRAFT,
 				Arrays.asList(
 					ObjectFieldUtil.createObjectField(
+						ObjectFieldConstants.BUSINESS_TYPE_BOOLEAN,
+						ObjectFieldConstants.DB_TYPE_BOOLEAN, true, false, null,
+						_language.get(locale, "default"), "default", false),
+					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_TEXT,
 						ObjectFieldConstants.DB_TYPE_STRING, true, false, null,
 						_language.get(locale, "field-name"), "fieldName", true),
@@ -606,6 +610,12 @@ public class FDSViewsPortlet extends MVCPortlet {
 						ObjectFieldConstants.DB_TYPE_STRING, true, false, null,
 						_language.get(locale, "sorting"), "sortingDirection",
 						true)));
+
+		_enableLocalization(fdsSortObjectDefinition);
+
+		_addLocalizedCustomObjectField(
+			_language.get(locale, "label"), "label", fdsSortObjectDefinition,
+			userId);
 
 		_objectDefinitionLocalService.publishSystemObjectDefinition(
 			userId, fdsSortObjectDefinition.getObjectDefinitionId());
