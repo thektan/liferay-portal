@@ -168,7 +168,6 @@ const AddFDSSortModalContent = ({
 
 					<ClaySelectWithOption
 						aria-label={Liferay.Language.get('sort-by')}
-						defaultValue=""
 						name="sortBy"
 						onChange={(event) => {
 							setSelectedField(event.target.value);
@@ -359,7 +358,6 @@ const EditFDSSortModalContent = ({
 
 					<ClaySelectWithOption
 						aria-label={Liferay.Language.get('sort-by')}
-						defaultValue=""
 						name={fdsSortFieldNameInputId}
 						onChange={(event) => {
 							setSelectedField(event.target.value);
