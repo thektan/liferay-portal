@@ -340,7 +340,7 @@ const EditFDSSortModalContent = ({
 			<ClayModal.Header>
 				{Liferay.Util.sub(
 					Liferay.Language.get('edit-x-sorting'),
-					fdsSort.fieldName
+					fdsSort.label
 				)}
 			</ClayModal.Header>
 
