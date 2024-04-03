@@ -144,23 +144,23 @@ const AddFDSSortModalContent = ({
 			</ClayModal.Header>
 
 			<ClayModal.Body>
+				<p className="text-secondary">
+					{Liferay.Language.get(
+						'create-a-sorting-option-for-the-dataset-fragment.-add-a-label-name-and-choose-a-field-to-be-displayed-in-the-sorting-dropdown'
+					)}
+				</p>
+
+				<InputLocalized
+					id={fdsSortLabelInput}
+					label={Liferay.Language.get('label')}
+					name="label"
+					onChange={setLabelI18n}
+					placeholder={Liferay.Language.get('add-a-label')}
+					required
+					translations={labelI18n}
+				/>
+
 				<ClayForm.Group>
-					<p className="text-secondary">
-						{Liferay.Language.get(
-							'create-a-sorting-option-for-the-dataset-fragment.-add-a-label-name-and-choose-a-field-to-be-displayed-in-the-sorting-dropdown'
-						)}
-					</p>
-
-					<InputLocalized
-						id={fdsSortLabelInput}
-						label={Liferay.Language.get('label')}
-						name="label"
-						onChange={setLabelI18n}
-						placeholder={Liferay.Language.get('add-a-label')}
-						required
-						translations={labelI18n}
-					/>
-
 					<label htmlFor={fdsSortFieldNameInputId}>
 						{Liferay.Language.get('sort-by')}
 
