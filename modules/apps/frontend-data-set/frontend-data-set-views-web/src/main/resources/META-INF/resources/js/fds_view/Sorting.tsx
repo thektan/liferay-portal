@@ -190,22 +190,32 @@ const AddFDSSortModalContent = ({
 				</ClayForm.Group>
 
 				<ClayForm.Group>
-					<ClayCheckbox
-						aria-label={Liferay.Language.get('use-as-default')}
-						checked={useAsDefault}
-						inline
-						label={Liferay.Language.get('use-as-default')}
-						onChange={() =>
-							setUseAsDefault((value: boolean) => !value)
-						}
-					/>
+					<div className="autofit-row autofit-row-center">
+						<div className="autofit-col">
+							<ClayCheckbox
+								aria-label={Liferay.Language.get(
+									'use-as-default'
+								)}
+								checked={useAsDefault}
+								inline
+								label={Liferay.Language.get('use-as-default')}
+								onChange={() =>
+									setUseAsDefault((value: boolean) => !value)
+								}
+							/>
+						</div>
 
-					<span
-						className="label-icon lfr-portal-tooltip ml-2"
-						title={Liferay.Language.get('use-as-default-help')}
-					>
-						<ClayIcon symbol="question-circle-full" />
-					</span>
+						<div className="autofit-col">
+							<span
+								className="label-icon lfr-portal-tooltip ml-2"
+								title={Liferay.Language.get(
+									'use-as-default-help'
+								)}
+							>
+								<ClayIcon symbol="question-circle-full" />
+							</span>
+						</div>
+					</div>
 				</ClayForm.Group>
 
 				{useAsDefault && (
@@ -381,22 +391,32 @@ const EditFDSSortModalContent = ({
 				</ClayForm.Group>
 
 				<ClayForm.Group>
-					<ClayCheckbox
-						aria-label={Liferay.Language.get('use-as-default')}
-						checked={useAsDefault}
-						inline
-						label={Liferay.Language.get('use-as-default')}
-						onChange={() =>
-							setUseAsDefault((value: boolean) => !value)
-						}
-					/>
+					<div className="autofit-row autofit-row-center">
+						<div className="autofit-col">
+							<ClayCheckbox
+								aria-label={Liferay.Language.get(
+									'use-as-default'
+								)}
+								checked={useAsDefault}
+								inline
+								label={Liferay.Language.get('use-as-default')}
+								onChange={() =>
+									setUseAsDefault((value: boolean) => !value)
+								}
+							/>
+						</div>
 
-					<span
-						className="label-icon lfr-portal-tooltip ml-2"
-						title={Liferay.Language.get('use-as-default-help')}
-					>
-						<ClayIcon symbol="question-circle-full" />
-					</span>
+						<div className="autofit-col">
+							<span
+								className="label-icon lfr-portal-tooltip ml-2"
+								title={Liferay.Language.get(
+									'use-as-default-help'
+								)}
+							>
+								<ClayIcon symbol="question-circle-full" />
+							</span>
+						</div>
+					</div>
 				</ClayForm.Group>
 
 				{useAsDefault && (
