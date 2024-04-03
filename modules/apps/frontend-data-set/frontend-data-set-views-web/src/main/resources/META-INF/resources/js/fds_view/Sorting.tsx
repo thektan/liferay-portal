@@ -443,7 +443,13 @@ const EditFDSSortModalContent = ({
 				last={
 					<ClayButton.Group spaced>
 						<ClayButton
-							disabled={saveButtonDisabled}
+							disabled={
+								saveButtonDisabled ||
+								!selectedFieldName ||
+								!labelI18n[
+									Liferay.ThemeDisplay.getDefaultLanguageId()
+								]
+							}
 							onClick={handleSave}
 						>
 							{Liferay.Language.get('save')}
