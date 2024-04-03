@@ -45,10 +45,10 @@ interface IFDSSort {
 	id: number;
 	label: string;
 	label_i18n: Liferay.Language.LocalizedValue<string>;
-	sortingDirection: string;
+	orderType: string;
 }
 
-const SORTING_DIRECTION = {
+const ORDER_TYPE = {
 	ASCENDING: {
 		label: Liferay.Language.get('ascending'),
 		value: 'asc',
@@ -59,10 +59,7 @@ const SORTING_DIRECTION = {
 	},
 };
 
-const SORTING_OPTIONS = [
-	SORTING_DIRECTION.ASCENDING,
-	SORTING_DIRECTION.DESCENDING,
-];
+const ORDER_TYPE_OPTIONS = [ORDER_TYPE.ASCENDING, ORDER_TYPE.DESCENDING];
 
 const DefaultComponent = ({item}: IContentRendererProps) => {
 	return (
@@ -85,17 +82,17 @@ const AddFDSSortModalContent = ({
 		Liferay.Language.LocalizedValue<string>
 	>({});
 	const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-	const [selectedField, setSelectedField] = useState<string>('');
-	const [selectedSortingDirection, setSelectedSortingDirection] = useState<
-		string
-	>(SORTING_DIRECTION.ASCENDING.value);
+	const [selectedFieldName, setSelectedFieldName] = useState<string>('');
+	const [selectedOrderType, setSelectedOrderType] = useState<string>(
+		ORDER_TYPE.ASCENDING.value
+	);
 	const [useAsDefault, setUseAsDefault] = useState(false);
 
 	const handleSave = async () => {
 		setSaveButtonDisabled(true);
 
 		const field = fields.find(
-			(item: IField) => item.name === selectedField
+			(item: IField) => item.name === selectedFieldName
 		);
 
 		if (!field) {
@@ -108,9 +105,9 @@ const AddFDSSortModalContent = ({
 			body: JSON.stringify({
 				[OBJECT_RELATIONSHIP.FDS_VIEW_FDS_SORT_ID]: fdsView.id,
 				default: useAsDefault,
-				fieldName: selectedField,
+				fieldName: selectedFieldName,
 				label_i18n: labelI18n,
-				sortingDirection: selectedSortingDirection,
+				orderType: selectedOrderType,
 			}),
 			headers: {
 				'Accept': 'application/json',
@@ -136,6 +133,10 @@ const AddFDSSortModalContent = ({
 		closeModal();
 	};
 
+	const fdsSortLabelInput = `${namespace}fdsSortLabelInput`;
+	const fdsSortFieldNameInputId = `${namespace}fdsSortFieldNameInput`;
+	const fdsSortOrderTypeInputId = `${namespace}fdsSortOrderTypeInput`;
+
 	return (
 		<>
 			<ClayModal.Header>
@@ -151,7 +152,7 @@ const AddFDSSortModalContent = ({
 					</p>
 
 					<InputLocalized
-						id={`${namespace}Label`}
+						id={fdsSortLabelInput}
 						label={Liferay.Language.get('label')}
 						name="label"
 						onChange={setLabelI18n}
@@ -160,7 +161,7 @@ const AddFDSSortModalContent = ({
 						translations={labelI18n}
 					/>
 
-					<label htmlFor="sortBy">
+					<label htmlFor={fdsSortFieldNameInputId}>
 						{Liferay.Language.get('sort-by')}
 
 						<RequiredMark />
@@ -168,9 +169,9 @@ const AddFDSSortModalContent = ({
 
 					<ClaySelectWithOption
 						aria-label={Liferay.Language.get('sort-by')}
-						name="sortBy"
+						name={fdsSortFieldNameInputId}
 						onChange={(event) => {
-							setSelectedField(event.target.value);
+							setSelectedFieldName(event.target.value);
 						}}
 						options={[
 							{
@@ -184,7 +185,7 @@ const AddFDSSortModalContent = ({
 							})),
 						]}
 						title={Liferay.Language.get('sort-by')}
-						value={selectedField}
+						value={selectedFieldName}
 					/>
 				</ClayForm.Group>
 
@@ -209,7 +210,7 @@ const AddFDSSortModalContent = ({
 
 				{useAsDefault && (
 					<ClayForm.Group>
-						<label htmlFor="orderType">
+						<label htmlFor={fdsSortOrderTypeInputId}>
 							{Liferay.Language.get('order-type')}
 
 							<RequiredMark />
@@ -217,11 +218,11 @@ const AddFDSSortModalContent = ({
 
 						<ClaySelectWithOption
 							aria-label={Liferay.Language.get('order-type')}
-							id="orderType"
+							id={fdsSortOrderTypeInputId}
 							onChange={(event) =>
-								setSelectedSortingDirection(event.target.value)
+								setSelectedOrderType(event.target.value)
 							}
-							options={SORTING_OPTIONS}
+							options={ORDER_TYPE_OPTIONS}
 						/>
 					</ClayForm.Group>
 				)}
@@ -233,7 +234,7 @@ const AddFDSSortModalContent = ({
 						<ClayButton
 							disabled={
 								saveButtonDisabled ||
-								!selectedField ||
+								!selectedFieldName ||
 								!labelI18n[
 									Liferay.ThemeDisplay.getDefaultLanguageId()
 								]
@@ -275,11 +276,11 @@ const EditFDSSortModalContent = ({
 		Liferay.Language.LocalizedValue<string>
 	>(fdsSort.label_i18n);
 	const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-	const [selectedField, setSelectedField] = useState<string>(
+	const [selectedFieldName, setSelectedFieldName] = useState<string>(
 		fdsSort.fieldName
 	);
-	const [selectedSortingDirection, setSelectedSortingDirection] = useState(
-		fdsSort.sortingDirection
+	const [selectedOrderType, setSelectedOrderType] = useState(
+		fdsSort.orderType
 	);
 	const [useAsDefault, setUseAsDefault] = useState(fdsSort.default);
 
@@ -291,9 +292,9 @@ const EditFDSSortModalContent = ({
 			{
 				body: JSON.stringify({
 					default: useAsDefault,
-					fieldName: selectedField,
+					fieldName: selectedFieldName,
 					label_i18n: labelI18n,
-					sortingDirection: selectedSortingDirection,
+					orderType: selectedOrderType,
 				}),
 				headers: {
 					'Accept': 'application/json',
@@ -320,8 +321,9 @@ const EditFDSSortModalContent = ({
 		onSave({editedFDSSort});
 	};
 
+	const fdsSortLabelInput = `${namespace}fdsSortLabelInput`;
 	const fdsSortFieldNameInputId = `${namespace}fdsSortFieldNameInput`;
-	const fdsSortSortingDirectionInputId = `${namespace}fdsSortSortingDirectionInput`;
+	const fdsSortOrderTypeInputId = `${namespace}fdsSortOrderTypeInput`;
 
 	return (
 		<>
@@ -341,7 +343,7 @@ const EditFDSSortModalContent = ({
 					</p>
 
 					<InputLocalized
-						id={`${namespace}Label`}
+						id={fdsSortLabelInput}
 						label={Liferay.Language.get('label')}
 						name="label"
 						onChange={setLabelI18n}
@@ -360,7 +362,7 @@ const EditFDSSortModalContent = ({
 						aria-label={Liferay.Language.get('sort-by')}
 						name={fdsSortFieldNameInputId}
 						onChange={(event) => {
-							setSelectedField(event.target.value);
+							setSelectedFieldName(event.target.value);
 						}}
 						options={[
 							{
@@ -374,7 +376,7 @@ const EditFDSSortModalContent = ({
 							})),
 						]}
 						title={Liferay.Language.get('sort-by')}
-						value={selectedField}
+						value={selectedFieldName}
 					/>
 				</ClayForm.Group>
 
@@ -399,7 +401,7 @@ const EditFDSSortModalContent = ({
 
 				{useAsDefault && (
 					<ClayForm.Group>
-						<label htmlFor={fdsSortSortingDirectionInputId}>
+						<label htmlFor={fdsSortOrderTypeInputId}>
 							{Liferay.Language.get('order-type')}
 
 							<RequiredMark />
@@ -407,11 +409,11 @@ const EditFDSSortModalContent = ({
 
 						<ClaySelectWithOption
 							aria-label={Liferay.Language.get('order-type')}
-							id={fdsSortSortingDirectionInputId}
+							id={fdsSortOrderTypeInputId}
 							onChange={(event) =>
-								setSelectedSortingDirection(event.target.value)
+								setSelectedOrderType(event.target.value)
 							}
-							options={SORTING_OPTIONS}
+							options={ORDER_TYPE_OPTIONS}
 						/>
 					</ClayForm.Group>
 				)}
