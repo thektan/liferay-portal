@@ -434,6 +434,7 @@ const EditFDSSortModalContent = ({
 								setSelectedOrderType(event.target.value)
 							}
 							options={ORDER_TYPE_OPTIONS}
+							value={selectedOrderType}
 						/>
 					</ClayForm.Group>
 				)}
