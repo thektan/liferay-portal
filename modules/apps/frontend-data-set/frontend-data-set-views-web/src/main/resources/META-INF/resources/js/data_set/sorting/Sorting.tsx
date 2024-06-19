@@ -65,15 +65,17 @@ const DefaultComponent = ({item}: IContentRendererProps) => {
 const AddFDSSortModalContent = ({
 	closeModal,
 	dataSet,
+	fdsSorts,
 	fields,
 	namespace,
 	onSave,
 }: {
 	closeModal: Function;
 	dataSet: IDataSet | FDSViewType;
+	fdsSorts: IFDSSort[];
 	fields: IField[];
 	namespace: string;
-	onSave: (newSort: IFDSSort) => void;
+	onSave: (newFDSSort: IFDSSort, editedFDSSort?: IFDSSort) => void;
 }) => {
 	const [labelI18n, setLabelI18n] = useState<
 		Liferay.Language.LocalizedValue<string>
@@ -85,49 +87,95 @@ const AddFDSSortModalContent = ({
 	);
 	const [useAsDefaultSorting, setUseAsDefaultSorting] = useState(false);
 
+	const getDefaultFDSSort = (fdsSorts: IFDSSort[]) => {
+		return fdsSorts.find((fdsSort) => fdsSort.default);
+	};
+
 	const handleSave = async () => {
 		setSaveButtonDisabled(true);
 
-		const field = fields.find(
-			(item: IField) => item.name === selectedFieldName
-		);
+		const addFDSSortFetch = () =>
+			fetch(API_URL.SORTS, {
+				body: JSON.stringify({
+					[OBJECT_RELATIONSHIP.DATA_SET_SORT_ID]: dataSet.id,
+					default: useAsDefaultSorting,
+					fieldName: selectedFieldName,
+					label_i18n: labelI18n,
+					orderType: selectedOrderType,
+				}),
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+			});
 
-		if (!field) {
-			openDefaultFailureToast();
+		// It's not necessary to always get default, but this is to simplify the
+		// code so there won't need to be more conditionals of performing the
+		// add FDSSort.
 
-			return;
+		const defaultFDSSort = getDefaultFDSSort(fdsSorts);
+
+		if (useAsDefaultSorting && defaultFDSSort) {
+			const updateDefaultFDSSortFetch = () =>
+				fetch(
+					`${API_URL.SORTS}/by-external-reference-code/${defaultFDSSort.externalReferenceCode}`,
+					{
+						body: JSON.stringify({
+							default: false,
+						}),
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json',
+						},
+						method: 'PATCH',
+					}
+				);
+
+			try {
+				const [updateDefaultFDSSortResponse, addFDSSortResponse] =
+					await Promise.all([
+						updateDefaultFDSSortFetch(),
+						addFDSSortFetch(),
+					]);
+
+				if (
+					!updateDefaultFDSSortResponse.ok ||
+					!addFDSSortResponse.ok
+				) {
+					setSaveButtonDisabled(false);
+					openDefaultFailureToast();
+
+					return;
+				}
+
+				const fdsSort = await addFDSSortResponse.json();
+
+				openDefaultSuccessToast();
+				onSave(fdsSort);
+				closeModal();
+			}
+			catch (error) {
+				setSaveButtonDisabled(false);
+				openDefaultFailureToast();
+			}
 		}
+		else {
+			const addFDSSortResponse = await addFDSSortFetch();
 
-		const response = await fetch(API_URL.SORTS, {
-			body: JSON.stringify({
-				[OBJECT_RELATIONSHIP.DATA_SET_SORT_ID]: dataSet.id,
-				default: useAsDefaultSorting,
-				fieldName: selectedFieldName,
-				label_i18n: labelI18n,
-				orderType: selectedOrderType,
-			}),
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			method: 'POST',
-		});
+			if (!addFDSSortResponse.ok) {
+				setSaveButtonDisabled(false);
+				openDefaultFailureToast();
 
-		if (!response.ok) {
-			setSaveButtonDisabled(false);
+				return;
+			}
 
-			openDefaultFailureToast();
+			const fdsSort = await addFDSSortResponse.json();
 
-			return;
+			openDefaultSuccessToast();
+			onSave(fdsSort);
+			closeModal();
 		}
-
-		const responseJSON = await response.json();
-
-		openDefaultSuccessToast();
-
-		onSave(responseJSON);
-
-		closeModal();
 	};
 
 	const fdsSortLabelInput = `${namespace}fdsSortLabelInput`;
@@ -480,9 +528,23 @@ const Sorting = ({
 				<AddFDSSortModalContent
 					closeModal={closeModal}
 					dataSet={dataSet}
+					fdsSorts={fdsSorts}
 					fields={fields}
 					namespace={namespace}
-					onSave={(newSort) => setFDSSorts([...fdsSorts, newSort])}
+					onSave={(newFDSSort, editedFDSSort) =>
+						setFDSSorts([
+							...(editedFDSSort
+								? fdsSorts?.map((fdsSort) => {
+										if (fdsSort.id === editedFDSSort.id) {
+											return editedFDSSort;
+										}
+
+										return fdsSort;
+									}) || []
+								: fdsSorts),
+							newFDSSort,
+						])
+					}
 				/>
 			),
 		});
