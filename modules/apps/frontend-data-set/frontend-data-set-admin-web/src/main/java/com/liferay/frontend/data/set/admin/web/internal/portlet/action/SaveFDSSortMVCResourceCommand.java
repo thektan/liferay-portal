@@ -14,7 +14,10 @@ import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseTransactionalMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
@@ -125,8 +128,26 @@ public class SaveFDSSortMVCResourceCommand
 			_getFDSSortObjectEntries(
 				fdsViewObjectDefinition, Long.valueOf(dataSetId));
 
+		// Move the properties to the root-level of the object entry to follow
+		// a similar structure as when fetching with /o/data-set-manager/sorts.
+
+		JSONArray updatedFDSSortObjectEntriesJSONArray = _jsonFactory.createJSONArray();
+
+		for (ObjectEntry fdsSortObjectEntry : updatedFDSSortObjectEntries) {
+			JSONObject jsonObject = _jsonFactory.createJSONObject(
+				fdsSortObjectEntry.toString());
+
+			Map<String, Object> properties = fdsSortObjectEntry.getProperties();
+
+			for (Map.Entry<String, Object> entry : properties.entrySet()) {
+				jsonObject.put(entry.getKey(), entry.getValue());
+			}
+
+			updatedFDSSortObjectEntriesJSONArray.put(jsonObject);
+		}
+
 		JSONPortletResponseUtil.writeJSON(
-			resourceRequest, resourceResponse, updatedFDSSortObjectEntries);
+			resourceRequest, resourceResponse, updatedFDSSortObjectEntriesJSONArray);
 	}
 
 	private Collection<ObjectEntry> _getFDSSortObjectEntries(
