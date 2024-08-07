@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayButton from '@clayui/button';
-import ClayDropDown from '@clayui/drop-down';
+import {Option, Picker} from '@clayui/core';
 import ClayForm from '@clayui/form';
 import ClayLabel from '@clayui/label';
 import ClayLayout from '@clayui/layout';
@@ -58,54 +57,6 @@ function Configuration({
 	const nameFormElementId = `${namespace}Name`;
 	const selectedFieldFormElementId = `${namespace}SelectedField`;
 
-	const FieldNameDropdown = ({
-		fields,
-		onItemClick,
-	}: {
-		fields: IField[];
-		onItemClick: Function;
-	}) => {
-		return (
-			<ClayDropDown
-				closeOnClick
-				menuElementAttrs={{
-					className: 'fds-field-name-dropdown-menu',
-				}}
-				trigger={
-					<ClayButton
-						className="form-control form-control-select form-control-select-secondary"
-						displayType="secondary"
-						id={selectedFieldFormElementId}
-					>
-						{selectedField
-							? selectedField.label
-							: Liferay.Language.get('select')}
-					</ClayButton>
-				}
-			>
-				<ClayDropDown.ItemList items={fields} role="listbox">
-					{fields.map((field) => (
-						<ClayDropDown.Item
-							className="align-items-center d-flex justify-content-between"
-							disabled={!!filter}
-							key={field.name}
-							onClick={() => onItemClick(field)}
-							roleItem="option"
-						>
-							{field.label}
-
-							{inUseFields.includes(field.name) && (
-								<ClayLabel displayType="info">
-									{Liferay.Language.get('in-use')}
-								</ClayLabel>
-							)}
-						</ClayDropDown.Item>
-					))}
-				</ClayDropDown.ItemList>
-			</ClayDropDown>
-		);
-	};
-
 	return (
 		<>
 			<ClayLayout.SheetSection className="mb-4">
@@ -154,11 +105,12 @@ function Configuration({
 					<RequiredMark />
 				</label>
 
-				<FieldNameDropdown
-					fields={fields}
-					onItemClick={(item: IField) => {
+				<Picker
+					disabled={!!filter}
+					items={fields}
+					onSelectionChange={(label: React.Key) => {
 						const newVal = fields.find((field) => {
-							return field.label === item.label;
+							return field.label === label;
 						});
 
 						if (newVal) {
@@ -167,7 +119,26 @@ function Configuration({
 							onChangeField(newVal);
 						}
 					}}
-				/>
+					selectedKey={selectedField ? selectedField.label : ''}
+				>
+					{(item) => (
+						<Option key={item.label} textValue={item.label}>
+							<ClayLayout.ContentRow>
+								<ClayLayout.ContentCol expand>
+									{item.label}
+								</ClayLayout.ContentCol>
+
+								{inUseFields.includes(item.name) && (
+									<ClayLayout.ContentCol>
+										<ClayLabel displayType="info">
+											{Liferay.Language.get('in-use')}
+										</ClayLabel>
+									</ClayLayout.ContentCol>
+								)}
+							</ClayLayout.ContentRow>
+						</Option>
+					)}
+				</Picker>
 
 				{fieldInUseValidationError && (
 					<ValidationFeedback
