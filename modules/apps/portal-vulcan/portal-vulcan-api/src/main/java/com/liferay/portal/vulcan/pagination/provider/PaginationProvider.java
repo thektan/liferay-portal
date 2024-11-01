@@ -14,5 +14,7 @@ public interface PaginationProvider {
 
 	public Pagination getPagination(
 		long companyId, Integer requestPage, Integer requestPageSize);
+	
+	public int getPageSizeLimit(long company);
 
 }

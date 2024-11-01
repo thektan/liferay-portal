@@ -27,11 +27,12 @@ public class PaginationProviderImpl implements PaginationProvider {
 		long companyId, Integer page, Integer pageSize) {
 
 		return _getPagination(
-			_getPageSizeLimit(companyId), GetterUtil.getInteger(page, 1),
+			getPageSizeLimit(companyId), GetterUtil.getInteger(page, 1),
 			GetterUtil.getInteger(pageSize, 20));
 	}
 
-	private int _getPageSizeLimit(long companyId) {
+	@Override
+	public int getPageSizeLimit(long companyId) {
 		try {
 			HeadlessAPICompanyConfiguration headlessAPICompanyConfiguration =
 				_configurationProvider.getCompanyConfiguration(
