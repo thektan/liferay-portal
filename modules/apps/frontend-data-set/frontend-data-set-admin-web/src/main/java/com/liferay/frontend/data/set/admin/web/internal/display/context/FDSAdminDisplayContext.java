@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
@@ -26,7 +27,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.vulcan.internal.configuration.HeadlessAPICompanyConfiguration;
 import com.liferay.portal.vulcan.pagination.Pagination;
+import com.liferay.portal.vulcan.pagination.provider.PaginationProvider;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,7 +46,7 @@ import javax.portlet.ResourceURL;
 public class FDSAdminDisplayContext {
 
 	public FDSAdminDisplayContext(
-		CETManager cetManager,
+		CETManager cetManager, PaginationProvider paginationProvider,
 		FDSAPIURLResolverRegistry fdsAPIURLResolverRegistry,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
 		RenderRequest renderRequest, RenderResponse renderResponse,
@@ -51,6 +54,7 @@ public class FDSAdminDisplayContext {
 			serviceTrackerList) {
 
 		_cetManager = cetManager;
+		_paginationProvider = paginationProvider;
 		_fdsAPIURLResolverRegistry = fdsAPIURLResolverRegistry;
 		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
@@ -189,6 +193,13 @@ public class FDSAdminDisplayContext {
 		return jsonArray;
 	}
 
+	private int getPageSizeLimit() {
+		ThemeDisplay themeDisplay = (ThemeDisplay)_renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		return _paginationProvider.getPageSizeLimit(themeDisplay.getCompanyId());
+	}
+
 	public String getSaveDataSetSortURL() {
 		ResourceURL resourceURL =
 			(ResourceURL)PortalUtil.getControlPanelPortletURL(
@@ -216,6 +227,7 @@ public class FDSAdminDisplayContext {
 	}
 
 	private final CETManager _cetManager;
+	private final PaginationProvider _paginationProvider;
 	private final ObjectDefinition _dataSetObjectDefinition;
 	private final FDSAPIURLResolverRegistry _fdsAPIURLResolverRegistry;
 	private final RenderRequest _renderRequest;

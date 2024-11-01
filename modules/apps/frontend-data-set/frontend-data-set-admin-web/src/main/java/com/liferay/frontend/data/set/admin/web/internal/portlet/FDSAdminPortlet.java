@@ -16,6 +16,7 @@ import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFacto
 import com.liferay.portal.kernel.module.util.BundleUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.vulcan.pagination.provider.PaginationProvider;
 
 import java.io.IOException;
 
@@ -104,7 +105,7 @@ public class FDSAdminPortlet extends MVCPortlet {
 		renderRequest.setAttribute(
 			FDSAdminWebKeys.FDS_ADMIN_DISPLAY_CONTEXT,
 			new FDSAdminDisplayContext(
-				_cetManager, _fdsAPIURLResolverRegistry,
+				_cetManager, _paginationProvider, _fdsAPIURLResolverRegistry,
 				_objectDefinitionLocalService, renderRequest, renderResponse,
 				_serviceTrackerList));
 
@@ -115,6 +116,9 @@ public class FDSAdminPortlet extends MVCPortlet {
 
 	@Reference
 	private CETManager _cetManager;
+
+	@Reference
+	private PaginationProvider _paginationProvider;
 
 	@Reference
 	private FDSAPIURLResolverRegistry _fdsAPIURLResolverRegistry;

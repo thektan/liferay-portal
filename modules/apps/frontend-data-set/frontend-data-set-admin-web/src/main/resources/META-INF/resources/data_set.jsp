@@ -32,6 +32,8 @@ renderResponse.setTitle(ParamUtil.getString(request, "dataSetLabel"));
 		).put(
 			"namespace", liferayPortletResponse.getNamespace()
 		).put(
+			"pageSizeLimit", fdsAdminDisplayContext.getPageSizeLimit()
+		).put(
 			"resolvedRESTSchemas", fdsAdminDisplayContext.getRESTApplicationResolvedSchemasJSONArray()
 		).put(
 			"restApplications", fdsAdminDisplayContext.getRESTApplicationsJSONArray()

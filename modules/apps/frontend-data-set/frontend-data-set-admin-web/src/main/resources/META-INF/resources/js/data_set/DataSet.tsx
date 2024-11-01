@@ -82,6 +82,7 @@ const DataSet = ({
 	filterClientExtensionRenderers,
 	learnResources,
 	namespace,
+	pageSizeLimit,
 	resolvedRESTSchemas = [],
 	restApplications,
 	saveDataSetSortURL,
@@ -95,6 +96,7 @@ const DataSet = ({
 	filterClientExtensionRenderers: IClientExtensionRenderer[];
 	learnResources: ILearnResourceContext;
 	namespace: string;
+	pageSizeLimit: number;
 	resolvedRESTSchemas: string[];
 	restApplications: string[];
 	saveDataSetSortURL: string;
