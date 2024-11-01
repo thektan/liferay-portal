@@ -23,15 +23,7 @@ import org.osgi.service.component.annotations.Reference;
 public class PaginationProviderImpl implements PaginationProvider {
 
 	@Override
-	public Pagination getPagination(
-		long companyId, Integer page, Integer pageSize) {
-
-		return _getPagination(
-			_getPageSizeLimit(companyId), GetterUtil.getInteger(page, 1),
-			GetterUtil.getInteger(pageSize, 20));
-	}
-
-	private int _getPageSizeLimit(long companyId) {
+	public int getPageSizeLimit(long companyId) {
 		try {
 			HeadlessAPICompanyConfiguration headlessAPICompanyConfiguration =
 				_configurationProvider.getCompanyConfiguration(
@@ -42,6 +34,15 @@ public class PaginationProviderImpl implements PaginationProvider {
 		catch (ConfigurationException configurationException) {
 			throw new RuntimeException(configurationException.getMessage());
 		}
+	}
+
+	@Override
+	public Pagination getPagination(
+		long companyId, Integer page, Integer pageSize) {
+
+		return _getPagination(
+			getPageSizeLimit(companyId), GetterUtil.getInteger(page, 1),
+			GetterUtil.getInteger(pageSize, 20));
 	}
 
 	private Pagination _getPagination(

@@ -12,6 +12,8 @@ import com.liferay.portal.vulcan.pagination.Pagination;
  */
 public interface PaginationProvider {
 
+	public int getPageSizeLimit(long companyId);
+
 	public Pagination getPagination(
 		long companyId, Integer requestPage, Integer requestPageSize);
 
