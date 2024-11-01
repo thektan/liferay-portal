@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.vulcan.pagination.Pagination;
+import com.liferay.portal.vulcan.pagination.provider.PaginationProvider;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,7 +44,7 @@ import javax.portlet.ResourceURL;
 public class FDSAdminDisplayContext {
 
 	public FDSAdminDisplayContext(
-		CETManager cetManager,
+		CETManager cetManager, PaginationProvider paginationProvider,
 		FDSAPIURLResolverRegistry fdsAPIURLResolverRegistry,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
 		RenderRequest renderRequest, RenderResponse renderResponse,
@@ -51,6 +52,7 @@ public class FDSAdminDisplayContext {
 			serviceTrackerList) {
 
 		_cetManager = cetManager;
+		_paginationProvider = paginationProvider;
 		_fdsAPIURLResolverRegistry = fdsAPIURLResolverRegistry;
 		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
@@ -144,6 +146,14 @@ public class FDSAdminDisplayContext {
 			));
 	}
 
+	public int getPageSizeLimit() {
+		ThemeDisplay themeDisplay = (ThemeDisplay)_renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		return _paginationProvider.getPageSizeLimit(
+			themeDisplay.getCompanyId());
+	}
+
 	public JSONArray getRESTApplicationResolvedSchemasJSONArray() {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
@@ -218,6 +228,7 @@ public class FDSAdminDisplayContext {
 	private final CETManager _cetManager;
 	private final ObjectDefinition _dataSetObjectDefinition;
 	private final FDSAPIURLResolverRegistry _fdsAPIURLResolverRegistry;
+	private final PaginationProvider _paginationProvider;
 	private final RenderRequest _renderRequest;
 	private final RenderResponse _renderResponse;
 	private final ServiceTrackerList
