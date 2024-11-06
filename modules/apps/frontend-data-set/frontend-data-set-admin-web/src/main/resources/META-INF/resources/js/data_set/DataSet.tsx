@@ -67,6 +67,7 @@ export interface IDataSetSectionProps {
 	namespace: string;
 	onActiveSectionChange: (section: number) => void;
 	onDataSetUpdate: (data: IDataSet) => void;
+	pageSizeLimit: number;
 	resolvedRESTSchemas: string[];
 	restApplications: string[];
 	saveDataSetSortURL: string;
@@ -178,6 +179,7 @@ const DataSet = ({
 							onDataSetUpdate={(updatedDataSet) => {
 								setDataSet({...dataSet, ...updatedDataSet});
 							}}
+							pageSizeLimit={pageSizeLimit}
 							resolvedRESTSchemas={resolvedRESTSchemas}
 							restApplications={restApplications}
 							saveDataSetSortURL={saveDataSetSortURL}

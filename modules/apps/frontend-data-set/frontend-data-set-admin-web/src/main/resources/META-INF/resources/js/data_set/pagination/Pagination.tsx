@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayLayout from '@clayui/layout';
 import classnames from 'classnames';
-import {fetch, navigate} from 'frontend-js-web';
+import {fetch, navigate, sub} from 'frontend-js-web';
 import React, {useRef, useState} from 'react';
 
 import RequiredMark from '../../components/RequiredMark';
@@ -21,6 +21,7 @@ function Pagination({
 	dataSet,
 	namespace,
 	onDataSetUpdate,
+	pageSizeLimit,
 }: IDataSetSectionProps) {
 	const [listOfItemsPerPage, setListOfItemsPerPage] = useState(
 		dataSet.listOfItemsPerPage
@@ -68,7 +69,7 @@ function Pagination({
 			const isPositiveInteger = /^\d+$/.test(element);
 			const item: number = parseInt(element, 10);
 
-			return !isPositiveInteger || item < 1 || item > 1000;
+			return !isPositiveInteger || item < 1 || item > pageSizeLimit;
 		});
 
 		setInvalidNumberInListOfItemsPerPageValidationError(invalidNumber);
@@ -203,8 +204,11 @@ function Pagination({
 											'this-field-is-required'
 										)
 									: invalidNumberInListOfItemsPerPageValidationError
-										? Liferay.Language.get(
-												'this-field-contains-an-invalid-number'
+										? sub(
+												Liferay.Language.get(
+													'this-field-contains-an-invalid-number'
+												),
+												pageSizeLimit
 											)
 										: Liferay.Language.get(
 												'this-field-contains-more-than-25-elements'
