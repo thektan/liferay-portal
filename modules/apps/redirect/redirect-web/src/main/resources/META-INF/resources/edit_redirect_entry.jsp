@@ -99,7 +99,13 @@ renderResponse.setTitle(editRedirectEntryDisplayContext.getTitle());
 					).put(
 						"initialDestinationUrl", editRedirectEntryDisplayContext.getDestinationURL()
 					).put(
+						"initialIsPermanent", editRedirectEntryDisplayContext.isRedirectEntryPermanent()
+					).put(
 						"namespace", liferayPortletResponse.getNamespace()
+					).put(
+						"permanentSelectId", liferayPortletResponse.getNamespace() + "permanent"
+					).put(
+						"typeInfoAlertId", liferayPortletResponse.getNamespace() + "typeInfoAlert"
 					).build()
 				%>'
 			/>

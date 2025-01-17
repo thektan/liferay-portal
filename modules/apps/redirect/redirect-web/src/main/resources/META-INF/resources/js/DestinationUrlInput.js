@@ -18,7 +18,10 @@ const STR_BLANK = '';
 const DestinationUrlInput = ({
 	autofocus = false,
 	initialDestinationUrl = STR_BLANK,
+	initialIsPermanent,
 	namespace,
+	permanentSelectId,
+	typeInfoAlertId,
 }) => {
 	const [requiredError, setRequiredError] = useState(false);
 	const [urlError, setUrlError] = useState(false);
@@ -65,9 +68,23 @@ const DestinationUrlInput = ({
 							setRequiredError(!currentTarget.value);
 							setUrlError(!isAbsoluteUrl(currentTarget.value));
 						}}
-						onChange={({currentTarget}) =>
-							setDestinationUrl(currentTarget.value)
-						}
+						onChange={({currentTarget}) => {
+							setDestinationUrl(currentTarget.value);
+
+							if (initialIsPermanent) {
+								const permanentSelect =
+									document.getElementById(permanentSelectId);
+								const typeInfoAlert =
+									document.getElementById(typeInfoAlertId);
+
+								typeInfoAlert.classList.toggle(
+									'hide',
+									permanentSelect.value === 'true' &&
+										currentTarget.value ===
+											initialDestinationUrl
+								);
+							}
+						}}
 						type="text"
 						value={destinationUrl}
 					/>
