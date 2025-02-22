@@ -9,5 +9,8 @@
 
 <div class="cms-section">
 	<div id="<%= CMSSiteInitializerFDSNames.CATEGORIZATION_SECTION %>">
+		<react:component
+			module="{CategorizationMainView} from site-cms-site-initializer"
+		/>
 	</div>
 </div>
