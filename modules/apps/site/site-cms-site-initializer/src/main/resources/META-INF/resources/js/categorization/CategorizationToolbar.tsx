@@ -11,9 +11,10 @@ import React from 'react';
 
 export default function CategorizationToolbar({onChangeTab, tab, tabs}) {
 	return (
-		<div className="categorization-section">
+		<div>
 			<ClayToolbar
-				aria-label={Liferay.Language.get('page-toolbar')}
+				aria-label={Liferay.Language.get('categorization')}
+				className="categorization-toolbar"
 				light
 			>
 				<div className="container-fluid">

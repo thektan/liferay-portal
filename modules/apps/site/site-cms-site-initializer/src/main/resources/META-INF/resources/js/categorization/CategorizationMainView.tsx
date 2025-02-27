@@ -12,8 +12,8 @@ import VocabulariesView from './vocabulary/VocabulariesView';
 
 export default function CategorizationMainView() {
 	const TABS = {
-		tags: Liferay.Language.get('Tags'),
 		vocabularies: Liferay.Language.get('Vocabularies'),
+		tags: Liferay.Language.get('Tags'),
 	};
 	const [tab, setTab] = useState('vocabularies');
 
