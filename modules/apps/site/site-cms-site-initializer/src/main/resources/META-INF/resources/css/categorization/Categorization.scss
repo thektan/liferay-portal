@@ -1,3 +1,5 @@
+@import 'cadmin-variables';
+
 .categorization-section {
 	.categorization-title {
 		color: #272833;
@@ -7,5 +9,38 @@
 
 	.categorization-toolbar {
 		border-style: none;
+	}
+
+	.edit-vocabulary {
+		&__wrapper {
+			height: calc(100vh - (var(--control-menu-container-height)));
+		}
+	}
+
+	.management-bar {
+		border: 1px solid #ddd;
+	}
+
+	.categorization-vertical-nav {
+		background-color: $cadmin-light-l1;
+		border-right: 1px solid #ddd;
+		height: calc(100vh - (var(--control-menu-container-height)));
+	}
+
+	.vertical-nav-content-wrapper {
+		padding-top: 1.5rem;
+		padding-left: 9rem;
+		padding-right: 9rem;
+
+		.form-group {
+			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
+
+		.form-title {
+			color: #272833;
+			font-size: 24px;
+			font-weight: 500;
+		}
 	}
 }

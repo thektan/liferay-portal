@@ -3,14 +3,22 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {openModal} from 'frontend-js-web';
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 import React from 'react';
 
-export default function VocabulariesView() {
+import { useNavigate } from "react-router-dom";
+
+export default function VocabulariesView(
+	onChangeView,
+) {
+	const navigate = useNavigate();
+
 	const creationMenu = {
 		primaryItems: [
 			{
 				label: Liferay.Language.get('add-vocabulary'),
+				onClick: navigate('/edit'),
 			},
 		],
 	};
@@ -35,6 +43,7 @@ export default function VocabulariesView() {
 
 	return (
 		<FrontendDataSet
+			//apiURL="o/headless-admin-taxonomy/v1.0/sites/{siteId}/taxonomy-vocabularies"
 			creationMenu={creationMenu}
 			emptyState={emptyState}
 			showManagementBar={false}

@@ -6,39 +6,27 @@
 import React, {useState} from 'react';
 
 import '../../css/categorization/Categorization.scss';
-import CategorizationToolbar from './CategorizationToolbar';
-import TagsView from './tags/TagsView';
-import VocabulariesView from './vocabulary/VocabulariesView';
+import CategorizationHome from './CategorizationHome';
+import EditCategorization from './vocabulary/EditCategorization';
+
+import {
+	Link,
+	Route,
+	Routes,
+	BrowserRouter,
+	useLocation
+} from 'react-router-dom';
 
 export default function CategorizationMainView() {
-	const TABS = {
-		vocabularies: Liferay.Language.get('Vocabularies'),
-		tags: Liferay.Language.get('Tags'),
-	};
-	const [tab, setTab] = useState('vocabularies');
-
-	const handleTabChange = (tab) => {
-		setTab(tab);
-	};
-
-	const renderTabContent = () => {
-		switch (tab) {
-			case 'tags':
-				return <TagsView />;
-			default:
-				return <VocabulariesView />;
-		}
-	};
 
 	return (
 		<div className="categorization-section">
-			<CategorizationToolbar
-				onChangeTab={handleTabChange}
-				tab={tab}
-				tabs={TABS}
-			/>
-
-			{renderTabContent()}
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<CategorizationHome />} />
+					<Route path="edit" element={<EditCategorization />} />
+				</Routes>
+			</BrowserRouter>
 		</div>
 	);
 }
