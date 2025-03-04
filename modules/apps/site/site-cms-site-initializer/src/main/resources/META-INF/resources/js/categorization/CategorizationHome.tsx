@@ -6,45 +6,54 @@
 import React, {useState} from 'react';
 
 import '../../css/categorization/Categorization.scss';
+
+import {RouteComponentProps} from 'react-router-dom';
+
 import CategorizationToolbar from './CategorizationToolbar';
 import TagsView from './tags/TagsView';
 import VocabulariesView from './vocabulary/VocabulariesView';
 
-export default function CategorizationMainView() {
-    const TABS = {
-        vocabularies: Liferay.Language.get('Vocabularies'),
-        tags: Liferay.Language.get('Tags'),
-    };
+const TABS: string[] = [
+	Liferay.Language.get('vocabularies'),
+	Liferay.Language.get('tags'),
+];
 
-    const [tab, setTab] = useState('vocabularies');
+export default function CategorizationHome({
+	history,
+}: {
+	history: RouteComponentProps['history'];
+}) {
+	const [tab, setTab] = useState(TABS[0]);
 
-    const handleTabChange = (tab) => {
-        setTab(tab);
-    };
+	const handleTabChange = (tab: string) => {
+		setTab(tab);
+	};
 
-    const renderTabContent = () => {
-        switch (tab) {
-            case 'tags':
-                return <TagsView/>;
-            default:
-                return (
-                    <>
-                        <VocabulariesView
-                            onChangeView={handleCurrentView}
-                        />
-                    </>);
-        }
-    };
+	const renderTabContent = () => {
+		switch (tab) {
+			case 'tags':
+				return <TagsView />;
+			default:
+				return (
+					<>
+						<VocabulariesView
+							history={history}
+							onChangeView={() => {}}
+						/>
+					</>
+				);
+		}
+	};
 
-    return (
-        <>
-            <CategorizationToolbar
-                onChangeTab={handleTabChange}
-                tab={tab}
-                tabs={TABS}
-            />
+	return (
+		<>
+			<CategorizationToolbar
+				activeTab={tab}
+				onChangeTab={handleTabChange}
+				tabs={TABS}
+			/>
 
-            {renderTabContent()}
-        </>
-    );
+			{renderTabContent()}
+		</>
+	);
 }

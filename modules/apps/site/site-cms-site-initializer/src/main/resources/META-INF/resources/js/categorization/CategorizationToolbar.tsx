@@ -9,7 +9,15 @@ import ClayNavigationBar from '@clayui/navigation-bar';
 import ClayToolbar from '@clayui/toolbar';
 import React from 'react';
 
-export default function CategorizationToolbar({onChangeTab, tab, tabs}) {
+export default function CategorizationToolbar({
+	activeTab,
+	onChangeTab,
+	tabs,
+}: {
+	activeTab: string;
+	onChangeTab: Function;
+	tabs: string[];
+}) {
 	return (
 		<div>
 			<ClayToolbar
@@ -54,15 +62,15 @@ export default function CategorizationToolbar({onChangeTab, tab, tabs}) {
 			<ClayNavigationBar
 				aria-label={Liferay.Language.get('navigation')}
 				fluidSize={false}
-				triggerLabel={tabs[tab]}
+				triggerLabel={activeTab}
 			>
-				{Object.keys(tabs).map((tabKey) => (
+				{tabs.map((tab) => (
 					<ClayNavigationBar.Item
-						active={tab === tabKey}
-						key={tabKey}
+						active={activeTab === tab}
+						key={tab}
 					>
-						<ClayButton onClick={() => onChangeTab(tabKey)}>
-							{tabs[tabKey]}
+						<ClayButton onClick={() => onChangeTab(tab)}>
+							{tab}
 						</ClayButton>
 					</ClayNavigationBar.Item>
 				))}
