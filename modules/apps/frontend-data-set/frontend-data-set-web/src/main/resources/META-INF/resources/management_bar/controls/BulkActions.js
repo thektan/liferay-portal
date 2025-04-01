@@ -231,14 +231,14 @@ function BulkActions({
 									(highlightedBulkAction) => {
 										return (
 											<li
-												className="d-none d-sm-flex nav-item"
+												className="nav-item"
 												key={
 													highlightedBulkAction.data
 														.id
 												}
 											>
 												<ClayButton
-													className="d-lg-inline d-none nav-link"
+													className="bulk-action-btn nav-link"
 													displayType="unstyled"
 													onClick={() =>
 														handleActionClick(
@@ -251,7 +251,7 @@ function BulkActions({
 														)
 													}
 												>
-													<span className="inline-item inline-item-before">
+													<span className="bulk-action-btn-icon inline-item inline-item-before">
 														<ClayIcon
 															symbol={
 																highlightedBulkAction.icon
@@ -259,34 +259,12 @@ function BulkActions({
 														/>
 													</span>
 
-													{
-														highlightedBulkAction.label
-													}
+													<span className="bulk-action-btn-text">
+														{
+															highlightedBulkAction.label
+														}
+													</span>
 												</ClayButton>
-
-												<ClayButtonWithIcon
-													aria-label={
-														highlightedBulkAction.label
-													}
-													className="d-lg-none nav-link nav-link-monospaced"
-													displayType="unstyled"
-													onClick={() =>
-														handleActionClick(
-															highlightedBulkAction,
-															formId,
-															formName,
-															loadData,
-															namespace,
-															sidePanelId
-														)
-													}
-													symbol={
-														highlightedBulkAction.icon
-													}
-													title={
-														highlightedBulkAction.label
-													}
-												/>
 											</li>
 										);
 									}
