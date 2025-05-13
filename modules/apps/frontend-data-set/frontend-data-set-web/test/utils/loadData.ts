@@ -7,6 +7,8 @@ import fetch from 'jest-fetch-mock';
 
 import {loadData} from '../../src/main/resources/META-INF/resources/utils/loadData';
 
+// Test
+
 const responseData = {
 	account: 25,
 	order: 0,
