@@ -11,9 +11,10 @@ import ClayMultiSelect from '@clayui/multi-select';
 import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 import {useFormik} from 'formik';
 import {openModal} from 'frontend-js-components-web';
-import {sub} from 'frontend-js-web';
-import React, {useEffect, useMemo, useState} from 'react';
+import {fetch, sub} from 'frontend-js-web';
+import React, {useEffect, useState} from 'react';
 
+import {HEADERS_ALL_LANGUAGES} from '../../../services/api';
 import {executeAsyncItemAction} from '../../FDSPropsTransformer/utils/executeAsyncItemAction';
 import SpaceSticker from '../../components/SpaceSticker';
 
@@ -27,33 +28,36 @@ export default function MergeTagsModalContent({
 	loadData,
 	tagId,
 	tagName,
-	tagsList,
 }: {
 	closeModal: () => void;
 	loadData: () => {};
 	tagId: number;
 	tagName: string;
-	tagsList: any;
 }) {
 	const [tags, setTags] = useState<Tag[]>([]);
-	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-
-	const allTags = useMemo(() => {
-		return tagsList.map((item: any) => ({
-			label: item.name,
-			value: item.tagId,
-		}));
-	}, [tagsList]);
+	const [selectedTags, setSelectedTags] = useState<Tag[]>([
+		{label: tagName, value: tagId},
+	]);
 
 	useEffect(() => {
-		setTags(allTags);
+		const getTags = async () => {
+			const response = await fetch(
+				'/o/headless-admin-taxonomy/v1.0/keywords',
+				{
+					headers: HEADERS_ALL_LANGUAGES,
+					method: 'GET',
+				}
+			);
 
-		const selectedTag = allTags.filter(
-			(tag: {label: string}) => tag.label === tagName
-		);
+			if (response.ok) {
+				const {items} = await response.json();
 
-		setSelectedTags(selectedTag);
-	}, [allTags, tagName, setSelectedTags, setTags]);
+				setTags(items.map(({id, name}) => ({label: name, value: id})));
+			}
+		};
+
+		getTags();
+	}, []);
 
 	const _handleTagChange = (items: Tag[]) => {
 		setSelectedTags(tags.filter((item) => items.includes(item)));
@@ -321,7 +325,7 @@ export default function MergeTagsModalContent({
 							onItemsChange={(items: Tag[]) => {
 								_handleTagChange(items);
 							}}
-							sourceItems={allTags}
+							sourceItems={tags}
 						/>
 					</ClayInput.GroupItem>
 
