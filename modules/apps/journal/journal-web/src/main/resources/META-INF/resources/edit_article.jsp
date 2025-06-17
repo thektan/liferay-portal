@@ -358,19 +358,16 @@ journalEditArticleDisplayContext.setViewAttributes();
 
 								<c:choose>
 									<c:when test='<%= FeatureFlagManagerUtil.isEnabled("LPD-51378") %>'>
-										<%
-										String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
-										%>
-
 										<liferay-editor:input-localized
 											autofillFromDefault="<%= true %>"
 											availableLocales="<%= journalEditArticleDisplayContext.getAvailableLocales() %>"
+											componentId="descriptionMapAsXML"
 											defaultLanguageId="<%= journalEditArticleDisplayContext.getDefaultArticleLanguageId() %>"
 											ignoreRequestValue="<%= journalEditArticleDisplayContext.isChangeStructure() %>"
 											languagesDropdownVisible="<%= false %>"
 											name="descriptionMapAsXML"
-											onBlurMethod='<%= randomNamespace + "handleBlurDescription" %>'
-											onChangeMethod='<%= randomNamespace + "handleChangeDescription" %>'
+											onBlurMethod='<%= liferayPortletResponse.getNamespace() + "handleBlurDescription" %>'
+											onChangeMethod='<%= liferayPortletResponse.getNamespace() + "handleChangeDescription" %>'
 											selectedLanguageId="<%= journalEditArticleDisplayContext.getSelectedLanguageId() %>"
 											xml="<%= (article != null) ? article.getDescriptionMapAsXML() : StringPool.BLANK %>"
 										/>
@@ -378,7 +375,7 @@ journalEditArticleDisplayContext.setViewAttributes();
 										<aui:script>
 											let edited = false;
 
-											function <%= randomNamespace %>handleBlurDescription() {
+											function <portlet:namespace />handleBlurDescription() {
 												if (!Liferay.FeatureFlags['LPD-11228']) {
 													return;
 												}
@@ -386,23 +383,29 @@ journalEditArticleDisplayContext.setViewAttributes();
 												if (edited) {
 													Liferay.fire('journal:unlock');
 
-													const label = document.querySelector('label[for="<portlet:namespace />descriptionMapAsXML"]').textContent;
+													const label = document.querySelector(
+														'label[for="<portlet:namespace />descriptionMapAsXML"]'
+													).textContent;
 
 													Liferay.fire('journal:storeState', {
-														fieldName: Liferay.Language.get('edit') + ' ' + label.trim()
+														fieldName: Liferay.Language.get('edit') + ' ' + label.trim(),
 													});
 
 													edited = false;
 												}
 											}
 
-											function <%= randomNamespace %>handleChangeDescription() {
+											function <portlet:namespace />handleChangeDescription() {
 												if (!Liferay.FeatureFlags['LPD-11228']) {
 													return;
 												}
 
-												if (!edited) {
-													Liferay.fire('journal:lock');
+												const isUserInEditor = !!document.activeElement.closest('.ck-editor');
+
+												if (isUserInEditor) {
+													if (!edited) {
+														Liferay.fire('journal:lock');
+													}
 
 													edited = true;
 												}
