@@ -215,7 +215,7 @@ test(
 
 				await page
 					.locator('.dropdown-menu')
-					.getByRole('button', {name: 'Edit Filter'})
+					.getByRole('button', {name: 'Show Results'})
 					.click();
 
 				await page
@@ -257,8 +257,8 @@ test(
 				await page.getByLabel('Exclude').check();
 			});
 
-			await test.step('Click "Edit Filter"', async () => {
-				await page.getByRole('button', {name: 'Edit Filter'}).click();
+			await test.step('Click "Show Results"', async () => {
+				await page.getByRole('button', {name: 'Show Results'}).click();
 
 				await page
 					.getByText('This is a description for sample 10.')
@@ -297,7 +297,7 @@ test(
 				await page.getByRole('checkbox', {name: 'Red'}).check();
 				await page.getByRole('checkbox', {name: 'Blue'}).uncheck();
 
-				await page.getByRole('button', {name: 'Edit Filter'}).click();
+				await page.getByRole('button', {name: 'Show Results'}).click();
 
 				await page
 					.getByText('This is a description for sample 1.')
