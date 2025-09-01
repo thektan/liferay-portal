@@ -84,6 +84,12 @@ export enum ESelectionTrigger {
 	INPUT = 'input',
 }
 
+export enum EStateInURLSettings {
+	OFF = 'off',
+	PUSH = 'push',
+	REPLACE = 'replace',
+}
+
 export interface IInlineEditingSettings {
 	alwaysOn: boolean;
 	defaultBodyContent: object;
@@ -333,6 +339,7 @@ export interface IFrontendDataSetProps {
 	showSelectAll?: boolean;
 	sidePanelId?: string;
 	sorts?: TSort[];
+	stateInURLSettings?: EStateInURLSettings;
 	style?: 'default' | 'fluid' | 'stacked';
 	uniformActionsDisplay?: boolean;
 	views: IView[];
