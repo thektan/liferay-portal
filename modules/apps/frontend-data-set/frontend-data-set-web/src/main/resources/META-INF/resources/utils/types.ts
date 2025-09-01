@@ -381,4 +381,8 @@ export {
 	FDS_NESTED_FIELD_NAME_PARENT_SUFFIX,
 } from '../constants';
 
+export interface IStateInURL {
+	delta: number;
+}
+
 export {Card} from '../views/cards/Cards';
