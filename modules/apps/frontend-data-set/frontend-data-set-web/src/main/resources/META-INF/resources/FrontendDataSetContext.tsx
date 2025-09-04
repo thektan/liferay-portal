@@ -10,6 +10,7 @@ import {
 	IInlineEditingSettings,
 	IItemsActions,
 	ISchema,
+	IStateInURLSetters,
 } from './utils/types';
 
 export interface IFrontendDataSetContext {
@@ -81,6 +82,7 @@ export interface IFrontendDataSetContext {
 	showInfoPanel: boolean;
 	sidePanelId?: string;
 	sorts?: Array<TRenderer>;
+	stateInURLSetters: IStateInURLSetters;
 	stateInURLSettings?: EStateInURLSettings;
 	style?: string;
 	toggleItemInlineEdit: Function;
@@ -147,6 +149,7 @@ const FrontendDataSetContext = React.createContext({
 	selectable: false,
 	selectedItemsValue: [],
 	setSearching: () => {},
+	stateInURLSetters: {},
 	stateInURLSettings: EStateInURLSettings.OFF,
 	toggleItemInlineEdit: () => {},
 	updateDataSetItems: () => {},

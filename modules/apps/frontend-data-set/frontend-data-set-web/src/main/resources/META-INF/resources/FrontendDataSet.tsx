@@ -158,7 +158,7 @@ const FrontendDataSetContent = ({
 			},
 		},
 	});
-	const setStateInURL = useSetStateInURL({
+	const stateInURLSetters = useSetStateInURL({
 		id,
 		setters: [
 			{
@@ -321,9 +321,9 @@ const FrontendDataSetContent = ({
 		(delta: number) => {
 			setPageNumber(1);
 
-			viewsDispatch(setStateInURL[EStateInURLKeys.DELTA](delta));
+			viewsDispatch(stateInURLSetters[EStateInURLKeys.DELTA](delta));
 		},
-		[setStateInURL, setPageNumber, viewsDispatch]
+		[stateInURLSetters, setPageNumber, viewsDispatch]
 	);
 
 	const {
@@ -1350,6 +1350,7 @@ const FrontendDataSetContent = ({
 				showInfoPanel: infoPanelComponent ? true : false,
 				sidePanelId: dataSetSupportSidePanelIdRef.current,
 				sorts,
+				stateInURLSetters,
 				style,
 				toggleItemInlineEdit,
 				uniformActionsDisplay,
