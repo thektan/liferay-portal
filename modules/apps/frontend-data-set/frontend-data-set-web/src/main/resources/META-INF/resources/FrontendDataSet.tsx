@@ -258,6 +258,16 @@ const FrontendDataSetContent = ({
 			}
 		}
 
+		if (stateFromURL.view) {
+			const activeView = views.find(
+				({name}) => name === stateFromURL.view
+			);
+
+			if (activeView) {
+				initialActiveView = activeView;
+			}
+		}
+
 		const activeView = {
 			component: getViewComponent(initialActiveView),
 			...initialActiveView,
