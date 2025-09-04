@@ -299,6 +299,7 @@ const FrontendDataSetContent = ({
 				...(paginationDelta && {
 					[EStateInURLKeys.DELTA]: paginationDelta,
 				}),
+				[EStateInURLKeys.VIEW_NAME]: activeView.name,
 			},
 			stateInURLSettings
 		);
