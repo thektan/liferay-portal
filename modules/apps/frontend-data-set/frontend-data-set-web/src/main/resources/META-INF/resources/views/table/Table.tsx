@@ -22,7 +22,6 @@ import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
 
 import FrontendDataSetContext, {
 	IFrontendDataSetContext,
-	TRenderer,
 } from '../../FrontendDataSetContext';
 import Actions from '../../actions/Actions';
 import {getInternalCellRenderer} from '../../cell_renderers/getInternalCellRenderer';
@@ -41,6 +40,7 @@ import {
 	IItemsActions,
 	ITableSchema,
 	IView,
+	TRenderer,
 	TSort,
 } from '../../utils/types';
 import ViewsContext, {
