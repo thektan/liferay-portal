@@ -64,7 +64,6 @@ import {loadData} from './utils/loadData';
 
 import {logError} from './utils/logError';
 import {saveViewSettings} from './utils/saveViewSettings';
-import {getStateFromURL, writeStateInURL} from './utils/stateInURL';
 import {
 	ESelectionTrigger,
 	EStateInURLKeys,
@@ -169,22 +168,22 @@ const FrontendDataSetContent = ({
 		[views]
 	);
 
-	const [initialStateFromURL, stateInURLSetters, getCurrentURLState] =
-		useURLState({
-			id,
-			setters: [
-				{
-					key: EStateInURLKeys.DELTA,
-					type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
-				},
-				{
-					key: EStateInURLKeys.VIEW_NAME,
-					type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
-				},
-			],
-			stateInURLSettings,
-			stateInitializers,
-		});
+	const [stateInURLSetters, getCurrentURLState, writeURLState] = useURLState({
+		id,
+		setters: [
+			{
+				key: EStateInURLKeys.DELTA,
+				type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
+			},
+			{
+				key: EStateInURLKeys.VIEW_NAME,
+				type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
+			},
+		],
+		stateInURLSettings,
+		stateInitializers,
+	});
+
 	const [componentLoading, setComponentLoading] = useState(false);
 	const [creationMenu, setCreationMenu] = useState(initialCreationMenu);
 	const [dataLoading, setDataLoading] = useState(!!apiURL);
@@ -307,17 +306,6 @@ const FrontendDataSetContent = ({
 				pagination?.initialDelta ||
 				DEFAULT_PAGINATION_DELTA);
 
-		writeStateInURL(
-			id,
-			{
-				...(paginationDelta && {
-					[EStateInURLKeys.DELTA]: paginationDelta,
-				}),
-				[EStateInURLKeys.VIEW_NAME]: activeView.name,
-			},
-			stateInURLSettings
-		);
-
 		return {
 			activeView,
 			customViews: customViews && JSON.parse(customViews),
@@ -339,10 +327,30 @@ const FrontendDataSetContent = ({
 	};
 
 	const [viewsState, viewsDispatch] = useThunk(
-		useReducer(viewsReducer, initialStateFromURL, getInitialViewsState)
+		useReducer(viewsReducer, getCurrentURLState(), getInitialViewsState)
 	);
 
 	const {activeView, filters, paginationDelta, sorts} = viewsState;
+
+	const isInitialMountRef = useRef(true);
+
+	useEffect(() => {
+
+		// This effect runs once on mount to ensure the URL reflects the initial
+		// state of the component, especially when no state was present in the
+		// URL to begin with.
+
+		if (isInitialMountRef.current) {
+			writeURLState({
+				...(paginationDelta && {
+					[EStateInURLKeys.DELTA]: paginationDelta,
+				}),
+				[EStateInURLKeys.VIEW_NAME]: activeView.name,
+			});
+
+			isInitialMountRef.current = false;
+		}
+	}, [activeView.name, paginationDelta, writeURLState]);
 
 	const handleDeltaChange = useCallback(
 		(delta: number) => {
