@@ -50,20 +50,20 @@ import Modal from './modal/Modal';
 // @ts-ignore
 
 import SidePanel from './side_panel/SidePanel';
-import filterCreationActions from './utils/actionItems/filterCreationActions';
-import EVENTS from './utils/eventsDefinitions';
-import getRandomId from './utils/getRandomId';
 
 // @ts-ignore
 
-import {formatItemChanges, getCurrentItemUpdates} from './utils/index';
+import {formatItemChanges, getCurrentItemUpdates} from './utils';
+import filterCreationActions from './utils/actionItems/filterCreationActions';
+import EVENTS from './utils/eventsDefinitions';
+import getRandomId from './utils/getRandomId';
 import {loadData} from './utils/loadData';
 
 // @ts-ignore
 
 import {logError} from './utils/logError';
 import {saveViewSettings} from './utils/saveViewSettings';
-import {writeStateInURL} from './utils/stateInURL';
+import {getStateFromURL, writeStateInURL} from './utils/stateInURL';
 import {
 	ESelectionTrigger,
 	EStateInURLKeys,
@@ -79,8 +79,7 @@ import {
 	TRenderer,
 	TSort,
 } from './utils/types';
-import useGetStateFromURL from './utils/useGetStateFromURL';
-import useSetStateInURL from './utils/useSetStateInURL';
+import useURLState from './utils/useURLState';
 import ViewsContext from './views/ViewsContext';
 
 // @ts-ignore
@@ -146,7 +145,7 @@ const FrontendDataSetContent = ({
 }: IFrontendDataSetProps) => {
 	const fdsRef = useRef(null);
 	const dataSetWrapperRef: RefObject<HTMLDivElement> = useRef(null);
-	const getStateFromURL = useGetStateFromURL({
+	const [initialStateFromURL, stateInURLSetters] = useURLState({
 		id,
 		stateInitializers: {
 			[EStateInURLKeys.DELTA]: (delta: number) => {
@@ -166,9 +165,6 @@ const FrontendDataSetContent = ({
 				return null;
 			},
 		},
-	});
-	const stateInURLSetters = useSetStateInURL({
-		id,
 		setters: [
 			{
 				key: EStateInURLKeys.DELTA,
@@ -335,7 +331,7 @@ const FrontendDataSetContent = ({
 	};
 
 	const [viewsState, viewsDispatch] = useThunk(
-		useReducer(viewsReducer, getStateFromURL(), getInitialViewsState)
+		useReducer(viewsReducer, initialStateFromURL, getInitialViewsState)
 	);
 
 	const {activeView, filters, paginationDelta, sorts} = viewsState;
@@ -670,7 +666,53 @@ const FrontendDataSetContent = ({
 	}, [dataSetWrapperRef]);
 
 	const handlePopState = useCallback(() => {
-		const stateFromURL = getStateFromURL();
+		const stateInitializers = {
+			[EStateInURLKeys.DELTA]: (delta: number) => {
+				if (isNaN(delta) || delta < 1) {
+					return null;
+				}
+
+				return delta;
+			},
+			[EStateInURLKeys.VIEW_NAME]: (viewName: string) => {
+				const view = views.find(({name}) => name === viewName);
+
+				if (view) {
+					return viewName;
+				}
+
+				return null;
+			},
+		};
+
+		const state: Partial<IStateInURL> | null = getStateFromURL(id);
+
+		if (!state) {
+			return;
+		}
+
+		const initializedState = {...state};
+
+		for (const key of Object.keys(initializedState) as Array<
+			keyof IStateInURL
+		>) {
+			const stateInitializer =
+				stateInitializers[key as keyof typeof stateInitializers];
+			const stateValue = initializedState[key];
+
+			if (stateInitializer && stateValue !== undefined) {
+				const initializedValue = (stateInitializer as any)(stateValue);
+
+				if (initializedValue !== null) {
+					initializedState[key] = initializedValue;
+				}
+				else {
+					delete initializedState[key];
+				}
+			}
+		}
+
+		const stateFromURL = initializedState;
 
 		if (!stateFromURL) {
 			return;
@@ -711,14 +753,7 @@ const FrontendDataSetContent = ({
 				value: stateUpdates,
 			});
 		}
-	}, [
-		appURL,
-		getStateFromURL,
-		id,
-		paginationDelta,
-		portletId,
-		viewsDispatch,
-	]);
+	}, [appURL, id, paginationDelta, portletId, views, viewsDispatch]);
 
 	useEffect(() => {
 		const registerEvent =
