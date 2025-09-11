@@ -200,11 +200,11 @@ function useURLState({
 	stateInURLSettings: EStateInURLSettings;
 	stateInitializers?: StateInitializer;
 }): [
-	IStateInURLSetters,
 	() => Partial<IStateInURL>,
 	(state: Partial<IStateInURL>) => void,
+	IStateInURLSetters,
 ] {
-	const stateSetters = setters.reduce((acc, {key, type}) => {
+	const urlStateSetters = setters.reduce((acc, {key, type}) => {
 		acc[key] = (value: any) => (viewsDispatch: Function) => {
 			viewsDispatch({type, value});
 
@@ -218,7 +218,7 @@ function useURLState({
 		return acc;
 	}, {} as IStateInURLSetters);
 
-	const getCurrentURLState = useCallback(
+	const getURLState = useCallback(
 		() => getInitializedState(id, stateInitializers),
 		[id, stateInitializers]
 	);
@@ -230,7 +230,7 @@ function useURLState({
 		[id, stateInURLSettings]
 	);
 
-	return [stateSetters, getCurrentURLState, writeURLState];
+	return [getURLState, writeURLState, urlStateSetters];
 }
 
 export default useURLState;

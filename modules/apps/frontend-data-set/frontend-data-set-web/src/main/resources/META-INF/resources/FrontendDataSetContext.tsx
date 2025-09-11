@@ -83,7 +83,7 @@ export interface IFrontendDataSetContext {
 	showInfoPanel: boolean;
 	sidePanelId?: string;
 	sorts?: Array<TRenderer>;
-	stateInURLSetters: IStateInURLSetters;
+	urlStateSetters: IStateInURLSetters;
 	stateInURLSettings?: EStateInURLSettings;
 	style?: string;
 	toggleItemInlineEdit: Function;
@@ -117,7 +117,7 @@ const FrontendDataSetContext = React.createContext({
 	selectable: false,
 	selectedItemsValue: [],
 	setSearching: () => {},
-	stateInURLSetters: {},
+	urlStateSetters: {},
 	stateInURLSettings: EStateInURLSettings.OFF,
 	toggleItemInlineEdit: () => {},
 	updateDataSetItems: () => {},

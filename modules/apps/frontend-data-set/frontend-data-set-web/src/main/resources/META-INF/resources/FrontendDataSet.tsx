@@ -168,7 +168,7 @@ const FrontendDataSetContent = ({
 		[views]
 	);
 
-	const [stateInURLSetters, getCurrentURLState, writeURLState] = useURLState({
+	const [getURLState, writeURLState, urlStateSetters] = useURLState({
 		id,
 		setters: [
 			{
@@ -327,7 +327,7 @@ const FrontendDataSetContent = ({
 	};
 
 	const [viewsState, viewsDispatch] = useThunk(
-		useReducer(viewsReducer, getCurrentURLState(), getInitialViewsState)
+		useReducer(viewsReducer, getURLState(), getInitialViewsState)
 	);
 
 	const {activeView, filters, paginationDelta, sorts} = viewsState;
@@ -356,9 +356,9 @@ const FrontendDataSetContent = ({
 		(delta: number) => {
 			setPageNumber(1);
 
-			viewsDispatch(stateInURLSetters[EStateInURLKeys.DELTA](delta));
+			viewsDispatch(urlStateSetters[EStateInURLKeys.DELTA](delta));
 		},
-		[stateInURLSetters, setPageNumber, viewsDispatch]
+		[urlStateSetters, setPageNumber, viewsDispatch]
 	);
 
 	const {
@@ -682,7 +682,7 @@ const FrontendDataSetContent = ({
 	}, [dataSetWrapperRef]);
 
 	const handlePopState = useCallback(() => {
-		const stateFromURL = getCurrentURLState();
+		const stateFromURL = getURLState();
 
 		if (!Object.keys(stateFromURL).length) {
 			return;
@@ -723,14 +723,7 @@ const FrontendDataSetContent = ({
 				value: stateUpdates,
 			});
 		}
-	}, [
-		appURL,
-		getCurrentURLState,
-		id,
-		paginationDelta,
-		portletId,
-		viewsDispatch,
-	]);
+	}, [appURL, getURLState, id, paginationDelta, portletId, viewsDispatch]);
 
 	useEffect(() => {
 		const registerEvent =
@@ -1406,12 +1399,12 @@ const FrontendDataSetContent = ({
 				showInfoPanel: infoPanelComponent ? true : false,
 				sidePanelId: dataSetSupportSidePanelIdRef.current,
 				sorts,
-				stateInURLSetters,
 				style,
 				toggleItemInlineEdit,
 				uniformActionsDisplay,
 				updateDataSetItems,
 				updateItem,
+				urlStateSetters,
 			}}
 		>
 			<ViewsContext.Provider value={[viewsState, viewsDispatch]}>
