@@ -21,6 +21,7 @@ import React, {
 	useCallback,
 	useContext,
 	useEffect,
+	useMemo,
 	useReducer,
 	useRef,
 	useState,
@@ -145,9 +146,9 @@ const FrontendDataSetContent = ({
 }: IFrontendDataSetProps) => {
 	const fdsRef = useRef(null);
 	const dataSetWrapperRef: RefObject<HTMLDivElement> = useRef(null);
-	const [initialStateFromURL, stateInURLSetters] = useURLState({
-		id,
-		stateInitializers: {
+
+	const stateInitializers = useMemo(
+		() => ({
 			[EStateInURLKeys.DELTA]: (delta: number) => {
 				if (isNaN(delta) || delta < 1) {
 					return null;
@@ -164,19 +165,26 @@ const FrontendDataSetContent = ({
 
 				return null;
 			},
-		},
-		setters: [
-			{
-				key: EStateInURLKeys.DELTA,
-				type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
-			},
-			{
-				key: EStateInURLKeys.VIEW_NAME,
-				type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
-			},
-		],
-		stateInURLSettings,
-	});
+		}),
+		[views]
+	);
+
+	const [initialStateFromURL, stateInURLSetters, getCurrentURLState] =
+		useURLState({
+			id,
+			setters: [
+				{
+					key: EStateInURLKeys.DELTA,
+					type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
+				},
+				{
+					key: EStateInURLKeys.VIEW_NAME,
+					type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
+				},
+			],
+			stateInURLSettings,
+			stateInitializers,
+		});
 	const [componentLoading, setComponentLoading] = useState(false);
 	const [creationMenu, setCreationMenu] = useState(initialCreationMenu);
 	const [dataLoading, setDataLoading] = useState(!!apiURL);
@@ -666,55 +674,9 @@ const FrontendDataSetContent = ({
 	}, [dataSetWrapperRef]);
 
 	const handlePopState = useCallback(() => {
-		const stateInitializers = {
-			[EStateInURLKeys.DELTA]: (delta: number) => {
-				if (isNaN(delta) || delta < 1) {
-					return null;
-				}
+		const stateFromURL = getCurrentURLState();
 
-				return delta;
-			},
-			[EStateInURLKeys.VIEW_NAME]: (viewName: string) => {
-				const view = views.find(({name}) => name === viewName);
-
-				if (view) {
-					return viewName;
-				}
-
-				return null;
-			},
-		};
-
-		const state: Partial<IStateInURL> | null = getStateFromURL(id);
-
-		if (!state) {
-			return;
-		}
-
-		const initializedState = {...state};
-
-		for (const key of Object.keys(initializedState) as Array<
-			keyof IStateInURL
-		>) {
-			const stateInitializer =
-				stateInitializers[key as keyof typeof stateInitializers];
-			const stateValue = initializedState[key];
-
-			if (stateInitializer && stateValue !== undefined) {
-				const initializedValue = (stateInitializer as any)(stateValue);
-
-				if (initializedValue !== null) {
-					initializedState[key] = initializedValue;
-				}
-				else {
-					delete initializedState[key];
-				}
-			}
-		}
-
-		const stateFromURL = initializedState;
-
-		if (!stateFromURL) {
+		if (!Object.keys(stateFromURL).length) {
 			return;
 		}
 
@@ -753,7 +715,14 @@ const FrontendDataSetContent = ({
 				value: stateUpdates,
 			});
 		}
-	}, [appURL, id, paginationDelta, portletId, views, viewsDispatch]);
+	}, [
+		appURL,
+		getCurrentURLState,
+		id,
+		paginationDelta,
+		portletId,
+		viewsDispatch,
+	]);
 
 	useEffect(() => {
 		const registerEvent =
