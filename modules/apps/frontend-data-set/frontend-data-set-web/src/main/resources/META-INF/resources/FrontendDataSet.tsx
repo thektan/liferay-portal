@@ -168,18 +168,8 @@ const FrontendDataSetContent = ({
 		[views]
 	);
 
-	const [getURLState, writeURLState, urlStateSetters] = useURLState({
+	const [getURLState, writeURLState] = useURLState({
 		id,
-		setters: [
-			{
-				key: EStateInURLKeys.DELTA,
-				type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
-			},
-			{
-				key: EStateInURLKeys.VIEW_NAME,
-				type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
-			},
-		],
 		stateInURLSettings,
 		stateInitializers,
 	});
@@ -356,9 +346,16 @@ const FrontendDataSetContent = ({
 		(delta: number) => {
 			setPageNumber(1);
 
-			viewsDispatch(urlStateSetters[EStateInURLKeys.DELTA](delta));
+			viewsDispatch({
+				type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
+				value: delta,
+			});
+
+			writeURLState({
+				[EStateInURLKeys.DELTA]: delta,
+			});
 		},
-		[urlStateSetters, setPageNumber, viewsDispatch]
+		[setPageNumber, viewsDispatch, writeURLState]
 	);
 
 	const {
@@ -1404,7 +1401,6 @@ const FrontendDataSetContent = ({
 				uniformActionsDisplay,
 				updateDataSetItems,
 				updateItem,
-				urlStateSetters,
 			}}
 		>
 			<ViewsContext.Provider value={[viewsState, viewsDispatch]}>
