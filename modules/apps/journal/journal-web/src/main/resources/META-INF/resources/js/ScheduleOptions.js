@@ -7,6 +7,7 @@ import ClayAlert from '@clayui/alert';
 import ClayDatePicker from '@clayui/date-picker';
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
+import {datetimeUtils} from '@liferay/object-js-components-web';
 import classNames from 'classnames';
 import {dateUtils, sub} from 'frontend-js-web';
 import React, {useEffect} from 'react';
@@ -21,6 +22,12 @@ export default function ScheduleOptions({
 	timeZone,
 }) {
 	const {day, hour, minutes, month, year} = getDate(displayDate);
+
+	const dateConfig = datetimeUtils.generateDateConfigurations({
+		defaultLanguageId: Liferay.ThemeDisplay.getDefaultLanguageId(),
+		locale: Liferay.ThemeDisplay.getLanguageId(),
+		type: 'DateTime',
+	});
 
 	useEffect(() => {
 		if (displayDate) {
@@ -69,27 +76,16 @@ export default function ScheduleOptions({
 						selectMonth: `${Liferay.Language.get('select-a-month')}`,
 						selectYear: `${Liferay.Language.get('select-a-year')}`,
 					}}
+					dateFormat={dateConfig.dateFormat}
 					firstDayOfWeek={dateUtils.getFirstDayOfWeek()}
 					id={`${portletNamespace}displayDatePicker`}
-					months={[
-						`${Liferay.Language.get('january')}`,
-						`${Liferay.Language.get('february')}`,
-						`${Liferay.Language.get('march')}`,
-						`${Liferay.Language.get('april')}`,
-						`${Liferay.Language.get('may')}`,
-						`${Liferay.Language.get('june')}`,
-						`${Liferay.Language.get('july')}`,
-						`${Liferay.Language.get('august')}`,
-						`${Liferay.Language.get('september')}`,
-						`${Liferay.Language.get('october')}`,
-						`${Liferay.Language.get('november')}`,
-						`${Liferay.Language.get('december')}`,
-					]}
+					months={dateUtils.getMonthsLong()}
 					onChange={setDisplayDate}
-					placeholder="YYYY-MM-DD HH:mm"
+					placeholder={dateConfig.placeholder}
 					required
 					time
 					timezone={timeZone.name}
+					use12Hours={dateConfig.use12Hours}
 					value={displayDate || ''}
 					weekdaysShort={dateUtils.getWeekdaysShort()}
 					years={{
