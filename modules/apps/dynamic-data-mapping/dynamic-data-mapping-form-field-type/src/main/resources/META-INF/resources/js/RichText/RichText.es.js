@@ -147,16 +147,14 @@ const RichText = ({
 	}, [currentEditingLocale]);
 
 	useEffect(() => {
-		if (Liferay.FeatureFlags['LPD-11235']) {
-			setCurrentInternalValue(
-				getEditingValue({
-					defaultLocale,
-					editingLocale: currentEditingLocale,
-					fieldName,
-					value: currentValue,
-				})
-			);
-		}
+		setCurrentInternalValue(
+			getEditingValue({
+				defaultLocale,
+				editingLocale: currentEditingLocale,
+				fieldName,
+				value: currentValue,
+			})
+		);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentEditingLocale, currentValue]);
@@ -192,17 +190,6 @@ const RichText = ({
 			...newEditingLocale,
 			icon: normalizeLocaleId(newEditingLocale.localeId),
 		});
-
-		if (!Liferay.FeatureFlags['LPD-11235']) {
-			setCurrentInternalValue(
-				getEditingValue({
-					defaultLocale,
-					editingLocale: newEditingLocale,
-					fieldName,
-					value: newCurrentValue,
-				})
-			);
-		}
 	};
 
 	useEffect(() => {
