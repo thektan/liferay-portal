@@ -42,6 +42,12 @@ export default function Assignee({
 	const [networkStatus, setNetworkStatus] = useState(4);
 	const [search, setSearch] = useState(value?.name ?? '');
 
+	const fullUrl = searchURL.startsWith('/')
+		? Liferay.ThemeDisplay.getPortalURL() +
+			Liferay.ThemeDisplay.getPathContext() +
+			searchURL
+		: searchURL;
+
 	const {
 		resource,
 	}: {
@@ -60,7 +66,7 @@ export default function Assignee({
 			method: 'GET',
 		},
 		fetchPolicy: FetchPolicy.CacheFirst,
-		link: searchURL,
+		link: fullUrl,
 		onNetworkStatusChange: setNetworkStatus,
 		variables: {
 			[`${portletNamespace}search`]: search,
