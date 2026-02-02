@@ -411,6 +411,24 @@
 								"definition": {
 									"fragmentDropZoneId": "2"
 								},
+								"pageElements": [
+									{
+										"definition": {
+											"fragment": {
+												"key": "com.liferay.site.cmp.site.initializer.internal.fragment.renderer.TaskHistoryJSPSectionFragmentRenderer"
+											},
+											"fragmentConfig": {
+											},
+											"fragmentFields": [
+											],
+											"fragmentStyle": {
+												"paddingTop": "3"
+											},
+											"indexed": true
+										},
+										"type": "Fragment"
+									}
+								],
 								"type": "FragmentDropZone"
 							}
 						],
