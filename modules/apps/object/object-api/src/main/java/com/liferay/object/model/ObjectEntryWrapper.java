@@ -231,6 +231,11 @@ public class ObjectEntryWrapper
 		return wrap(model.cloneWithOriginalValues());
 	}
 
+	@Override
+	public String[] getAssetTagNames() {
+		return model.getAssetTagNames();
+	}
+
 	/**
 	 * Returns the company ID of this object entry.
 	 *
