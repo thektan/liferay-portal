@@ -5,6 +5,7 @@
 
 package com.liferay.object.model.impl;
 
+import com.liferay.asset.kernel.service.AssetTagLocalServiceUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalServiceUtil;
@@ -68,6 +69,12 @@ public class ObjectEntryImpl extends ObjectEntryBaseImpl {
 		objectEntry.setValues(_transientValues);
 
 		return objectEntry;
+	}
+
+	@Override
+	public String[] getAssetTagNames() {
+		return AssetTagLocalServiceUtil.getTagNames(
+			getModelClassName(), getObjectEntryId());
 	}
 
 	@Override
