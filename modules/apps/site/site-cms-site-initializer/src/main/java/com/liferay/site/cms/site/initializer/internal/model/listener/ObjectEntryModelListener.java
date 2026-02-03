@@ -5,9 +5,14 @@
 
 package com.liferay.site.cms.site.initializer.internal.model.listener;
 
+import com.liferay.asset.kernel.model.AssetEntry;
+import com.liferay.asset.kernel.model.AssetTag;
+import com.liferay.asset.kernel.service.AssetEntryLocalService;
+import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.depot.constants.DepotConstants;
 import com.liferay.depot.constants.DepotRolesConstants;
 import com.liferay.depot.model.DepotEntry;
+import com.liferay.depot.model.DepotEntryModel;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.constants.ObjectEntryFolderConstants;
@@ -17,8 +22,10 @@ import com.liferay.object.model.ObjectEntryFolder;
 import com.liferay.object.rest.filter.factory.FilterFactory;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryFolderLocalService;
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.CharPool;
+import com.liferay.portal.kernel.audit.AuditRouter;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -32,22 +39,30 @@ import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.security.audit.event.generators.util.Attribute;
+import com.liferay.portal.security.audit.event.generators.util.AuditMessageBuilder;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskInstanceTokenLocalService;
 import com.liferay.site.cms.site.initializer.util.CMSDefaultPermissionUtil;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -64,6 +79,7 @@ public class ObjectEntryModelListener extends BaseModelListener<ObjectEntry> {
 
 		try {
 			if (_isCMSObjectEntry(objectEntry)) {
+				_route(objectEntry);
 				_setResourcePermissions(objectEntry);
 			}
 		}
@@ -81,6 +97,8 @@ public class ObjectEntryModelListener extends BaseModelListener<ObjectEntry> {
 			if (!_isCMSObjectEntry(objectEntry)) {
 				return;
 			}
+
+			_route(objectEntry);
 
 			if (originalObjectEntry.getObjectEntryFolderId() !=
 					objectEntry.getObjectEntryFolderId()) {
@@ -203,6 +221,86 @@ public class ObjectEntryModelListener extends BaseModelListener<ObjectEntry> {
 		return true;
 	}
 
+	private void _route(ObjectEntry objectEntry) throws Exception {
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
+
+		if (serviceContext == null) {
+			return;
+		}
+
+		ObjectDefinition taskObjectDefinition =
+			_objectDefinitionLocalService.
+				fetchObjectDefinitionByExternalReferenceCode(
+					"L_CMP_TASK", objectEntry.getCompanyId());
+
+		if (taskObjectDefinition == null) {
+			return;
+		}
+
+		Set<String> newAssetTagNames = SetUtil.fromArray(
+			serviceContext.getAssetTagNames());
+		Set<String> oldAssetTagNames = SetUtil.fromArray(
+			objectEntry.getAssetTagNames());
+
+		_route(
+			SetUtil.asymmetricDifference(newAssetTagNames, oldAssetTagNames),
+			Collections.singletonList(
+				new Attribute(objectEntry.getTitleValue())),
+			"CMP_ADD_ASSET", taskObjectDefinition);
+		_route(
+			SetUtil.asymmetricDifference(oldAssetTagNames, newAssetTagNames),
+			Collections.singletonList(
+				new Attribute(objectEntry.getTitleValue())),
+			"CMP_REMOVE_ASSET", taskObjectDefinition);
+	}
+
+	private void _route(
+			Set<String> assetTagNames, List<Attribute> attributes,
+			String eventType, ObjectDefinition taskObjectDefinition)
+		throws Exception {
+
+		for (String assetTagName : assetTagNames) {
+			if (!StringUtil.startsWith(
+					assetTagName,
+					taskObjectDefinition.getExternalReferenceCode())) {
+
+				continue;
+			}
+
+			BaseModelSearchResult<AssetTag> baseModelSearchResult =
+				_assetTagLocalService.searchTags(
+					TransformUtil.transformToLongArray(
+						_depotEntryLocalService.getDepotEntries(
+							taskObjectDefinition.getCompanyId(),
+							DepotConstants.TYPE_PROJECT),
+						DepotEntryModel::getGroupId),
+					assetTagName, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+			for (AssetTag assetTag : baseModelSearchResult.getBaseModels()) {
+				for (long assetEntryId :
+						_assetTagLocalService.getAssetEntryPrimaryKeys(
+							assetTag.getTagId())) {
+
+					AssetEntry assetEntry = _assetEntryLocalService.fetchEntry(
+						assetEntryId);
+
+					if (!StringUtil.equals(
+							assetEntry.getClassName(),
+							taskObjectDefinition.getClassName())) {
+
+						continue;
+					}
+
+					_auditRouter.route(
+						AuditMessageBuilder.buildAuditMessage(
+							eventType, taskObjectDefinition.getClassName(),
+							assetEntry.getClassPK(), attributes));
+				}
+			}
+		}
+	}
+
 	private void _setResourcePermissions(ObjectEntry objectEntry)
 		throws Exception {
 
@@ -260,6 +358,15 @@ public class ObjectEntryModelListener extends BaseModelListener<ObjectEntry> {
 					action -> resourceActions.contains(action)));
 		}
 	}
+
+	@Reference
+	private AssetEntryLocalService _assetEntryLocalService;
+
+	@Reference
+	private AssetTagLocalService _assetTagLocalService;
+
+	@Reference
+	private AuditRouter _auditRouter;
 
 	@Reference
 	private DepotEntryLocalService _depotEntryLocalService;
