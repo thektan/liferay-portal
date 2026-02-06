@@ -5,6 +5,7 @@
 
 import {Option, Picker} from '@clayui/core';
 import classNames from 'classnames';
+import {ReactFieldBase as FieldBase} from 'dynamic-data-mapping-form-field-type/api';
 import React, {LegacyRef, useState} from 'react';
 
 import './StateSelector.scss';
@@ -33,6 +34,25 @@ const mapLabelToLabelDisplayType: {[key: string]: LabelDisplayType} = {
 	'Overdue': 'warning',
 };
 
+const mapKeyToDisplayOrder: Record<string, number> = {
+	blocked: 3,
+	done: 4,
+	inProgress: 2,
+	notStarted: 1,
+};
+
+function getNextStates(selectedKey: string, states: State[]) {
+	const {nextStates} = states.find(({key}) => key === selectedKey) as State;
+
+	return states
+		.filter(({key}) => {
+			return nextStates.includes(key) || key === selectedKey;
+		})
+		.sort(
+			(a, b) => mapKeyToDisplayOrder[a.key] - mapKeyToDisplayOrder[b.key]
+		);
+}
+
 const Trigger = React.forwardRef(
 	(
 		{
@@ -58,31 +78,33 @@ const Trigger = React.forwardRef(
 export default function StateSelector({
 	initialSelectedKey,
 	onChange,
+	showLabel = false,
 	states,
 }: {
 	initialSelectedKey: string;
-	onChange: (key: string) => Promise<void>;
+	onChange?: (key: string) => Promise<void>;
+	showLabel?: boolean;
 	states: State[];
 }) {
+	const [nextStates, setNextStates] = useState(() =>
+		getNextStates(initialSelectedKey, states)
+	);
 	const [selectedKey, setSelectedKey] = useState(initialSelectedKey);
 
-	function getNextStates() {
-		const {nextStates} = states.find(
-			({key}) => key === selectedKey
-		) as State;
-
-		return states.filter(({key}) => {
-			return nextStates.includes(key) || key === selectedKey;
-		});
-	}
-
 	return (
-		<div>
+		<FieldBase
+			accessible={false}
+			hideEditedFlag
+			label={Liferay.Language.get('state')}
+			name="ObjectField_state"
+			showLabel={showLabel}
+			visible={true}
+		>
 			<Picker<State>
 				as={Trigger}
 				defaultSelectedKey={initialSelectedKey}
 				disabled={false}
-				items={getNextStates()}
+				items={nextStates}
 				messages={{
 					itemDescribedby: Liferay.Language.get(
 						'you-are-currently-on-a-text-element,-inside-of-a-list-box'
@@ -95,7 +117,11 @@ export default function StateSelector({
 				onSelectionChange={async (item) => {
 					setSelectedKey(item as string);
 
-					await onChange(item as string);
+					await onChange?.(item as string);
+
+					if (onChange) {
+						setNextStates(getNextStates(item as string, states));
+					}
 				}}
 				selectedKey={selectedKey}
 				width={125}
@@ -110,6 +136,8 @@ export default function StateSelector({
 					</Option>
 				)}
 			</Picker>
-		</div>
+
+			<input name="ObjectField_state" type="hidden" value={selectedKey} />
+		</FieldBase>
 	);
 }
