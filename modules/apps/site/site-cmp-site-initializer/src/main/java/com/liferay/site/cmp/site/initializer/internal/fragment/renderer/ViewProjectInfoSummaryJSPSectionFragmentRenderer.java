@@ -7,12 +7,8 @@ package com.liferay.site.cmp.site.initializer.internal.fragment.renderer;
 
 import com.liferay.fragment.renderer.FragmentRenderer;
 import com.liferay.info.constants.InfoDisplayWebKeys;
-import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.model.ObjectEntry;
-import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
-import com.liferay.object.service.ObjectStateFlowLocalService;
-import com.liferay.object.service.ObjectStateLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -56,9 +52,7 @@ public class ViewProjectInfoSummaryJSPSectionFragmentRenderer
 					objectEntry.getObjectDefinitionId()));
 
 		return new ViewProjectInfoSummarySectionDisplayContext(
-			_listTypeEntryLocalService, (ObjectEntry)object,
-			_objectFieldLocalService, _objectStateFlowLocalService,
-			_objectStateLocalService,
+			(ObjectEntry)object,
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY));
 	}
@@ -74,18 +68,6 @@ public class ViewProjectInfoSummaryJSPSectionFragmentRenderer
 	}
 
 	@Reference
-	private ListTypeEntryLocalService _listTypeEntryLocalService;
-
-	@Reference
-	private ObjectFieldLocalService _objectFieldLocalService;
-
-	@Reference
 	private ObjectRelationshipLocalService _objectRelationshipLocalService;
-
-	@Reference
-	private ObjectStateFlowLocalService _objectStateFlowLocalService;
-
-	@Reference
-	private ObjectStateLocalService _objectStateLocalService;
 
 }

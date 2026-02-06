@@ -5,11 +5,7 @@
 
 package com.liferay.site.cmp.site.initializer.internal.display.context;
 
-import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.model.ObjectEntry;
-import com.liferay.object.service.ObjectFieldLocalService;
-import com.liferay.object.service.ObjectStateFlowLocalService;
-import com.liferay.object.service.ObjectStateLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.site.cmp.site.initializer.internal.util.ObjectEntryValuesUtil;
@@ -23,16 +19,9 @@ public class ViewTaskInfoSummarySectionDisplayContext
 	extends BaseInfoSummarySectionDisplayContext {
 
 	public ViewTaskInfoSummarySectionDisplayContext(
-		ListTypeEntryLocalService listTypeEntryLocalService,
-		ObjectEntry objectEntry,
-		ObjectFieldLocalService objectFieldLocalService,
-		ObjectStateFlowLocalService objectStateFlowLocalService,
-		ObjectStateLocalService objectStateLocalService,
-		ThemeDisplay themeDisplay) {
+		ObjectEntry objectEntry, ThemeDisplay themeDisplay) {
 
-		super(
-			listTypeEntryLocalService, objectEntry, objectFieldLocalService,
-			objectStateFlowLocalService, objectStateLocalService, themeDisplay);
+		super(objectEntry, themeDisplay);
 	}
 
 	@Override
