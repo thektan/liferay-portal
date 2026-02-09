@@ -4,13 +4,12 @@
  */
 
 import {Option, Picker} from '@clayui/core';
+import Label from '@clayui/label';
 import classNames from 'classnames';
 import {ReactFieldBase as FieldBase} from 'dynamic-data-mapping-form-field-type/api';
-import React, {LegacyRef, useState} from 'react';
+import React, {LegacyRef, useMemo, useState} from 'react';
 
 import './StateSelector.scss';
-
-import Label from '@clayui/label';
 
 export interface State {
 	key: string;
@@ -40,18 +39,6 @@ const mapKeyToDisplayOrder: Record<string, number> = {
 	inProgress: 2,
 	notStarted: 1,
 };
-
-function getNextStates(selectedKey: string, states: State[]) {
-	const {nextStates} = states.find(({key}) => key === selectedKey) as State;
-
-	return states
-		.filter(({key}) => {
-			return nextStates.includes(key) || key === selectedKey;
-		})
-		.sort(
-			(a, b) => mapKeyToDisplayOrder[a.key] - mapKeyToDisplayOrder[b.key]
-		);
-}
 
 const Trigger = React.forwardRef(
 	(
@@ -86,10 +73,33 @@ export default function StateSelector({
 	showLabel?: boolean;
 	states: State[];
 }) {
-	const [nextStates, setNextStates] = useState(() =>
-		getNextStates(initialSelectedKey, states)
-	);
 	const [selectedKey, setSelectedKey] = useState(initialSelectedKey);
+
+	const filteredStates = useMemo(() => {
+		const currentState = states.find(({key}) => key === selectedKey);
+
+		if (!currentState) {
+			return [];
+		}
+
+		return states
+			.filter(
+				({key}) =>
+					currentState.nextStates.includes(key) || key === selectedKey
+			)
+			.sort(
+				(a, b) =>
+					(mapKeyToDisplayOrder[a.key] || 0) -
+					(mapKeyToDisplayOrder[b.key] || 0)
+			);
+	}, [selectedKey, states]);
+
+	const handleSelectionChange = (key: React.Key) => {
+		const newKey = String(key);
+
+		setSelectedKey(newKey);
+		onChange?.(newKey);
+	};
 
 	return (
 		<FieldBase
@@ -98,13 +108,13 @@ export default function StateSelector({
 			label={Liferay.Language.get('state')}
 			name="ObjectField_state"
 			showLabel={showLabel}
-			visible={true}
+			visible
 		>
 			<Picker<State>
 				as={Trigger}
 				defaultSelectedKey={initialSelectedKey}
 				disabled={false}
-				items={nextStates}
+				items={filteredStates}
 				messages={{
 					itemDescribedby: Liferay.Language.get(
 						'you-are-currently-on-a-text-element,-inside-of-a-list-box'
@@ -114,15 +124,7 @@ export default function StateSelector({
 						Liferay.Language.get('scroll-to-bottom'),
 					scrollToTopAriaLabel: Liferay.Language.get('scroll-to-top'),
 				}}
-				onSelectionChange={async (item) => {
-					setSelectedKey(item as string);
-
-					await onChange?.(item as string);
-
-					if (onChange) {
-						setNextStates(getNextStates(item as string, states));
-					}
-				}}
+				onSelectionChange={handleSelectionChange}
 				selectedKey={selectedKey}
 				width={125}
 			>
