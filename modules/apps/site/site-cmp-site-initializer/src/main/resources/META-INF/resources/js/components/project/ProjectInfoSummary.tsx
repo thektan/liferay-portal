@@ -5,7 +5,8 @@
 
 import Label from '@clayui/label';
 import {DateRenderer} from '@liferay/frontend-data-set-web';
-import React from 'react';
+import {openToast} from 'frontend-js-components-web';
+import React, {useState} from 'react';
 
 import {patchProjectById} from '../../utils/api';
 import {displayStateSuccessToast} from '../../utils/toastUtil';
@@ -32,6 +33,9 @@ export default function ProjectInfoSummary({
 	states,
 	tags,
 }: ProjectInfoSummaryProps) {
+	const [selectedStateKey, setSelectedStateKey] = useState(initialState);
+	const [stateSelectorDisabled, setStateSelectorDisabled] = useState(false);
+
 	return (
 		<InfoSummary
 			defaultOpen={true}
@@ -40,17 +44,32 @@ export default function ProjectInfoSummary({
 					label: 'State',
 					value: (
 						<StateSelector
-							initialSelectedKey={initialState}
+							disabled={stateSelectorDisabled}
 							onChange={async (key: string) => {
+								setStateSelectorDisabled(true);
+
 								const response = await patchProjectById({
 									body: {state: key},
 									projectId,
 								});
 
 								if (response.ok) {
+									setSelectedStateKey(key);
+
 									displayStateSuccessToast();
 								}
+								else {
+									openToast({
+										message: Liferay.Language.get(
+											'an-unexpected-system-error-occurred'
+										),
+										type: 'danger',
+									});
+								}
+
+								setStateSelectorDisabled(false);
 							}}
+							selectedKey={selectedStateKey}
 							states={states}
 						/>
 					),

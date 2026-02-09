@@ -1,6 +1,14 @@
+@import 'atlas-variables';
+
 .lfr-cmp__state-selector {
 	&:hover {
 		opacity: 0.8;
+	}
+
+	&.disabled {
+		border-color: $light;
+		cursor: not-allowed;
+		opacity: 0.4;
 	}
 
 	.label:not(.label-item) {

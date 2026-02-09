@@ -5,7 +5,8 @@
 
 import Label from '@clayui/label';
 import {AssigneeValue} from '@liferay/object-dynamic-data-mapping-form-field-type';
-import React from 'react';
+import {openToast} from 'frontend-js-components-web';
+import React, {useState} from 'react';
 
 import {patchTaskById} from '../../utils/api';
 import {
@@ -39,6 +40,9 @@ export default function TaskInfoSummary({
 	taskId,
 	title,
 }: TaskInfoSummaryProps) {
+	const [selectedStateKey, setSelectedStateKey] = useState(initialState);
+	const [stateSelectorDisabled, setStateSelectorDisabled] = useState(false);
+
 	return (
 		<InfoSummary
 			defaultOpen={true}
@@ -47,17 +51,32 @@ export default function TaskInfoSummary({
 					label: 'State',
 					value: (
 						<StateSelector
-							initialSelectedKey={initialState}
+							disabled={stateSelectorDisabled}
 							onChange={async (key: string) => {
+								setStateSelectorDisabled(true);
+
 								const response = await patchTaskById({
 									body: {state: key},
 									taskId,
 								});
 
 								if (response.ok) {
+									setSelectedStateKey(key);
+
 									displayStateSuccessToast();
 								}
+								else {
+									openToast({
+										message: Liferay.Language.get(
+											'an-unexpected-system-error-occurred'
+										),
+										type: 'danger',
+									});
+								}
+
+								setStateSelectorDisabled(false);
 							}}
+							selectedKey={selectedStateKey}
 							states={states}
 						/>
 					),
