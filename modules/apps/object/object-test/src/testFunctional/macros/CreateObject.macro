@@ -236,6 +236,8 @@ definition {
 	macro saveObject() {
 		Button.clickSave();
 
+		SelectFrame.selectFrameTop();
+
 		Alert.viewSuccessMessage();
 
 		WaitForElementNotPresent(locator1 = "Message#SUCCESS");
