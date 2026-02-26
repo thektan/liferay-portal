@@ -1446,7 +1446,9 @@ definition {
 			key_label = ${label},
 			locator1 = "ObjectAdmin#SELECT_OBJECT_FIELD");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
+		if (!(IsElementPresent(key_fieldName = ${label}, locator1 = "ObjectAdmin#LAYOUT_FIELD_NAME"))) {
+			SelectFrame(locator1 = "IFrame#IFRAME");
+		}
 	}
 
 	@summary = "Default summary"
@@ -1483,7 +1485,9 @@ definition {
 				locator1 = "CreateObject#SELECT_OBJECT_FIELD_IN_TABLE");
 		}
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
+		if (!(IsElementPresent(locator1 = "ObjectAdmin#LABEL_OBJECT_RELATIONSHIP"))) {
+			SelectFrame(locator1 = "IFrame#IFRAME");
+		}
 	}
 
 	@summary = "Default summary"
@@ -1544,7 +1548,9 @@ definition {
 
 	@summary = "Default summary"
 	macro markLayoutAsDefault() {
-		SelectFrame(locator1 = "IFrame#IFRAME");
+		if (!(IsElementPresent(locator1 = "ObjectAdmin#LAYOUT_INFO_TAB"))) {
+			SelectFrame(locator1 = "IFrame#IFRAME");
+		}
 
 		Click(locator1 = "ObjectAdmin#LAYOUT_INFO_TAB");
 

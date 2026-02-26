@@ -224,9 +224,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block Name",
@@ -267,9 +265,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block Name",
@@ -310,9 +306,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block Name",
@@ -347,9 +341,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(tabName = "Field Tab");
 
@@ -754,9 +746,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block 1",
@@ -1233,9 +1223,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block Name",
@@ -2069,9 +2057,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block 1",
@@ -2824,9 +2810,7 @@ definition {
 
 				ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-				SelectFrame(locator1 = "IFrame#IFRAME");
-
-				Click.clickAtNotVisible(locator1 = "ObjectAdmin#ENTRY_BOOLEAN_CHECKBOX");
+				ObjectAdmin.markLayoutAsDefault();
 
 				ObjectAdmin.goToLayoutTabOnLayouts();
 
@@ -3389,9 +3373,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block 1",
@@ -3972,9 +3954,7 @@ definition {
 
 		ObjectAdmin.gotoRelationshipsTab();
 
-		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
-
-		SelectFrame(locator1 = "IFrame#IFRAME");
+		ObjectAdmin.goToRelationshipsDetails(labelName = "Relationship");
 
 		CreateObject.editLabel(labelName = "Relationship Updated");
 
@@ -4151,9 +4131,7 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block 1",
@@ -4221,19 +4199,15 @@ definition {
 
 		ObjectAdmin.selectKebabMenuOption(kebabOption = "Edit");
 
-		SelectFrame(locator1 = "IFrame#IFRAME");
+		ObjectAdmin.markLayoutAsDefault();
 
-		Click(locator1 = "ObjectAdmin#LAYOUT_LAYOUT_TAB");
+		ObjectAdmin.goToLayoutTabOnLayouts();
 
 		ObjectAdmin.addTabFieldsOnLayout(
 			blockName = "Block 1",
 			columnsNumber = 2,
 			fieldList = "Custom Field A,Custom Field B",
 			tabName = "Field Tab");
-
-		Click(locator1 = "ObjectAdmin#LAYOUT_INFO_TAB");
-
-		Click.clickAtNotVisible(locator1 = "ObjectAdmin#ENTRY_BOOLEAN_CHECKBOX");
 
 		CreateObject.saveObject();
 
