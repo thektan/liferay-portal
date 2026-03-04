@@ -236,9 +236,13 @@ definition {
 	macro saveObject() {
 		Button.clickSave();
 
+		SelectFrameTop();
+
 		Alert.viewSuccessMessage();
 
 		WaitForElementNotPresent(locator1 = "Message#SUCCESS");
+
+		WaitForElementNotPresent(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
 
 		WaitForPageLoad();
 	}
