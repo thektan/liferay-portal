@@ -244,7 +244,9 @@ definition {
 
 		WaitForElementNotPresent(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
 
-		WaitForPageLoad();
+		SelectFrameTop();
+
+		WaitForVisible(locator1 = "xpath=//div[contains(@class, 'fds')]");
 	}
 
 	@summary = "Default summary"
