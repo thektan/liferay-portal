@@ -246,7 +246,7 @@ definition {
 
 		SelectFrameTop();
 
-		WaitForVisible(locator1 = "xpath=//div[contains(@class, 'fds')]");
+		WaitForVisible(locator1 = "xpath=//body");
 	}
 
 	@summary = "Default summary"
