@@ -533,7 +533,10 @@ function hasValue(input: HTMLInputElement) {
 		return Boolean(input.files?.length);
 	}
 
-	return Boolean(input.getAttribute('value')?.length);
+	return (
+		Boolean(input.getAttribute('value')?.length) ||
+		input.dataset.translated === 'true'
+	);
 }
 
 export function getSelectedLanguageId(formId?: string) {

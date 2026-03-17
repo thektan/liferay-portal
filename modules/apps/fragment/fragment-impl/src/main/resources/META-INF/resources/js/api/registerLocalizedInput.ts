@@ -201,6 +201,8 @@ export function registerLocalizedInput({
 					input: translationInput,
 					value,
 				});
+
+				translationInput.dataset.translated = 'true';
 			}
 
 			Liferay.fire(EVENT_TRANSLATION_STATUS, {
@@ -329,7 +331,10 @@ export function registerLocalizedInput({
 
 			// Do nothing if it's already translated
 
-			if (translationInput.getAttribute('value')) {
+			if (
+				translationInput.getAttribute('value') ||
+				translationInput.dataset.translated === 'true'
+			) {
 				return;
 			}
 
@@ -352,6 +357,8 @@ export function registerLocalizedInput({
 					value: defaultLanguageInput.value,
 				});
 			}
+
+			translationInput.dataset.translated = 'true';
 
 			Liferay.fire(EVENT_TRANSLATION_STATUS, {
 				languageId: currentLanguageId,
@@ -402,6 +409,19 @@ export function registerLocalizedInput({
 				});
 
 				setTranslationInputsValue(languageId, null);
+			}
+
+			const translationInput = getTranslationInput({
+				createIfMissing: false,
+				inputId: inputElement?.id || inputName,
+				inputName,
+				languageId,
+				localizationInputsContainer,
+				namespace,
+			});
+
+			if (translationInput) {
+				delete translationInput.dataset.translated;
 			}
 
 			Liferay.fire(EVENT_TRANSLATION_STATUS, {
