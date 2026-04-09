@@ -9,10 +9,12 @@ import com.liferay.dynamic.data.mapping.form.field.type.constants.DDMFormFieldTy
 import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectFieldSettingConstants;
 import com.liferay.object.field.business.type.ObjectFieldBusinessType;
+import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
 import com.liferay.object.petra.sql.dsl.DynamicObjectDefinitionTableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -90,6 +92,12 @@ public class PhoneNumberObjectFieldBusinessType
 	public Set<String> getUnmodifiableObjectFieldSettingsNames() {
 		return SetUtil.fromArray(
 			ObjectFieldSettingConstants.NAME_UNIQUE_VALUES);
+	}
+
+	@Override
+	public boolean isVisible(ObjectDefinition objectDefinition) {
+		return FeatureFlagManagerUtil.isEnabled(
+			objectDefinition.getCompanyId(), "LPD-83570");
 	}
 
 	@Override
