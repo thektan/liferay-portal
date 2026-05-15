@@ -98,7 +98,10 @@ const Text = ({
 		editingLanguageId
 	);
 
+	const [isFocused, setIsFocused] = useState(false);
+
 	const inputRef = useRef(null);
+	const tooltipWrapperRef = useRef(null);
 
 	const prevEditingLanguageId = usePrevious(editingLanguageId);
 
@@ -160,7 +163,10 @@ const Text = ({
 			<ClayTooltipProvider autoAlign>
 				<div
 					data-tooltip-align="top"
-					{...getTooltipTitle({placeholder, value})}
+					ref={tooltipWrapperRef}
+					{...(isFocused
+						? {title: ''}
+						: getTooltipTitle({placeholder, value}))}
 				>
 					<ClayInput
 						{...accessibleProps}
@@ -175,6 +181,7 @@ const Text = ({
 						maxLength={showCounter ? '' : maxLength}
 						name={name}
 						onBlur={(event) => {
+							setIsFocused(false);
 							onBlur(event);
 
 							if (!preventChangeHandlerOnBlur) {
@@ -182,7 +189,21 @@ const Text = ({
 							}
 						}}
 						onChange={handleChangeInput}
-						onFocus={onFocus}
+						onFocus={(event) => {
+							setIsFocused(true);
+
+							if (
+								tooltipWrapperRef.current?.hasAttribute(
+									'data-restore-title'
+								)
+							) {
+								tooltipWrapperRef.current.dispatchEvent(
+									new MouseEvent('mouseout', {bubbles: true})
+								);
+							}
+
+							onFocus(event);
+						}}
 						onKeyDown={onKeyDown}
 						placeholder={placeholder}
 						ref={inputRef}
