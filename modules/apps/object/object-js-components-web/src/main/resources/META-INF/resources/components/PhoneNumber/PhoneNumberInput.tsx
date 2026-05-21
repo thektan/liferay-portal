@@ -25,7 +25,7 @@ interface PhoneNumberInputProps {
 	onBlur?: (event: React.FocusEvent) => void;
 	onChange?: (event: {target: {value: string}}) => void;
 	onFocus?: (event: React.FocusEvent) => void;
-	prefix?: string;
+	prefix?: CountryInfo['a2'];
 	prefixType?: PrefixType;
 	value?: string;
 }
@@ -49,16 +49,17 @@ export function PhoneNumberInput({
 
 	const fixedCountry =
 		prefixType === PREFIX_TYPE.FIXED
-			? countries.find((country) => `+${country.idd}` === prefix)
+			? countries.find((country) => country.a2 === prefix)
 			: null;
 
 	const fixedFlagSymbol = fixedCountry ? getFlagSymbol(fixedCountry.a2) : '';
+	const fixedIddPrefix = fixedCountry ? `+${fixedCountry.idd}` : '';
 
 	const handleValueChange = (country: CountryInfo, number: string) => {
 		if (onChange) {
 			const resolvedPrefix =
 				prefixType === PREFIX_TYPE.FIXED
-					? prefix || ''
+					? fixedIddPrefix
 					: `+${country.idd}`;
 
 			const sanitizedNumber = number.replace(/\D/g, '');
@@ -76,8 +77,8 @@ export function PhoneNumberInput({
 	/** Parse the phone value to set the initial states. */
 	useEffect(() => {
 		if (prefixType === PREFIX_TYPE.FIXED) {
-			if (prefix && value.startsWith(prefix)) {
-				setLocalNumber(value.substring(prefix.length));
+			if (fixedIddPrefix && value.startsWith(fixedIddPrefix)) {
+				setLocalNumber(value.substring(fixedIddPrefix.length));
 			}
 			else {
 				const {localNumber: parsedLocalNumber} = parsePhoneValue(
@@ -120,7 +121,7 @@ export function PhoneNumberInput({
 							</span>
 						)}
 
-						{prefix}
+						{fixedIddPrefix}
 					</ClayInput.GroupText>
 				) : (
 					<CountryCodePicker
