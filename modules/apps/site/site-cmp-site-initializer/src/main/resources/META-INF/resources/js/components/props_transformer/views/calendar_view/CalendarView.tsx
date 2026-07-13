@@ -440,6 +440,7 @@ export default function CalendarView({
 				droppable
 				eventContent={(arg) => (
 					<CalendarTaskCard
+						expanded={currentView !== 'dayGridMonth'}
 						itemsActions={itemsActions}
 						loadData={loadData}
 						task={arg.event.extendedProps.task}
