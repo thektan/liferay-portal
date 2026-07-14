@@ -527,7 +527,7 @@ export default function CalendarView({
 					},
 					dayCellContent: (arg) => (
 						<>
-							{arg.dayNumberText}
+							{arg.dayNumberText || String(arg.date.getDate())}
 
 							<ClayButtonWithIcon
 								aria-label={Liferay.Language.get('add-task')}
