@@ -236,11 +236,17 @@ definition {
 	macro saveObject() {
 		Button.clickSave();
 
+		SelectFrameTop();
+
 		Alert.viewSuccessMessage();
 
 		WaitForElementNotPresent(locator1 = "Message#SUCCESS");
 
-		WaitForPageLoad();
+		WaitForElementNotPresent(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
+
+		SelectFrameTop();
+
+		WaitForVisible(locator1 = "xpath=//div[contains(@class, 'fds')]");
 	}
 
 	@summary = "Default summary"
