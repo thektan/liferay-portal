@@ -16,32 +16,51 @@ jest.mock('@liferay/frontend-data-set-web', () => ({
 	FrontendDataSet: (props: any) => mockFrontendDataSet(props),
 }));
 
-(global as any).Liferay = {
-	Language: {
-		get: (key: string) => key,
-	},
-	ThemeDisplay: {
-		getPathThemeImages: () => '/path/to/images',
-	},
+const defaultProps = {
+	actionItems: [] as any,
+	cmsGroupId: 1,
+	dataSetId: 'tags',
+	invalidTagCharacters: '',
+	tagUsagesURL: '',
+	tagsURL: '',
+	vocabulariesURL: '',
 };
 
 describe('[CMS Categorization] Components: ViewTags', () => {
 	afterEach(() => {
+		Liferay.FeatureFlags['LPD-58677'] = false;
+
 		jest.clearAllMocks();
 	});
 
-	it('passes a Space-typed asset library filter to FrontendDataSet', () => {
-		render(
-			<ViewTags
-				actionItems={[] as any}
-				cmsGroupId={1}
-				dataSetId="tags"
-				invalidTagCharacters=""
-				tagUsagesURL=""
-				tagsURL=""
-				vocabulariesURL=""
-			/>
+	it('does not pass a Project filter to FrontendDataSet when the CMP feature flag is disabled', () => {
+		Liferay.FeatureFlags['LPD-58677'] = false;
+
+		render(<ViewTags {...defaultProps} />);
+
+		const [{filters}] = mockFrontendDataSet.mock.calls[0] as any;
+
+		expect(
+			filters.find((filter: any) => filter.id === 'projects')
+		).toBeUndefined();
+	});
+
+	it('passes a Project-typed asset library filter to FrontendDataSet when the CMP feature flag is enabled', () => {
+		Liferay.FeatureFlags['LPD-58677'] = true;
+
+		render(<ViewTags {...defaultProps} />);
+
+		const [{filters}] = mockFrontendDataSet.mock.calls[0] as any;
+
+		const projectFilter = filters.find(
+			(filter: any) => filter.id === 'projects'
 		);
+
+		expect(projectFilter?.apiURL).toContain("filter=type eq 'Project'");
+	});
+
+	it('passes a Space-typed asset library filter to FrontendDataSet', () => {
+		render(<ViewTags {...defaultProps} />);
 
 		const [{filters}] = mockFrontendDataSet.mock.calls[0] as any;
 
