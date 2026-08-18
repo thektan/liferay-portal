@@ -8,6 +8,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import React from 'react';
 
 import ApiHelper from '../../../../../src/main/resources/META-INF/resources/js/common/services/ApiHelper';
+import ProjectLinkService from '../../../../../src/main/resources/META-INF/resources/js/common/services/ProjectLinkService';
 import SpaceService from '../../../../../src/main/resources/META-INF/resources/js/common/services/SpaceService';
 import CreateTagsModalContent from '../../../../../src/main/resources/META-INF/resources/js/main_view/categorization/tags/CreateTagsModal';
 
@@ -16,6 +17,9 @@ jest.mock(
 );
 jest.mock(
 	'../../../../../src/main/resources/META-INF/resources/js/common/services/ApiHelper'
+);
+jest.mock(
+	'../../../../../src/main/resources/META-INF/resources/js/common/services/ProjectLinkService'
 );
 
 const defaultProps = {
@@ -27,8 +31,14 @@ const defaultProps = {
 
 describe('CreateTagsModal', () => {
 	beforeEach(() => {
+		Liferay.FeatureFlags['LPD-99403'] = true;
+
 		jest.spyOn(SpaceService, 'getSpaces').mockResolvedValue([] as any);
 		jest.spyOn(ApiHelper, 'getAll').mockResolvedValue([]);
+		jest.spyOn(
+			ProjectLinkService,
+			'getNonDraftProjectScopeIds'
+		).mockResolvedValue({data: new Set<number>(), error: null});
 
 		window.ResizeObserver = jest.fn().mockImplementation(() => ({
 			disconnect: jest.fn(),

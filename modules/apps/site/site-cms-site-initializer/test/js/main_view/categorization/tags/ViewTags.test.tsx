@@ -27,6 +27,10 @@ const defaultProps = {
 };
 
 describe('[CMS Categorization] Components: ViewTags', () => {
+	beforeEach(() => {
+		Liferay.FeatureFlags['LPD-99403'] = true;
+	});
+
 	afterEach(() => {
 		Liferay.FeatureFlags['LPD-58677'] = false;
 
@@ -45,7 +49,7 @@ describe('[CMS Categorization] Components: ViewTags', () => {
 		).toBeUndefined();
 	});
 
-	it('passes a Project-typed asset library filter to FrontendDataSet when the CMP feature flag is enabled', () => {
+	it('passes a project filter to FrontendDataSet when the CMP feature flag is enabled', () => {
 		Liferay.FeatureFlags['LPD-58677'] = true;
 
 		render(<ViewTags {...defaultProps} />);
@@ -56,7 +60,9 @@ describe('[CMS Categorization] Components: ViewTags', () => {
 			(filter: any) => filter.id === 'projects'
 		);
 
-		expect(projectFilter?.apiURL).toContain("filter=type eq 'Project'");
+		expect(projectFilter?.apiURL).toContain(
+			"objectDefinitionExternalReferenceCode eq 'l_cmp_project'"
+		);
 	});
 
 	it('passes a Space-typed asset library filter to FrontendDataSet', () => {
