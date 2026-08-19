@@ -31,6 +31,7 @@ jest.mock(
 
 const defaultProps = {
 	assetLibraries: [],
+	cmpEnabled: false,
 	defaultLanguageId: 'en_US',
 	externalReferenceCodeInputError: '',
 	externalReferenceCodeMaxLength: 255,
@@ -79,12 +80,10 @@ describe('EditGeneralInfo', () => {
 	});
 
 	afterEach(() => {
-		Liferay.FeatureFlags['LPD-58677'] = false;
-
 		jest.clearAllMocks();
 	});
 
-	it('does not render the project scope selector when the CMP feature flag is disabled', async () => {
+	it('does not render the project scope selector when CMP is disabled', async () => {
 		render(<EditGeneralInfo {...defaultProps} />);
 
 		await waitFor(() => {
@@ -100,10 +99,8 @@ describe('EditGeneralInfo', () => {
 		expect(ApiHelper.getAll).not.toHaveBeenCalled();
 	});
 
-	it('renders the project scope selector when the CMP feature flag is enabled', async () => {
-		Liferay.FeatureFlags['LPD-58677'] = true;
-
-		render(<EditGeneralInfo {...defaultProps} />);
+	it('renders the project scope selector when CMP is enabled', async () => {
+		render(<EditGeneralInfo {...defaultProps} cmpEnabled />);
 
 		await waitFor(() => {
 			expect(ApiHelper.getAll).toHaveBeenCalled();

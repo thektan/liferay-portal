@@ -64,6 +64,7 @@ jest.mock(
 const defaultProps = {
 	availableAssetTypes: [],
 	backURL: '/back',
+	cmpEnabled: false,
 	cmsGroupId: 123,
 	defaultLanguageId: 'en_US',
 	externalReferenceCodeMaxLength: 75,

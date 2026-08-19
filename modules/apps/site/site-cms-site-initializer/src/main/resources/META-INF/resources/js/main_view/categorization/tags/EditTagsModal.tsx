@@ -44,6 +44,7 @@ const CONFIRMATION_MESSAGES = {
 export default function EditTagsModalContent({
 	assetLibraries,
 	closeModal,
+	cmpEnabled,
 	editTagURL,
 	loadData,
 	projects,
@@ -52,6 +53,7 @@ export default function EditTagsModalContent({
 }: {
 	assetLibraries: AssetLibraryType[];
 	closeModal: () => void;
+	cmpEnabled: boolean;
 	editTagURL: string;
 	loadData: () => {};
 	projects?: AssetLibraryType[];
@@ -221,16 +223,15 @@ export default function EditTagsModalContent({
 						setSpaceInputError={setSpaceInputError}
 					/>
 
-					{Liferay.FeatureFlags['LPD-58677'] &&
-						Liferay.FeatureFlags['LPD-99403'] && (
-							<CategorizationProjects
-								checkboxText="tag"
-								projects={projects}
-								setProjectChange={setProjectChange}
-								setProjectInputError={setProjectInputError}
-								setSelectedProjects={setSelectedProjects}
-							/>
-						)}
+					{cmpEnabled && Liferay.FeatureFlags['LPD-99403'] && (
+						<CategorizationProjects
+							checkboxText="tag"
+							projects={projects}
+							setProjectChange={setProjectChange}
+							setProjectInputError={setProjectInputError}
+							setSelectedProjects={setSelectedProjects}
+						/>
+					)}
 				</div>
 			</ClayModal.Body>
 

@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.site.cms.site.initializer.internal.constants.CMSSiteInitializerFDSNames;
+import com.liferay.site.cms.site.initializer.internal.util.CMPUtil;
 import com.liferay.site.cms.site.initializer.internal.util.ExportImportUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +35,8 @@ public class ViewTagsDisplayContext {
 			"actionItems",
 			ExportImportUtil.getCategorizationActionItemsJSONArray(
 				_httpServletRequest, _themeDisplay)
+		).put(
+			"cmpEnabled", CMPUtil.isEnabled(_themeDisplay.getCompanyId())
 		).put(
 			"cmsGroupId", _themeDisplay.getScopeGroupId()
 		).put(

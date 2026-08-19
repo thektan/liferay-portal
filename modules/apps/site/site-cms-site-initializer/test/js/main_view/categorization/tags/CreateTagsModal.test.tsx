@@ -24,6 +24,7 @@ jest.mock(
 
 const defaultProps = {
 	closeModal: jest.fn(),
+	cmpEnabled: false,
 	cmsGroupId: 1,
 	dataSetId: 'tags',
 	invalidTagCharacters: '',
@@ -48,14 +49,10 @@ describe('CreateTagsModal', () => {
 	});
 
 	afterEach(() => {
-		Liferay.FeatureFlags['LPD-58677'] = false;
-
 		jest.clearAllMocks();
 	});
 
-	it('does not render the project scope selector when the CMP feature flag is disabled', async () => {
-		Liferay.FeatureFlags['LPD-58677'] = false;
-
+	it('does not render the project scope selector when CMP is disabled', async () => {
 		render(<CreateTagsModalContent {...defaultProps} />);
 
 		await waitFor(() => {
@@ -71,10 +68,8 @@ describe('CreateTagsModal', () => {
 		expect(ApiHelper.getAll).not.toHaveBeenCalled();
 	});
 
-	it('renders the project scope selector when the CMP feature flag is enabled', async () => {
-		Liferay.FeatureFlags['LPD-58677'] = true;
-
-		render(<CreateTagsModalContent {...defaultProps} />);
+	it('renders the project scope selector when CMP is enabled', async () => {
+		render(<CreateTagsModalContent {...defaultProps} cmpEnabled />);
 
 		await waitFor(() => {
 			expect(ApiHelper.getAll).toHaveBeenCalled();

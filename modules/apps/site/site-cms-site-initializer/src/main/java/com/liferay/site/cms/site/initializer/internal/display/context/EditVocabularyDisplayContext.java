@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.site.cms.site.initializer.internal.util.CMPUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -74,6 +75,8 @@ public class EditVocabularyDisplayContext {
 				).build())
 		).put(
 			"backURL", getBackURL()
+		).put(
+			"cmpEnabled", CMPUtil.isEnabled(_themeDisplay.getCompanyId())
 		).put(
 			"cmsGroupId", _themeDisplay.getScopeGroupId()
 		).put(
