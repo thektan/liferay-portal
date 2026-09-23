@@ -1,5 +1,5 @@
 {
-	"@generated": "1169f3ae30c636650f06b9632c4578cb419477b8",
+	"@generated": "597fc68973d2ef36959241e62ba60d245bdf1629",
 	"@readonly": "** AUTO-GENERATED: DO NOT EDIT **",
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
@@ -19,6 +19,15 @@
 			],
 			"@liferay/frontend-js-item-selector-web": [
 				"../../../../../../../frontend-js/frontend-js-item-selector-web/src/main/resources/META-INF/resources/index.ts"
+			],
+			"@liferay/map-common": [
+				"../../../../../../../map/map-common/src/main/resources/META-INF/resources/js/index.js"
+			],
+			"@liferay/map-google-maps": [
+				"../../../../../../../map/map-google-maps/src/main/resources/META-INF/resources/js/index.js"
+			],
+			"@liferay/map-openstreetmap": [
+				"../../../../../../../map/map-openstreetmap/src/main/resources/META-INF/resources/js/index.js"
 			],
 			"@liferay/object-js-components-web": [
 				"../../../../../../object-js-components-web/src/main/resources/META-INF/resources/index.ts"
@@ -66,6 +75,15 @@
 		},
 		{
 			"path": "../../../../../../../frontend-js/frontend-js-item-selector-web/src/main/resources/META-INF/resources/tsconfig.json"
+		},
+		{
+			"path": "../../../../../../../map/map-common/src/main/resources/META-INF/resources/tsconfig.json"
+		},
+		{
+			"path": "../../../../../../../map/map-google-maps/src/main/resources/META-INF/resources/tsconfig.json"
+		},
+		{
+			"path": "../../../../../../../map/map-openstreetmap/src/main/resources/META-INF/resources/tsconfig.json"
 		},
 		{
 			"path": "../../../../../../object-js-components-web/src/main/resources/META-INF/resources/tsconfig.json"
