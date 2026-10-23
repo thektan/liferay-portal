@@ -40,6 +40,12 @@ export default function FileContainer({
 						}}
 					>
 						{attachment.title}
+
+						{attachment.size && (
+							<span className="d-block small text-secondary">
+								{attachment.size}
+							</span>
+						)}
 					</ClayButton>
 
 					{Liferay.ThemeDisplay.isSignedIn() &&
