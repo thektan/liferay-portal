@@ -1135,6 +1135,11 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				).put(
 					"fileEntryId", fileEntry.getFileEntryId()
 				).put(
+					"size",
+					_language.formatStorageSize(
+						fileEntry.getSize(),
+						_portal.getLocale(uploadPortletRequest))
+				).put(
 					"title",
 					TempFileEntryUtil.getOriginalTempFileName(
 						fileEntry.getFileName())
