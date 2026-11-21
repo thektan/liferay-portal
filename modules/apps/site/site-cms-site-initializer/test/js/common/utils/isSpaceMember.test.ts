@@ -11,7 +11,7 @@ describe('isSpaceMember', () => {
 		{externalReferenceCode: 'SPACE_A', groupId: 1, name: 'Space A'},
 	];
 
-	it('allows a folder from a Space in the asset libraries list', () => {
+	it('allows a folder from a Space in the libraries list', () => {
 		expect(
 			isSpaceMember({
 				assetLibraries,
@@ -23,7 +23,7 @@ describe('isSpaceMember', () => {
 		).toBe(true);
 	});
 
-	it('allows an asset from a Space in the asset libraries list', () => {
+	it('allows an item from a Space in the libraries list', () => {
 		expect(
 			isSpaceMember({
 				assetLibraries,
@@ -38,7 +38,7 @@ describe('isSpaceMember', () => {
 		).toBe(true);
 	});
 
-	it("allows an asset from the project's own library", () => {
+	it("allows an item from the project's own library", () => {
 		expect(
 			isSpaceMember({
 				assetLibraries,
@@ -54,7 +54,7 @@ describe('isSpaceMember', () => {
 		).toBe(true);
 	});
 
-	it('allows an asset when the asset libraries list is missing', () => {
+	it('allows an item when the libraries list is missing', () => {
 		expect(
 			isSpaceMember({
 				assetLibraries: undefined,
@@ -69,13 +69,13 @@ describe('isSpaceMember', () => {
 		).toBe(true);
 	});
 
-	it('allows an asset without Space data', () => {
+	it('allows an item without Space data', () => {
 		expect(isSpaceMember({assetLibraries, itemData: {embedded: {}}})).toBe(
 			true
 		);
 	});
 
-	it('denies an asset from a Space outside the asset libraries list', () => {
+	it('denies an item from a Space outside the libraries list', () => {
 		expect(
 			isSpaceMember({
 				assetLibraries,
